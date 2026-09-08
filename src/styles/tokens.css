@@ -30,24 +30,28 @@
   --warn: #8a5a00;
 
   /* --- типографика: один гротеск, заголовки светлые --- */
-  --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'Inter', system-ui, sans-serif;   /* моно в референсе нет — цифры табличным Inter */
+  --font-display: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Manrope', system-ui, sans-serif;  /* моно в референсе нет — цифры табличным Manrope */
 
   /* На слайде 1280px заголовок ≈ 90px → ~7vw; все заголовки секций одного кегля */
-  --fs-h1: clamp(2.8rem, 7vw, 5.8rem);
-  --fs-h2: clamp(2.6rem, 6.6vw, 5.4rem);
+  --fs-h1: clamp(2.6rem, 6.4vw, 5.2rem);
+  --fs-h2: clamp(2.4rem, 6vw, 4.9rem);
   --fs-h3: clamp(1.35rem, 2vw, 1.75rem);    /* заголовок карточки ≈ 26px */
   --fs-lead: 1.0625rem;
   --fs-body: 1.0625rem;                     /* 17px */
   --fs-sm: 1rem;
   --fs-xs: 0.875rem;
 
+  /* Manrope шире Inter примерно на десятую и опускает выносные глубже
+     (desc 0.30em против 0.24em), поэтому кегли заголовков сняты на ~10 %,
+     а межстрочное поднято: при 0.92 «ę» и «ó» налезали на следующую строку.
+     Визуально плотность та же, что была у Inter. */
   --fw-head: 400;            /* заголовки НЕ жирные */
-  --lh-tight: 0.92;
-  --lh-head: 0.96;
+  --lh-tight: 0.98;
+  --lh-head: 1;
   --lh-body: 1.45;
-  --ls-display: -0.03em;
+  --ls-display: -0.034em;
 
   /* --- радиусы (измерено): мелкая карточка 20, фото 28, карточка 40, контейнер 48 --- */
   --r-xs: 20px;

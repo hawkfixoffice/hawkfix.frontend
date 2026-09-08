@@ -19,8 +19,8 @@
 }
 .herox__h1 {
   font-family: var(--font-display); font-weight: var(--fw-head);
-  font-size: clamp(2.6rem, 6.4vw, 5.6rem); line-height: 0.95;
-  letter-spacing: -0.035em; margin: 0; color: var(--on-dark); max-width: 15ch;
+  font-size: clamp(2.45rem, 5.8vw, 5rem); line-height: 1;
+  letter-spacing: -0.038em; margin: 0; color: var(--on-dark); max-width: 15ch;
 }
 .herox__sub { color: var(--on-dark-2); font-size: var(--fs-body); max-width: 44ch; margin: 0; line-height: 1.35; }
 .herox__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
@@ -50,7 +50,7 @@
 }
 @media (max-width: 640px) {
   /* На телефоне заголовок героя — главный элемент экрана: крупно, плотно */
-  .herox__h1 { font-size: clamp(2.6rem, 11.4vw, 3.7rem); line-height: 0.96; letter-spacing: -0.045em; max-width: none; }
+  .herox__h1 { font-size: clamp(2.3rem, 10.4vw, 3.4rem); line-height: 1; letter-spacing: -0.045em; max-width: none; }
   .herox__sub { font-size: var(--fs-body); }
   .herox__text { gap: 20px; padding: 18px 16px 22px; }
 }
@@ -453,3 +453,10 @@ a.toc__card:hover { transform: translateY(-3px); }
   color: var(--ink); font-size: var(--fs-sm);
 }
 .lead__order b { font-weight: 600; letter-spacing: 0.02em; }
+
+/* На планшете панель героя узкая: подпись бейджа в неё уже не влезает и
+   обрезалась до «W..». Ниже 1200px оставляем только кружок — ссылка та же. */
+@media (max-width: 1200px) and (min-width: 901px) {
+  .herox__badge { left: auto; right: 12px; transform: none; padding: 6px; }
+  .herox__badge .badge__text { display: none; }
+}

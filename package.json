@@ -16,7 +16,8 @@
     "seo:keywords": "python3 tools/build-keywords.py",
     "seo:audit": "python3 tools/audit-seo-full.py",
     "assets:images": "sh tools/build-images.sh",
-    "assets:lottie": "python3 tools/build-lottie.py"
+    "assets:lottie": "python3 tools/build-lottie.py",
+    "assets:og": "node tools/make-og.mjs"
   },
   "dependencies": {
     "lottie-web": "^5.13.0",

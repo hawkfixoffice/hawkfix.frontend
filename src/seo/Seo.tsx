@@ -56,9 +56,14 @@ export default function Seo({ page, locale, schema, title, description, ogImage 
       <meta property="og:title" content={t} />
       <meta property="og:description" content={d} />
       <meta property="og:url" content={url} />
+      {/* Полный набор: часть мессенджеров (WhatsApp, Telegram) не рисует превью,
+          если нет размеров и типа, а Slack и LinkedIn спрашивают secure_url. */}
       <meta property="og:image" content={img} />
+      <meta property="og:image:secure_url" content={img} />
+      <meta property="og:image:type" content="image/png" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={t} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={t} />
       <meta name="twitter:description" content={d} />
