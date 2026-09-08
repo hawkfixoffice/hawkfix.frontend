@@ -102,7 +102,7 @@ export default function Calculator() {
         ) : (
           <>
             <div className="calc__popular">
-              <p className="label label--plain">{popularLabel(locale)}</p>
+              <p className="calc__subhead">{popularLabel(locale)}</p>
               <div className="calc__chips">
                 {popular.map((i) => {
                   const on = p.qtyOf(i.key) > 0
@@ -188,7 +188,7 @@ export default function Calculator() {
       <aside className="calc__sum" aria-label={t.home.calcLabel}>
         <div className="sum">
           <div className="sum__head">
-            <p className="label label--plain">{t.home.calcLabel}</p>
+            <p className="calc__subhead">{t.home.calcLabel}</p>
             {quote.count > 0 && !sent && (
               <button type="button" className="sum__clear" onClick={p.clear}>{clearLabel(locale)}</button>
             )}

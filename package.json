@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite-react-ssg build && node tools/postbuild.mjs",
+    "build": "node tools/check-css.mjs && vite-react-ssg build && node tools/postbuild.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "content:pull": "node tools/pull-content.mjs",
     "assets:photos": "node tools/fetch-photos.mjs",
     "content:split": "node tools/split-content.mjs",
-    "shot": "node tools/shot.mjs"
+    "shot": "node tools/shot.mjs",
+    "check:css": "node tools/check-css.mjs"
   },
   "dependencies": {
     "lottie-web": "^5.13.0",

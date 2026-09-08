@@ -34,62 +34,69 @@ export default function Header() {
     { to: pathOf(KEY_PAGES.contact, locale), label: t.nav.contact },
   ]
   const here = page.paths[locale]
+  const langs = LOCALES.filter((l) => page.paths[l])
 
   return (
-    <header className="hdr" data-stuck={stuck}>
-      <div className="wrap hdr__in">
-        <Link className="brand" to={pathOf(KEY_PAGES.home, locale)}>
-          HAWK<span className="brand__dot">.</span>FIX
-        </Link>
+    <>
+      <header className="hdr" data-stuck={stuck}>
+        <div className="wrap hdr__in">
+          <Link className="brand" to={pathOf(KEY_PAGES.home, locale)}>
+            HAWK<span className="brand__dot">.</span>FIX
+          </Link>
 
-        <nav className="nav" aria-label={t.a11y.menu}>
-          {nav.map((n) => (
-            <Link key={n.to} to={n.to} aria-current={here === n.to ? 'page' : undefined}>{n.label}</Link>
-          ))}
-        </nav>
-
-        <div className="hdr__spacer" />
-
-        <div className="hdr__side">
-          <nav className="lang" aria-label={t.a11y.lang}>
-            {LOCALES.filter((l) => page.paths[l]).map((l: Locale) => (
-              <Link key={l} to={page.paths[l]} hrefLang={l} aria-current={l === locale ? 'true' : undefined}>
-                {l}
-              </Link>
-            ))}
-          </nav>
-          <a className="tel" href={CONTACT.phoneHref}>
-            <Icon name="phone" size={16} />
-            <span>{CONTACT.phone}</span>
-          </a>
-          <button
-            className="burger" type="button" aria-expanded={open}
-            aria-controls="mobile-menu" aria-label={open ? t.a11y.close : t.a11y.menu}
-            onClick={() => setOpen((v) => !v)}
-          >
-            <span />
-          </button>
-        </div>
-      </div>
-
-      {open && (
-        <div className="mobmenu" id="mobile-menu">
-          <nav className="mobmenu__nav" aria-label={t.a11y.menu}>
+          <nav className="nav" aria-label={t.a11y.menu}>
             {nav.map((n) => (
-              <Link key={n.to} to={n.to} onClick={() => setOpen(false)}>
-                <span>{n.label}</span>
-                <Icon name="arrowUpRight" size={20} />
-              </Link>
+              <Link key={n.to} to={n.to} aria-current={here === n.to ? 'page' : undefined}>{n.label}</Link>
             ))}
           </nav>
-          <nav className="mobmenu__lang" aria-label={t.a11y.lang}>
-            {LOCALES.filter((l) => page.paths[l]).map((l: Locale) => (
+
+          <div className="hdr__spacer" />
+
+          <div className="hdr__side">
+            <nav className="lang" aria-label={t.a11y.lang}>
+              {langs.map((l: Locale) => (
+                <Link key={l} to={page.paths[l]} hrefLang={l} aria-current={l === locale ? 'true' : undefined}>
+                  {l}
+                </Link>
+              ))}
+            </nav>
+            <a className="tel" href={CONTACT.phoneHref}>
+              <Icon name="phone" size={16} />
+              <span>{CONTACT.phone}</span>
+            </a>
+            <button
+              className="burger" type="button" aria-expanded={open}
+              aria-controls="mobile-menu" aria-label={open ? t.a11y.close : t.a11y.menu}
+              onClick={() => setOpen((v) => !v)}
+            >
+              <span />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Меню рендерится СНАРУЖИ <header>: у шапки backdrop-filter, а он создаёт
+          содержащий блок для position: fixed — внутри меню не растянулось бы
+          на весь экран. */}
+      {open && (
+        <div className="mobmenu" id="mobile-menu" role="dialog" aria-modal="true" aria-label={t.a11y.menu}>
+          <div className="mobmenu__bar">
+            <Link className="brand brand--onDark" to={pathOf(KEY_PAGES.home, locale)} onClick={() => setOpen(false)}>
+              HAWK<span className="brand__dot">.</span>FIX
+            </Link>
+            <button className="mobmenu__close" type="button" onClick={() => setOpen(false)} aria-label={t.a11y.close}>
+              <Icon name="x" size={20} />
+            </button>
+          </div>
+
+          <nav className="mobmenu__nav" aria-label={t.a11y.menu}>
+            {nav.map((n, i) => (
               <Link
-                key={l} to={page.paths[l]} hrefLang={l}
-                aria-current={l === locale ? 'true' : undefined}
-                onClick={() => setOpen(false)}
+                key={n.to} to={n.to} onClick={() => setOpen(false)}
+                style={{ ['--i' as string]: String(i) }}
               >
-                {l.toUpperCase()}
+                <span>{n.label}</span>
+                <Icon name="arrowUpRight" size={26} />
               </Link>
             ))}
           </nav>
@@ -98,12 +105,23 @@ export default function Header() {
             <a className="btn btn--primary" href={CONTACT.phoneHref}>
               <Icon name="phone" size={17} /> {CONTACT.phone}
             </a>
-            <a className="btn btn--ghost" href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener">
+            <a className="btn btn--onDark" href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener">
               <Icon name="whatsapp" size={17} /> {t.cta.whatsapp}
             </a>
+            <nav className="mobmenu__lang" aria-label={t.a11y.lang}>
+              {langs.map((l: Locale) => (
+                <Link
+                  key={l} to={page.paths[l]} hrefLang={l}
+                  aria-current={l === locale ? 'true' : undefined}
+                  onClick={() => setOpen(false)}
+                >
+                  {l.toUpperCase()}
+                </Link>
+              ))}
+            </nav>
           </div>
         </div>
       )}
-    </header>
+    </>
   )
 }

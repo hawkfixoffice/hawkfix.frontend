@@ -42,7 +42,7 @@
 .pricegroups { display: grid; gap: clamp(20px, 3vw, 40px); }
 .pricegroup { scroll-margin-top: 96px; }
 .pricegroup__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--sp-3); margin-bottom: var(--sp-4); }
-.pricegroup__head h2 { font-size: clamp(1.3rem, 2.4vw, 1.9rem); }
+.pricegroup__head h2 { font-size: clamp(1.15rem, 2vw, 1.6rem); letter-spacing: -0.025em; }
 .pricegroup__head p { color: var(--accent-text); font-size: var(--fs-sm); margin: 0; }
 
 .pricelist { background: var(--card); border: 1px solid var(--line-card); border-radius: var(--r-card); overflow: hidden; }
@@ -60,11 +60,11 @@
 /* Полоса призыва к действию */
 .ctaband { background: var(--paper-2); }
 .ctaband__in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-5); }
-.ctaband h2 { margin-block: var(--sp-3); max-width: 18ch; }
+.ctaband h2 { font-size: var(--fs-h2); line-height: 1.02; letter-spacing: -0.038em; margin-block: 0 var(--sp-3); max-width: 18ch; }
 .ctaband__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
 
 .notfound { padding-block: clamp(64px, 12vw, 140px); text-align: center; }
-.notfound h1 { margin-block: var(--sp-4); font-size: clamp(1.6rem, 4vw, 2.6rem); }
+.notfound h1 { margin-block: 0 var(--sp-4); font-size: clamp(1.6rem, 4vw, 2.6rem); }
 .notfound .prose { margin-inline: auto; }
 .notfound .pagehead__actions { justify-content: center; }
 
@@ -85,7 +85,12 @@
 .pagehead__stats { align-self: stretch; }
 .pagehead__stats .blk { justify-content: space-between; min-height: 132px; }
 
-.sec-h2 { font-size: clamp(1.4rem, 2.6vw, 2.1rem); margin-bottom: var(--sp-5); max-width: 22ch; }
+/* Заголовки разделов — тот же крупный масштаб, что и на главной */
+.sec-h2 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: var(--fs-h2); line-height: 1.02; letter-spacing: -0.038em;
+  margin-bottom: clamp(20px, 2.6vw, 36px); max-width: 20ch;
+}
 .sec-p { margin-bottom: var(--sp-4); }
 
 /* Блок-строка списка: номер + короткая подпись */
@@ -134,3 +139,16 @@
 
 .contact-below { margin-top: clamp(10px, 1.2vw, 16px); align-items: stretch; }
 .contact-notes { align-content: start; }
+
+.prices-bars { margin-bottom: clamp(24px, 3vw, 40px); }
+
+.svc-photo { min-height: 420px; }
+.svc-blocks { align-content: start; }
+.svc-blocks__wide { grid-column: 1 / -1; }
+.svc-cta { justify-content: center; gap: var(--sp-3); align-items: flex-start; min-height: 100%; }
+.svc-cta .blk__t { font-size: clamp(1.15rem, 1.8vw, 1.5rem); margin-bottom: var(--sp-2); }
+.detail__note { background: var(--card); }
+.detail__note p { font-size: var(--fs-xs); color: var(--ink-3); line-height: 1.55; margin: 0 0 8px; }
+.detail__note p:last-child { margin-bottom: 0; }
+
+@media (max-width: 900px) { .svc-photo { min-height: 300px; } }

@@ -54,7 +54,7 @@ export default function PricesPage() {
                 <p className="blk__n">{t.nav.prices}</p>
                 <p className="blk__v">{items.length}</p>
               </div>
-              <div className="blk blk--dark">
+              <div className="blk blk--forest">
                 <p className="blk__n">{t.form.urgent}</p>
                 <p className="blk__v">+{settings.urgentPct}%</p>
               </div>
@@ -70,7 +70,7 @@ export default function PricesPage() {
             <div className="blocks blocks--2">
               {shortLists.slice(0, 2).map((sec, i) => (
                 <Reveal key={sec.heading} delay={i * 80}>
-                  <div className={`blk ${i === 0 ? 'blk--accent' : 'blk--dark'}`}>
+                  <div className={`blk ${i === 0 ? 'blk--accent' : 'blk--forest'}`}>
                     <h2 className="blk__t">{sec.heading}</h2>
                     <ul className="blk__list">
                       {(sec.lists[0] ?? []).map((x) => (
@@ -87,6 +87,26 @@ export default function PricesPage() {
 
       <section className="band band--tight">
         <div className="wrap">
+          {/* Сводка «от» по группам — полосами, как в референсе */}
+          <div className="vbars prices-bars">
+            {rows.slice(0, 5).map(({ g, list }, i) => (
+              <Reveal key={g.key} delay={i * 60}>
+                <a
+                  className={`vbar${i === 0 ? ' vbar--accent' : i === 1 ? ' vbar--forest' : ''}`}
+                  href={`#${g.key}`}
+                >
+                  <span className="vbar__label">
+                    <span className="vbar__name">{g.name[locale] ?? g.key}</span>
+                    <span className="vbar__meta">{list.length} {t.prices.positions}</span>
+                  </span>
+                  <span className="vbar__v num">
+                    {t.prices.from} {Math.min(...list.map((i2) => i2.price))} {cur}
+                  </span>
+                </a>
+              </Reveal>
+            ))}
+          </div>
+
           <nav className="chipwall" aria-label={t.prices.group}>
             {rows.map(({ g, list }) => (
               <a className="chip" key={g.key} href={`#${g.key}`}>

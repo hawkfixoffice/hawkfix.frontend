@@ -12,10 +12,11 @@ export default function ServicePage() {
   const { page, locale, t } = usePage()
   const tr = page.tr[locale]
   const body = (useLoaderData() as PageBody | undefined) ?? { blocks: [] }
+  const cur = settings.currency
+
   const groupItems = page.group ? items.filter((i) => i.group === page.group) : []
   const priceFrom = groupItems.length ? Math.min(...groupItems.map((i) => i.price)) : settings.minVisit
 
-  // Соседние услуги: следующие по списку, по кругу
   const idx = services.findIndex((s) => s.key === page.key)
   const others = [...services.slice(idx + 1), ...services.slice(0, idx)].slice(0, 3)
 
@@ -28,103 +29,130 @@ export default function ServicePage() {
             { name: t.nav.services, to: pathOf(KEY_PAGES.services, locale) },
             { name: tr.h1, to: page.paths[locale] },
           ]} />
-          <h1>{tr.h1}</h1>
-        </div>
-      </section>
-
-      <section className="band band--tight">
-        <div className="wrap">
-          <div className="detail">
-            <div className="card card--flush detail__media">
-              <div className="media media--4x3">
-                <Picture
-                  name={page.image!} alt={tr.h1} ratio="4x3"
-                  sizes="(max-width: 900px) 100vw, 50vw" priority
-                />
-              </div>
+          <div className="pagehead__split">
+            <div>
+              <h1>{tr.h1}</h1>
+              <p className="pagehead__lead">{tr.blurb}</p>
             </div>
-
-            <div className="detail__body">
-              <p className="detail__blurb">{tr.blurb}</p>
-              {body.intro?.map((x: string) => <p className="detail__intro" key={x}>{x}</p>)}
-
-              {body.checklist?.length ? (
-                <>
-                  <p className="label">{t.service.included}</p>
-                  <ul className="checklist">
-                    {body.checklist.map((c: string) => (
-                      <li key={c}><Icon name="check" size={16} /><span>{c}</span></li>
-                    ))}
-                  </ul>
-                </>
-              ) : null}
-
-              <div className="detail__price card card--paper">
-                <div>
-                  <p className="stat__unit">{t.service.priceFrom}</p>
-                  <p className="detail__priceNum num">{priceFrom} {settings.currency}</p>
-                </div>
-                <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
-                  {t.service.askAbout} <Icon name="arrow" size={17} />
-                </Link>
+            <div className="blocks blocks--stat pagehead__stats">
+              <div className="blk blk--accent">
+                <p className="blk__n">{t.service.priceFrom}</p>
+                <p className="blk__v">{priceFrom} {cur}</p>
               </div>
-
               {groupItems.length > 0 && (
-                <div className="detail__items">
-                  <p className="label">{t.nav.prices}</p>
-                  <ul className="pricelist">
-                    {groupItems.map((i) => (
-                      <li key={i.key}>
-                        <span>{i.name[locale]}</span>
-                        <span className="num">
-                          {i.price} {settings.currency}
-                          <small> / {settings.units[locale]?.[i.unit] ?? i.unit}</small>
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="blk blk--forest">
+                  <p className="blk__n">{t.nav.prices}</p>
+                  <p className="blk__v">{groupItems.length}</p>
                 </div>
               )}
-
-              {body.note?.length ? (
-                <div className="detail__note">
-                  {body.note.map((x: string) => <p key={x}>{x}</p>)}
-                </div>
-              ) : null}
-
-              <div className="detail__actions">
-                <a className="btn btn--dark" href={CONTACT.phoneHref}>
-                  <Icon name="phone" size={16} /> {CONTACT.phone}
-                </a>
-                <a className="btn btn--ghost" href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener">
-                  <Icon name="whatsapp" size={16} /> {t.cta.whatsapp}
-                </a>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* фото и то, что входит */}
       <section className="band band--tight">
         <div className="wrap">
-          <div className="secthead">
-            <h2>{t.service.other}</h2>
+          <div className="blocks blocks--wide-right">
+            <Reveal>
+              <div className="panel panel--fill svc-photo">
+                <Picture
+                  name={page.image!} alt={tr.h1} ratio="4x3"
+                  widths={[800, 1200]} sizes="(max-width: 900px) 100vw, 40vw" priority
+                />
+                <span className="badge badge--tl">{tr.h1}</span>
+              </div>
+            </Reveal>
+
+            <Reveal delay={70}>
+              <div className="blocks blocks--2 svc-blocks">
+                {body.intro?.map((x: string) => (
+                  <div className="blk blk--mute svc-blocks__wide" key={x}>
+                    <p className="blk__s blk__s--lead">{x}</p>
+                  </div>
+                ))}
+                {body.checklist?.map((c: string, i: number) => (
+                  <div className={`blk${i === 0 ? ' blk--forest' : ''}`} key={c}>
+                    <p className="blk__n">{String(i + 1).padStart(2, '0')}</p>
+                    <p className="blk__t blk__t--sm">{c}</p>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* цены группы полосами */}
+      {groupItems.length > 0 && (
+        <section className="band band--tight">
+          <div className="wrap">
+            <h2 className="sec-h2">{t.nav.prices}</h2>
+            <div className="vbars">
+              {groupItems.map((i, n) => (
+                <Reveal key={i.key} delay={Math.min(n, 6) * 40}>
+                  <div className={`vbar${n === 0 ? ' vbar--accent' : ''}`}>
+                    <span className="vbar__label">
+                      <span className="vbar__name">{i.name[locale]}</span>
+                      <span className="vbar__meta">{settings.units[locale]?.[i.unit] ?? i.unit}</span>
+                    </span>
+                    <span className="vbar__v num">{i.price} {cur}</span>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* примечание и связь */}
+      <section className="band band--tight">
+        <div className="wrap">
+          <div className="blocks blocks--wide-left">
+            {body.note?.length ? (
+              <Reveal>
+                <div className="blk detail__note">
+                  {body.note.map((x: string) => <p key={x}>{x}</p>)}
+                </div>
+              </Reveal>
+            ) : <div />}
+            <Reveal delay={70}>
+              <div className="blk blk--dark svc-cta">
+                <h2 className="blk__t">{t.home.ctaHead}</h2>
+                <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
+                  {t.service.askAbout} <Icon name="arrow" size={17} />
+                </Link>
+                <a className="btn btn--onDark" href={CONTACT.phoneHref}>
+                  <Icon name="phone" size={16} /> {CONTACT.phone}
+                </a>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* другие услуги */}
+      <section className="band band--tight">
+        <div className="wrap">
+          <div className="sechead">
+            <h2 className="h-big">{t.service.other}</h2>
             <Link className="btn btn--ghost" to={pathOf(KEY_PAGES.services, locale)}>
               {t.service.backToServices} <Icon name="arrow" size={16} />
             </Link>
           </div>
-          <div className="grid grid--3">
+          <div className="svc-grid">
             {others.map((s, i) => (
               <Reveal key={s.key} delay={i * 70}>
-              <Link className="card card--flush svc" to={s.paths[locale]}>
-                <div className="media media--3x2">
-                  <Picture name={s.image!} alt={s.tr[locale].h1} sizes="(max-width: 900px) 100vw, 32vw" />
-                </div>
-                <div className="svc__body">
-                  <h3>{s.tr[locale].h1}</h3>
-                  <p>{s.tr[locale].blurb}</p>
-                </div>
-              </Link>
+                <Link className="panel svc-tile" to={s.paths[locale]}>
+                  <Picture
+                    name={s.image!} alt={s.tr[locale].h1} ratio="3x2"
+                    widths={[800, 1200]} sizes="(max-width: 900px) 100vw, 32vw"
+                  />
+                  <div className="svc-tile__body">
+                    <h3>{s.tr[locale].h1}</h3>
+                    <p>{s.tr[locale].blurb}</p>
+                  </div>
+                </Link>
               </Reveal>
             ))}
           </div>

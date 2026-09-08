@@ -47,7 +47,7 @@ export default function AboutPage() {
                 <p className="blk__n">{t.nav.services}</p>
                 <p className="blk__v">{services.length}</p>
               </div>
-              <div className="blk blk--dark">
+              <div className="blk blk--forest">
                 <p className="blk__n">{t.nav.prices}</p>
                 <p className="blk__v">{items.length}</p>
               </div>
@@ -85,14 +85,13 @@ export default function AboutPage() {
         <section className="band band--tight" key={sec.heading}>
           <div className="wrap">
             <Reveal>
-              {sec.eyebrow && <p className="label">{sec.eyebrow}</p>}
               <h2 className="sec-h2">{sec.heading}</h2>
             </Reveal>
             {sec.paras.map((x) => <p className="prose sec-p" key={x}>{x}</p>)}
             <div className="blocks blocks--3">
               {(sec.lists[0] ?? []).map((x, i) => (
                 <Reveal key={x} delay={(i % 3) * 70}>
-                  <div className={`blk blk--line${si % 2 && i === 0 ? ' blk--dark' : ''}`}>
+                  <div className={`blk blk--line${si % 2 && i === 0 ? ' blk--forest' : ''}`}>
                     <p className="blk__n">{String(i + 1).padStart(2, '0')}</p>
                     <p className="blk__t blk__t--sm">{x}</p>
                   </div>

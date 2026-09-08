@@ -1,69 +1,79 @@
 /* HAWK.FIX — герой, секции главной, калькулятор, служебные слои. */
 
-/* ============================ ГЕРОЙ ============================ */
-.hero { position: relative; background: var(--ink); color: var(--on-dark); overflow: hidden; }
-.hero__media { position: absolute; inset: 0; }
-/* Кадр смещён вниз: главный объект снимка сидит ниже центра */
-.hero__media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; }
-/* Затемнение слева, чтобы белый текст читался на любом кадре */
-.hero__media::after {
-  content: ''; position: absolute; inset: 0;
-  background:
-    linear-gradient(100deg, rgb(10 12 15 / 78%) 0%, rgb(10 12 15 / 45%) 42%, rgb(10 12 15 / 8%) 70%),
-    linear-gradient(to top, rgb(10 12 15 / 62%) 0%, transparent 42%);
+/* ============================ ГЕРОЙ ============================
+   Композиция из карточек: тёмная карточка с заголовком, ряд высоких
+   фото-панелей, круглая кнопка на стыке и три плашки снизу. */
+.herox { padding-block: clamp(16px, 2vw, 28px) clamp(40px, 6vw, 80px); }
+.herox__top {
+  position: relative;
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 10px; margin-bottom: 10px;
 }
-.hero__in {
-  position: relative; z-index: var(--z-base);
-  padding-block: clamp(72px, 13vw, 168px) clamp(96px, 15vw, 190px);
-  max-width: min(var(--maxw), 100%);
+.herox__card {
+  justify-content: center; gap: var(--sp-4);
+  padding: clamp(24px, 3.4vw, 52px);
+  min-height: clamp(340px, 40vw, 480px);
 }
-/* Категория над заголовком — мелко и плотно, как в референсе */
-.hero__eyebrow {
-  font-size: var(--fs-label); font-weight: 600; letter-spacing: var(--ls-label);
-  text-transform: uppercase; color: rgb(255 255 255 / 72%);
-  margin: 0 0 var(--sp-4);
+.herox__h1 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(2.4rem, 4.6vw, 4.2rem); line-height: 1.0;
+  letter-spacing: -0.042em; margin: 0; color: var(--on-dark); max-width: 15ch;
 }
-/* Заголовок героя средний: доминировать должен вордмарк, а не он */
-.hero__tagline {
-  font-size: clamp(1.9rem, 3.9vw, 3.1rem); font-weight: 700;
-  letter-spacing: -0.035em; line-height: 1.06; margin: 0 0 var(--sp-4);
-  max-width: 20ch;
+.herox__sub { color: var(--on-dark-2); font-size: var(--fs-sm); max-width: 46ch; margin: 0; }
+.herox__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-2); }
+
+/* Ряд высоких панелей в тёмной обойме */
+.herox__panels {
+  background: var(--ink); border-radius: var(--r-panel); padding: 10px;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;
 }
-/* Плашка набрана предложением: разогнанный капс выдаёт шаблон */
-.hero__pill {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 0.875rem; color: var(--on-dark);
-  background: rgb(255 255 255 / 13%); border: 1px solid rgb(255 255 255 / 18%);
-  border-radius: var(--r-pill); padding: 8px 16px; margin: 0 0 var(--sp-4);
-  backdrop-filter: blur(6px);
+.herox__panel { border-radius: var(--r-card); min-height: 100%; }
+.herox__panel img { filter: grayscale(1) contrast(1.05); transition: filter 600ms var(--ease); }
+.herox__panel:hover img { filter: grayscale(0); }
+
+/* Круглая мятная кнопка на стыке карточки и панелей */
+.herox__dot { left: calc(53% - 26px); bottom: -26px; width: 52px; height: 52px; }
+.herox__dot svg { transform: rotate(90deg); }
+
+/* Бейдж не должен вылезать за панель — режем по ширине */
+.herox__badge {
+  max-width: calc(100% - 24px);
+  overflow: hidden; text-overflow: ellipsis; display: block; white-space: nowrap;
 }
-.hero__tagline span { display: block; }
-.hero__sub { max-width: 44ch; color: rgb(255 255 255 / 86%); font-size: 1rem; margin-bottom: var(--sp-5); }
-.hero__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
-/* Гигантский вордмарк, выходящий за нижний край — как в референсе */
-.hero__mark {
-  position: relative; z-index: var(--z-base);
-  text-align: center; line-height: 0.74; pointer-events: none;
-  margin-bottom: -0.085em; color: var(--on-dark);
+
+.herox__bottom .blk { min-height: 168px; justify-content: space-between; }
+
+/* Мятная плашка-ярлык */
+.pill {
+  display: inline-flex; align-items: center; align-self: flex-start;
+  padding: 7px 15px; border-radius: var(--r-pill);
+  font-size: var(--fs-xs); font-weight: 600;
+}
+.pill--accent { background: var(--accent); color: var(--ink); }
+
+@media (max-width: 900px) {
+  .herox__top { grid-template-columns: minmax(0, 1fr); }
+  .herox__card { min-height: 0; }
+  .herox__panels { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .herox__panel { aspect-ratio: 3 / 4; }
+  .herox__dot { left: auto; right: 12px; bottom: -22px; }
+}
+@media (max-width: 560px) {
+  .herox__panels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .herox__panel:last-child { display: none; }
 }
 
 /* ============================ ЗАГОЛОВКИ СЕКЦИЙ ============================ */
-.secthead {
-  display: flex; align-items: flex-end; justify-content: space-between;
-  gap: var(--sp-6); margin-bottom: clamp(24px, 4vw, 48px);
-}
-.secthead h2 { max-width: 20ch; }
 
-.benefit__head { max-width: 20ch; margin-block: var(--sp-3) clamp(24px, 3.5vw, 44px); }
 .benefit__grid { align-items: stretch; }
 .benefit__right { align-items: stretch; }
 .benefit__photo { min-height: 340px; }
 
-/* Шаги: средний блок тёмный — ритм из референса */
-.step-blk { min-height: 190px; justify-content: space-between; }
-.step-blk .blk__t { font-size: clamp(1.05rem, 1.6vw, 1.35rem); }
+/* Шаги внутри контейнера-группы: заголовок и текст идут подряд,
+   номер сверху — как в референсе, без распорки на всю высоту. */
+.step-blk { min-height: 200px; justify-content: flex-start; }
+.step-blk .blk__t { font-size: clamp(1rem, 1.5vw, 1.2rem); margin-bottom: 2px; }
 
-.secthead__aside { max-width: 34ch; color: var(--on-dark-2); font-size: var(--fs-sm); margin: 0; }
 
 /* Плитки услуг: фото во всю карточку, цена бейджем, текст снизу поверх */
 .svc-grid {
@@ -78,7 +88,7 @@
   background: linear-gradient(to top, rgb(12 14 17 / 88%) 0%, rgb(12 14 17 / 30%) 38%, transparent 62%);
 }
 .svc-tile__body { position: absolute; z-index: 2; inset: auto 0 0 0; padding: var(--sp-5); display: grid; gap: 6px; }
-.svc-tile__body h3 { font-size: 1.15rem; color: var(--on-dark); }
+.svc-tile__body h2, .svc-tile__body h3 { font-size: 1.15rem; color: var(--on-dark); letter-spacing: -0.02em; }
 .svc-tile__body p { font-size: 0.875rem; color: rgb(255 255 255 / 80%); margin: 0; }
 
 .faq-blocks { align-content: start; }
@@ -101,7 +111,6 @@
 .svc:hover .svc__go, .svc:focus-visible .svc__go { opacity: 1; transform: none; }
 
 /* Шаги */
-.steps__head { max-width: 18ch; margin-block: var(--sp-3) clamp(24px, 4vw, 44px); }
 .step { display: grid; gap: var(--sp-3); align-content: start; }
 .step__n {
   font-family: var(--font-display); font-size: 2.5rem; font-weight: 700;
@@ -110,9 +119,6 @@
 
 /* ============================ КАЛЬКУЛЯТОР ============================ */
 .calcband { background: var(--paper-2); }
-.calcband__head { display: flex; flex-wrap: wrap; gap: var(--sp-5); justify-content: space-between; align-items: flex-end; margin-bottom: var(--sp-6); }
-.calcband__head h2 { margin-top: var(--sp-3); max-width: 16ch; }
-.calcband__lead { max-width: 42ch; color: var(--ink-2); }
 
 .calc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: clamp(16px, 2vw, 28px); align-items: start; }
 .calc__pick { display: grid; gap: var(--sp-4); }
@@ -297,20 +303,6 @@
 .cookie__link { border: 0; background: none; color: var(--ink-3); font-size: 0.8125rem; text-decoration: underline; display: inline-flex; align-items: center; gap: 4px; min-height: var(--tap); padding: 0; }
 .cookie__link:hover { color: var(--ink); }
 
-/* ============================ МОБИЛЬНОЕ МЕНЮ ============================ */
-.mobmenu {
-  position: fixed; inset: 64px 0 0; z-index: var(--z-overlay);
-  background: var(--paper); padding: var(--sp-5) var(--gutter);
-  display: grid; align-content: start; gap: var(--sp-5); overflow-y: auto;
-}
-.mobmenu__nav { display: grid; }
-.mobmenu__nav a {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: var(--sp-4) 0; border-bottom: 1px solid var(--line);
-  font-family: var(--font-display); font-size: 1.6rem; font-weight: 600;
-  letter-spacing: -0.03em; text-decoration: none;
-}
-.mobmenu__foot { display: grid; gap: var(--sp-3); }
 
 /* ============================ ПОДВАЛ (детали) ============================ */
 .footer__pitch { color: var(--ink-3); font-size: var(--fs-sm); max-width: 34ch; margin-block: var(--sp-3); }
@@ -328,8 +320,6 @@
   .svc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 900px) {
-  .secthead { flex-direction: column; align-items: flex-start; }
-  .hero__mark { margin-bottom: -0.06em; }
   .benefit__photo, .about-panel { min-height: 300px; }
 }
 @media (max-width: 640px) {
@@ -346,3 +336,64 @@
 /* --- Lottie --- */
 .lead__lottie { margin-inline: auto; }
 .lead__dots { display: inline-block; vertical-align: middle; }
+
+/* Светлый вариант подзаголовка для тёмной секции */
+.h-aside--dark { color: var(--on-dark-2); }
+
+/* Подзаголовки внутри калькулятора — обычным текстом, без капса */
+.calc__subhead {
+  font-family: var(--font-display); font-weight: 600; font-size: 0.9375rem;
+  letter-spacing: -0.01em; color: var(--ink-2); margin: 0;
+}
+.cookie__title { font-family: var(--font-display); font-weight: 600; font-size: 1rem; margin: 0; }
+
+/* ==================== МОБИЛЬНОЕ МЕНЮ НА ВЕСЬ ЭКРАН ==================== */
+.mobmenu {
+  position: fixed; inset: 0; z-index: var(--z-modal);
+  background: var(--ink); color: var(--on-dark);
+  display: grid; grid-template-rows: auto 1fr auto;
+  padding: var(--sp-4) var(--gutter) calc(var(--sp-6) + env(safe-area-inset-bottom));
+  overflow-y: auto; overscroll-behavior: contain;
+  animation: menu-in 260ms var(--ease);
+}
+@keyframes menu-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.mobmenu__bar { display: flex; align-items: center; justify-content: space-between; min-height: 48px; }
+.brand--onDark { color: var(--on-dark); }
+.mobmenu__close {
+  width: var(--tap); height: var(--tap); display: grid; place-items: center;
+  border: 1px solid var(--dark-line); border-radius: 50%;
+  background: transparent; color: var(--on-dark);
+  transition: background var(--dur-fast) var(--ease);
+}
+.mobmenu__close:hover { background: rgb(255 255 255 / 10%); }
+
+/* Крупные ссылки, въезжают каскадом */
+.mobmenu__nav { display: grid; align-content: center; gap: 0; }
+.mobmenu__nav a {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4);
+  padding: clamp(14px, 2.4vh, 22px) 0;
+  border-bottom: 1px solid var(--dark-line);
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(2rem, 9vw, 3rem); letter-spacing: -0.04em; line-height: 1.05;
+  text-decoration: none; color: var(--on-dark);
+  animation: link-in 380ms var(--ease) both;
+  animation-delay: calc(70ms + var(--i, 0) * 55ms);
+}
+@keyframes link-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.mobmenu__nav a svg { color: var(--accent); flex: none; }
+.mobmenu__nav a:active { color: var(--accent); }
+
+.mobmenu__foot { display: grid; gap: var(--sp-3); }
+.mobmenu__lang { display: flex; gap: var(--sp-2); margin-top: var(--sp-2); }
+.mobmenu__lang a {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 58px; min-height: var(--tap); padding: 0 var(--sp-3);
+  border: 1px solid var(--dark-line); border-radius: var(--r-pill);
+  font-size: var(--fs-xs); font-weight: 600; text-decoration: none; color: var(--on-dark-2);
+}
+.mobmenu__lang a[aria-current='true'] { background: var(--accent); border-color: transparent; color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mobmenu, .mobmenu__nav a { animation: none; }
+}

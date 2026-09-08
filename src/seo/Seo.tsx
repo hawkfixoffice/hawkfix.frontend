@@ -39,7 +39,7 @@ export default function Seo({ page, locale, schema, title, description, ogImage 
 
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
       <meta name="author" content="HAWK.FIX" />
-      <meta name="theme-color" content="#14161a" />
+      <meta name="theme-color" content="#111312" />
 
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="HAWK.FIX" />

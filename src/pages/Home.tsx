@@ -30,33 +30,71 @@ export default function Home() {
 
   return (
     <>
-      {/* ============================= ГЕРОЙ ============================= */}
-      <section className="hero">
-        <div className="hero__media">
-          <Picture name="hero" alt="" ratio="16x9" widths={[1200, 1800, 2600]} sizes="100vw" priority />
-        </div>
+      {/* ============================= ГЕРОЙ =============================
+          Композиция из карточек, как первый слайд референса: тёмная карточка
+          с крупным заголовком, ряд высоких фото-панелей, круглая кнопка
+          и три плашки снизу. */}
+      <section className="herox">
+        <div className="wrap">
+          <div className="herox__top">
+            <div className="blk blk--dark herox__card">
+              <span className="pill pill--accent">{t.hero.kicker}</span>
+              <h1 className="herox__h1">{t.hero.tagline.replace('\n', ' ')}</h1>
+              <p className="herox__sub">{t.hero.sub}</p>
+              <div className="herox__actions">
+                <a className="btn btn--primary" href="#wycena">
+                  {t.cta.quote} <Icon name="arrow" size={17} />
+                </a>
+                <a className="btn btn--onDark" href={CONTACT.phoneHref}>
+                  <Icon name="phone" size={16} /> {CONTACT.phone}
+                </a>
+              </div>
+            </div>
 
-        <div className="wrap hero__in">
-          <p className="hero__eyebrow">{t.hero.eyebrow}</p>
-          <h1 className="hero__tagline">
-            {t.hero.tagline.split('\n').map((line, i) => <span key={i}>{line}</span>)}
-          </h1>
-          <p className="hero__pill">
-            <Icon name="pin" size={15} /> {t.hero.kicker}
-          </p>
-          <p className="hero__sub">{t.hero.sub}</p>
-          <div className="hero__actions">
-            <a className="btn btn--primary" href="#wycena">
-              {t.cta.quote} <Icon name="arrow" size={17} />
-            </a>
-            <a className="btn btn--onDark" href={CONTACT.phoneHref}>
-              <Icon name="phone" size={16} /> {CONTACT.phone}
+            <div className="herox__panels">
+              {/* Кадры для панелей выбраны светлые: в обесцвеченном виде
+                  тёмный снимок превращается в чёрный прямоугольник. */}
+              {['plumbing', 'renovation', 'moving']
+                .map((img) => services.find((x) => x.image === img))
+                .filter(Boolean)
+                .map((s, i) => (
+                <div className="panel herox__panel" key={s!.key}>
+                  <Picture
+                    name={s!.image!} alt={s!.tr[locale].h1} ratio="3x2"
+                    widths={[800, 1200]} sizes="(max-width: 900px) 34vw, 16vw"
+                    priority={i === 0}
+                  />
+                  {i === 0 && (
+                    <span className="badge badge--accent badge--bl herox__badge">
+                      {/* Берём часть названия до тире — полное в бейдж не влезает */}
+                      {s!.tr[locale].h1.split(' — ')[0]}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <a className="dot-btn herox__dot" href="#wycena" aria-label={t.cta.quote}>
+              <Icon name="arrow" size={20} />
             </a>
           </div>
-        </div>
 
-        <div className="hero__mark" aria-hidden="true">
-          <p className="wordmark">HAWK<span className="wordmark__dot">.</span>FIX</p>
+          <div className="blocks blocks--3 herox__bottom">
+            <div className="blk blk--accent">
+              <p className="blk__t">{t.home.minVisitTitle}</p>
+              <p className="blk__v">{settings.minVisit} {cur}</p>
+              <p className="blk__s">{t.home.minVisitNote}</p>
+            </div>
+            <div className="blk blk--mute">
+              <p className="blk__v">{items.length}</p>
+              <p className="blk__s">{t.prices.positions}</p>
+            </div>
+            <div className="blk blk--forest">
+              <p className="blk__t">{t.nav.services}</p>
+              <p className="blk__v">{services.length}</p>
+              <p className="blk__s">{t.home.benefitLead}</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -64,12 +102,14 @@ export default function Home() {
       <section className="band">
         <div className="wrap">
           <Reveal>
-            <p className="label">{t.home.benefitLabel}</p>
-            <h2 className="benefit__head">
-              {t.home.benefitHead}{' '}
-              <Picture name="drains" alt="" ratio="3x2" widths={[800]} sizes="118px" className="inline-chip" />{' '}
-              {t.home.benefitHeadTail}
-            </h2>
+            <div className="sechead">
+              <h2 className="h-big">
+                {t.home.benefitHead}{' '}
+                <Picture name="drains" alt="" ratio="3x2" widths={[800]} sizes="118px" className="inline-chip" />{' '}
+                {t.home.benefitHeadTail}
+              </h2>
+              <p className="h-aside">{t.home.benefitLead}</p>
+            </div>
           </Reveal>
 
           <div className="blocks blocks--3-1-2 benefit__grid">
@@ -104,7 +144,7 @@ export default function Home() {
                     <p className="blk__v">{items.length}</p>
                     <p className="blk__s">{t.prices.positions}</p>
                   </div>
-                  <div className="blk blk--dark">
+                  <div className="blk blk--forest">
                     <p className="blk__n">{t.nav.services}</p>
                     <p className="blk__v">{services.length}</p>
                     <Link className="btn btn--onDark" to={pathOf(KEY_PAGES.services, locale)}>
@@ -134,28 +174,32 @@ export default function Home() {
       <section className="band band--tight">
         <div className="wrap">
           <Reveal>
-            <div className="secthead">
-              <div>
-                <p className="label">{t.home.stepsLabel}</p>
-                <h2>{t.home.stepsHead}</h2>
-              </div>
+            <div className="sechead">
+              <h2 className="h-big">{t.home.stepsHead}</h2>
               <a className="btn-round" href="#wycena" aria-label={t.cta.quote}>
                 <Icon name="arrow" size={22} />
               </a>
             </div>
           </Reveal>
 
-          <div className="blocks blocks--3">
-            {t.home.steps.map((s, i) => (
-              <Reveal key={s.t} delay={i * 90}>
-                <div className={`blk step-blk${i === 1 ? ' blk--dark' : ''}`}>
+          <Reveal>
+            <div className="groupbox">
+              {t.home.steps.slice(0, 2).map((s, i) => (
+                <div className={`blk step-blk${i === 0 ? ' blk--accent' : ''}`} key={s.t}>
                   <p className="blk__n">0{i + 1} / 0{t.home.steps.length}</p>
                   <h3 className="blk__t">{s.t}</h3>
                   <p className="blk__s">{s.d}</p>
                 </div>
-              </Reveal>
-            ))}
-          </div>
+              ))}
+              <div className="panel">
+                <Picture
+                  name="about" alt="" ratio="4x3" widths={[800, 1200]}
+                  sizes="(max-width: 900px) 100vw, 32vw"
+                />
+                <span className="badge badge--accent badge--bl">{t.home.steps[2].t}</span>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -163,12 +207,9 @@ export default function Home() {
       <section className="band band--tight calcband">
         <div className="wrap">
           <Reveal>
-            <div className="calcband__head">
-              <div>
-                <p className="label">{t.home.calcLabel}</p>
-                <h2>{t.home.calcHead}</h2>
-              </div>
-              <p className="calcband__lead">{t.home.calcLead}</p>
+            <div className="sechead">
+              <h2 className="h-big">{t.home.calcHead}</h2>
+              <p className="h-aside">{t.home.calcLead}</p>
             </div>
           </Reveal>
           <Calculator />
@@ -179,15 +220,12 @@ export default function Home() {
       <section className="band">
         <div className="wrap">
           <Reveal>
-            <div className="secthead">
-              <div>
-                <p className="label">{t.home.servicesLabel}</p>
-                <h2>
-                  {t.home.servicesHead}{' '}
-                  <Picture name="painting" alt="" ratio="3x2" widths={[800]} sizes="118px" className="inline-chip" />{' '}
-                  {t.home.servicesLead}
-                </h2>
-              </div>
+            <div className="sechead">
+              <h2 className="h-big h-big--wide">
+                {t.home.servicesHead}{' '}
+                <Picture name="painting" alt="" ratio="3x2" widths={[800]} sizes="118px" className="inline-chip" />{' '}
+                {t.home.servicesLead}
+              </h2>
               <Link className="btn-round" to={pathOf(KEY_PAGES.services, locale)} aria-label={t.cta.allServices}>
                 <Icon name="arrowUpRight" size={22} />
               </Link>
@@ -224,12 +262,9 @@ export default function Home() {
       <section className="band band--dark">
         <div className="wrap">
           <Reveal>
-            <div className="secthead">
-              <div>
-                <p className="label label--dark">{t.home.pricesLabel}</p>
-                <h2>{t.home.pricesHead}</h2>
-              </div>
-              <p className="secthead__aside">{t.home.pricesLead}</p>
+            <div className="sechead">
+              <h2 className="h-big">{t.home.pricesHead}</h2>
+              <p className="h-aside h-aside--dark">{t.home.pricesLead}</p>
             </div>
           </Reveal>
 
@@ -258,11 +293,9 @@ export default function Home() {
       <section className="band">
         <div className="wrap">
           <Reveal>
-            <div className="secthead">
-              <div>
-                <p className="label">{f.heading}</p>
-                <h2>{t.home.reviewsHead}</h2>
-              </div>
+            <div className="sechead">
+              <h2 className="h-big">{f.heading}</h2>
+              <p className="h-aside">{t.home.reviewsHead}</p>
             </div>
           </Reveal>
 
@@ -270,7 +303,7 @@ export default function Home() {
             <Reveal delay={60}>
               <div className="blocks blocks--2 faq-blocks">
                 {f.items.map((x, i) => (
-                  <div className={`blk${i === 0 ? ' blk--mute' : ''}`} key={x.q}>
+                  <div className={`blk${i === 0 ? ' blk--mute' : ''}${i === 3 ? ' blk--forest' : ''}`} key={x.q}>
                     <p className="blk__n">0{i + 1}</p>
                     <h3 className="blk__t">{x.q}</h3>
                     <p className="blk__s">{x.a}</p>

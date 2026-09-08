@@ -1,57 +1,61 @@
 /* HAWK.FIX — дизайн-токены.
-   Палитра проверена на контраст (см. tools/): тёмный текст на оранжевом = 5.41 (AA),
-   белый на оранжевом = 3.35 — годится только для крупного текста, поэтому кнопки
-   с оранжевой заливкой несут ТЁМНЫЙ текст, а не белый. */
+   Палитра снята с референса-презентации: мятно-зелёный акцент, тёмно-зелёный,
+   почти-чёрный и светло-серая бумага. Контраст проверен расчётом:
+   тёмный текст на мяте — 12.65, белый на мяте — 1.47, поэтому на акцентных
+   плашках текст ВСЕГДА тёмный. */
 
 :root {
   /* --- цвет --- */
-  --ink: #14161a;            /* основной текст, тёмные плашки */
-  --ink-2: #454b54;          /* вторичный текст          7.71 на бумаге */
-  --ink-3: #5e646c;          /* приглушённый             4.62 на бумаге */
-  --paper: #f1f0ec;          /* фон страницы, тёплый серый */
-  --paper-2: #e8e6e0;        /* фон второго уровня */
+  --ink: #111312;            /* основной текст, чёрные плашки */
+  --ink-2: #4a4f4c;          /* вторичный текст        7.39 на бумаге */
+  --ink-3: #626864;          /* приглушённый           4.72 на бумаге */
+  --paper: #f1f1ef;          /* фон страницы */
+  --paper-2: #e7e7e4;        /* серая плашка */
   --card: #ffffff;
-  --line: #e0ddd5;           /* границы на бумаге */
-  --line-card: #ebe8e1;      /* границы на белом */
+  --line: #dedcd7;
+  --line-card: #eae9e4;
 
-  --accent: #ff4b12;         /* фирменный оранжевый — заливки, крупный текст */
-  --accent-hover: #ec3f08;
-  --accent-text: #c43200;    /* оранжевый для МЕЛКОГО текста   4.84 на бумаге */
-  --accent-soft: #ffe9e1;
+  --accent: #74ec9f;         /* мята — заливки; текст на ней только тёмный */
+  --accent-hover: #5fe28f;
+  --accent-soft: #dff8e9;
+  --accent-text: #0e5c3a;    /* зелёный для текста     7.11 на бумаге */
+
+  --forest: #123c29;         /* тёмно-зелёная плашка */
+  --forest-2: #a9c6b6;       /* вторичный текст на ней 6.71 */
 
   --on-dark: #ffffff;
-  --on-dark-2: #b9bec6;      /* вторичный в тёмной секции      9.70 */
-  --dark-line: #2b2f36;
+  --on-dark-2: #b4b9b6;      /* вторичный на чёрном    9.38 */
+  --dark-line: #272b29;
 
-  --ok: #1a7f4b;
-  --warn: #9a5b00;
+  --ok: #0e5c3a;
+  --warn: #8a5a00;
 
   /* --- типографика --- */
-  --font-display: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Wix Madefor Display', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Wix Madefor Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  /* Дисплейная шкала: fluid, но с потолком — на 4K заголовок не разъезжается */
+  /* Крупные заголовки во всю ширину — главный приём референса */
   --fs-mega: clamp(3.5rem, 15.5vw, 15rem);   /* вордмарк */
-  --fs-h1: clamp(2.1rem, 5.6vw, 4.4rem);
-  --fs-h2: clamp(1.75rem, 4vw, 3rem);
-  --fs-h3: clamp(1.25rem, 2.2vw, 1.75rem);
+  --fs-h1: clamp(2.6rem, 7vw, 5.8rem);
+  --fs-h2: clamp(2.1rem, 5.8vw, 4.8rem);
+  --fs-h3: clamp(1.2rem, 1.8vw, 1.55rem);
   --fs-lead: clamp(1.0625rem, 1.5vw, 1.3rem);
-  --fs-body: 1.0625rem;      /* 17px — на мобиле не мельче 16 */
-  --fs-sm: 0.9375rem;
-  --fs-label: 0.75rem;       /* лейблы секций — обычный гротеск, не моно */
+  --fs-body: 1.0625rem;
+  --fs-sm: 1rem;
+  --fs-xs: 0.875rem;
 
   --lh-tight: 0.95;
-  --lh-head: 1.05;
-  --lh-body: 1.6;
-  --ls-display: -0.035em;
-  /* Узкий трекинг: широко разогнанный капс — первое, что выдаёт шаблон */
-  --ls-label: 0.04em;
+  --lh-head: 1.04;
+  --lh-body: 1.55;
+  --ls-display: -0.032em;
 
   /* --- геометрия --- */
-  --r-card: 24px;
-  --r-media: 20px;
-  --r-sm: 12px;
+  /* В референсе карточки компактные, радиус небольшой */
+  --r-card: 14px;
+  --r-panel: 18px;
+  --r-media: 14px;
+  --r-sm: 10px;
   --r-pill: 999px;
 
   --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
@@ -60,20 +64,18 @@
 
   --gutter: clamp(16px, 4vw, 40px);
   --maxw: 1440px;
-  --maxw-text: 68ch;         /* длина строки 65–75 знаков */
+  --maxw-text: 68ch;
 
-  --tap: 44px;               /* минимальная зона нажатия */
+  --tap: 44px;
 
-  /* --- слои --- */
   --z-base: 1; --z-sticky: 10; --z-header: 20; --z-overlay: 30; --z-modal: 40; --z-toast: 50;
 
-  /* --- движение --- */
   --dur-fast: 150ms;
   --dur: 220ms;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
-  --shadow-card: 0 1px 2px rgb(20 22 26 / 4%), 0 8px 24px -12px rgb(20 22 26 / 12%);
-  --shadow-lift: 0 2px 4px rgb(20 22 26 / 6%), 0 18px 40px -16px rgb(20 22 26 / 18%);
+  --shadow-card: 0 1px 2px rgb(17 19 18 / 4%), 0 8px 24px -14px rgb(17 19 18 / 14%);
+  --shadow-lift: 0 2px 4px rgb(17 19 18 / 6%), 0 18px 40px -18px rgb(17 19 18 / 20%);
 }
 
 @media (prefers-reduced-motion: reduce) {

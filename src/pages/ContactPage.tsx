@@ -38,7 +38,7 @@ export default function ContactPage() {
         <div className="wrap">
           <Reveal>
             <div className="blocks blocks--3 contact-cards">
-                <a className="blk blk--dark contact-card" href={CONTACT.phoneHref}>
+                <a className="blk blk--forest contact-card" href={CONTACT.phoneHref}>
                   <Icon name="phone" size={22} />
                   <p className="blk__t">{t.cta.call}</p>
                   <p className="contact-card__v num">{CONTACT.phone}</p>

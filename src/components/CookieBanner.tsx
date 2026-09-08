@@ -42,7 +42,7 @@ export default function CookieBanner() {
         aria-labelledby="cookie-title" tabIndex={-1} ref={ref}
       >
         <div className="cookie__head">
-          <p className="label" id="cookie-title">{t.cookie.title}</p>
+          <p className="cookie__title" id="cookie-title">{t.cookie.title}</p>
           <p className="cookie__text">{t.cookie.text}</p>
         </div>
 

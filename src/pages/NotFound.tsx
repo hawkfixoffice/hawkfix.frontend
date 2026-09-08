@@ -10,7 +10,7 @@ export default function NotFound() {
       </Head>
       <section className="band notfound">
         <div className="wrap">
-          <p className="label">404</p>
+          
           <h1>Nie ma takiej strony<br />· Сторінки немає · Страницы нет · Page not found</h1>
           <p className="prose">
             Sprawdź adres albo wróć na stronę główną. · Перевірте адресу або поверніться на головну. ·

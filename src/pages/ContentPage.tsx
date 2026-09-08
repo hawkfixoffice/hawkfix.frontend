@@ -38,7 +38,6 @@ export default function ContentPage({ narrow = false }: { narrow?: boolean }) {
       <section className="band band--tight ctaband">
         <div className="wrap ctaband__in">
           <div>
-            <p className="label">{t.nav.contact}</p>
             <h2>{t.home.ctaHead}</h2>
             <p className="prose">{t.home.ctaLead}</p>
           </div>

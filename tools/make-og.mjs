@@ -23,12 +23,12 @@ const b64 = async (f) => (await readFile(`public/fonts/${f}`)).toString('base64'
 // Нужны ОБА латинских сабсета: базовые A–Z лежат в latin, а польские
 // диакритики (ł, ą, ę) — в latin-ext. С одним latin-ext браузер считает,
 // что шрифт покрывает всю латиницу, глифов не находит и падает на засечный.
-const interLat = await b64('intertight-latin.woff2')
-const interLatX = await b64('intertight-latin-ext.woff2')
-const interCyr = await b64('intertight-cyrillic.woff2')
-const onestLat = await b64('onest-400-600-latin.woff2')
-const onestLatX = await b64('onest-400-600-latin-ext.woff2')
-const onestCyr = await b64('onest-400-600-cyrillic.woff2')
+const interLat = await b64('wmd-latin.woff2')
+const interLatX = await b64('wmd-latin-ext.woff2')
+const interCyr = await b64('wmd-cyrillic.woff2')
+const onestLat = await b64('wmt-latin.woff2')
+const onestLatX = await b64('wmt-latin-ext.woff2')
+const onestCyr = await b64('wmt-cyrillic.woff2')
 
 const R_LAT = 'U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+20AC, U+2122'
 const R_LATX = 'U+0100-02BA, U+1E00-1E9F, U+2020, U+20A0-20AB, U+2C60-2C7F'
@@ -42,18 +42,18 @@ const html = (locale) => `<!doctype html><html><head><meta charset="utf-8"><styl
 @font-face{font-family:ON;src:url(data:font/woff2;base64,${onestLatX}) format('woff2');font-weight:400 600;unicode-range:${R_LATX}}
 @font-face{font-family:ON;src:url(data:font/woff2;base64,${onestCyr}) format('woff2');font-weight:400 600;unicode-range:${R_CYR}}
 *{margin:0;padding:0;box-sizing:border-box}
-body{width:1200px;height:630px;background:#14161A;color:#fff;font-family:ON,sans-serif;
+body{width:1200px;height:630px;background:#111312;color:#fff;font-family:ON,sans-serif;
      display:flex;flex-direction:column;justify-content:space-between;padding:64px 72px;overflow:hidden;position:relative}
 .dot{position:absolute;right:-160px;top:-160px;width:520px;height:520px;border-radius:50%;
-     background:radial-gradient(circle at 30% 30%,#FF6A3D,#FF4B12 60%,#D93A00);opacity:.92}
+     background:radial-gradient(circle at 30% 30%,#9BF3B9,#74EC9F 55%,#3FBE77);opacity:.95}
 .brand{font-family:IT;font-weight:800;font-size:30px;letter-spacing:-.03em;position:relative}
-.brand i{color:#FF4B12;font-style:normal}
+.brand i{color:#74EC9F;font-style:normal}
 h1{font-family:IT;font-weight:700;font-size:76px;line-height:1.02;letter-spacing:-.04em;
    white-space:pre-line;max-width:15ch;position:relative}
-.sub{font-size:23px;color:#B9BEC6;position:relative}
+.sub{font-size:23px;color:#B4B9B6;position:relative}
 .bar{display:flex;align-items:center;gap:14px;position:relative}
 .pill{border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:10px 20px;font-size:19px}
-.pill--hot{background:#FF4B12;border-color:transparent;color:#14161A;font-weight:600}
+.pill--hot{background:#74EC9F;border-color:transparent;color:#111312;font-weight:600}
 </style></head><body>
 <div class="dot"></div>
 <div class="brand">HAWK<i>.</i>FIX</div>

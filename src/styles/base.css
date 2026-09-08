@@ -73,22 +73,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .skip:focus { top: var(--sp-4); }
 
-/* --- лейбл секции ---
-   Набирается основным гротеском, плотно и тёмным: моноширинный капс
-   с широким трекингом читается как шаблонная заготовка. */
-.label {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-family: var(--font-body); font-size: var(--fs-label); font-weight: 600;
-  letter-spacing: var(--ls-label); text-transform: uppercase;
-  color: var(--ink-2);
-}
-.label::before {
-  content: ''; width: 5px; height: 5px; border-radius: 50%;
-  background: var(--accent); flex: none;
-}
-.label--dark { color: var(--on-dark); }
-/* Вариант без точки — чтобы приём не повторялся на каждой секции подряд */
-.label--plain::before { display: none; }
 
 /* --- полосы/секции --- */
 .band { padding-block: clamp(48px, 8vw, 112px); }
