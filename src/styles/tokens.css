@@ -1,0 +1,80 @@
+/* HAWK.FIX — дизайн-токены.
+   Палитра проверена на контраст (см. tools/): тёмный текст на оранжевом = 5.41 (AA),
+   белый на оранжевом = 3.35 — годится только для крупного текста, поэтому кнопки
+   с оранжевой заливкой несут ТЁМНЫЙ текст, а не белый. */
+
+:root {
+  /* --- цвет --- */
+  --ink: #14161a;            /* основной текст, тёмные плашки */
+  --ink-2: #454b54;          /* вторичный текст          7.71 на бумаге */
+  --ink-3: #5e646c;          /* приглушённый             4.62 на бумаге */
+  --paper: #f1f0ec;          /* фон страницы, тёплый серый */
+  --paper-2: #e8e6e0;        /* фон второго уровня */
+  --card: #ffffff;
+  --line: #e0ddd5;           /* границы на бумаге */
+  --line-card: #ebe8e1;      /* границы на белом */
+
+  --accent: #ff4b12;         /* фирменный оранжевый — заливки, крупный текст */
+  --accent-hover: #ec3f08;
+  --accent-text: #c43200;    /* оранжевый для МЕЛКОГО текста   4.84 на бумаге */
+  --accent-soft: #ffe9e1;
+
+  --on-dark: #ffffff;
+  --on-dark-2: #b9bec6;      /* вторичный в тёмной секции      9.70 */
+  --dark-line: #2b2f36;
+
+  --ok: #1a7f4b;
+  --warn: #9a5b00;
+
+  /* --- типографика --- */
+  --font-display: 'Inter Tight', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Дисплейная шкала: fluid, но с потолком — на 4K заголовок не разъезжается */
+  --fs-mega: clamp(3.5rem, 15.5vw, 15rem);   /* вордмарк */
+  --fs-h1: clamp(2.1rem, 5.6vw, 4.4rem);
+  --fs-h2: clamp(1.75rem, 4vw, 3rem);
+  --fs-h3: clamp(1.25rem, 2.2vw, 1.75rem);
+  --fs-lead: clamp(1.0625rem, 1.5vw, 1.3rem);
+  --fs-body: 1.0625rem;      /* 17px — на мобиле не мельче 16 */
+  --fs-sm: 0.9375rem;
+  --fs-label: 0.6875rem;     /* моно-лейблы секций */
+
+  --lh-tight: 0.95;
+  --lh-head: 1.05;
+  --lh-body: 1.6;
+  --ls-display: -0.035em;
+  --ls-label: 0.14em;
+
+  /* --- геометрия --- */
+  --r-card: 24px;
+  --r-media: 20px;
+  --r-sm: 12px;
+  --r-pill: 999px;
+
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
+  --sp-9: 96px; --sp-10: 128px;
+
+  --gutter: clamp(16px, 4vw, 40px);
+  --maxw: 1440px;
+  --maxw-text: 68ch;         /* длина строки 65–75 знаков */
+
+  --tap: 44px;               /* минимальная зона нажатия */
+
+  /* --- слои --- */
+  --z-base: 1; --z-sticky: 10; --z-header: 20; --z-overlay: 30; --z-modal: 40; --z-toast: 50;
+
+  /* --- движение --- */
+  --dur-fast: 150ms;
+  --dur: 220ms;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --shadow-card: 0 1px 2px rgb(20 22 26 / 4%), 0 8px 24px -12px rgb(20 22 26 / 12%);
+  --shadow-lift: 0 2px 4px rgb(20 22 26 / 6%), 0 18px 40px -16px rgb(20 22 26 / 18%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 1ms; --dur: 1ms; }
+}

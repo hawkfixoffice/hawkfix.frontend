@@ -1,0 +1,1410 @@
+[
+ {
+  "key": "home",
+  "type": "home",
+  "paths": {
+   "pl": "/",
+   "uk": "/uk/",
+   "ru": "/ru/",
+   "en": "/en/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/",
+    "title": "HAWK.FIX — złota rączka w Warszawie, hydraulik i elektryk",
+    "description": "Złota rączka w Warszawie: hydraulika, elektryka, meble i AGD, remont kosmetyczny, sprzątanie, przeprowadzki, ogród. Kosztorys składasz sam i widzisz cenę.",
+    "h1": "Co się zepsuło?"
+   },
+   "uk": {
+    "path": "/uk/",
+    "title": "HAWK.FIX — майстер, сантехнік і електрик у Варшаві",
+    "description": "Майстер на всі руки у Варшаві: сантехніка, електрика, меблі й техніка, косметичний ремонт, прибирання, переїзди, сад. Кошторис складаєте самі й бачите ціну.",
+    "h1": "Що зламалось?"
+   },
+   "ru": {
+    "path": "/ru/",
+    "title": "HAWK.FIX — мастер на час в Варшаве, сантехник и электрик",
+    "description": "Мастер на все руки в Варшаве: сантехника, электрика, мебель и техника, косметический ремонт, уборка, переезды, сад. Смету собираете сами и сразу видите цену.",
+    "h1": "Что сломалось?"
+   },
+   "en": {
+    "path": "/en/",
+    "title": "HAWK.FIX — handyman in Warsaw, plumbing and electrics",
+    "description": "Handyman in Warsaw: plumbing, wiring, furniture and appliances, cosmetic refurbishment, cleaning, moving, garden work. Build the estimate and see the price.",
+    "h1": "What broke?"
+   }
+  }
+ },
+ {
+  "key": "uslugi",
+  "type": "services",
+  "paths": {
+   "pl": "/uslugi/",
+   "uk": "/uk/posluhy/",
+   "ru": "/ru/uslugi/",
+   "en": "/en/services/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/",
+    "title": "Usługi — złota rączka Warszawa | HAWK.FIX",
+    "description": "Pełna lista usług: hydraulika, elektryka, montaż mebli, AGD, karnisze, silikon, drzwi i zamki, malowanie ścian. Stała cena przy każdej pozycji.",
+    "h1": "Usługi"
+   },
+   "uk": {
+    "path": "/uk/posluhy/",
+    "title": "Послуги — майстер на всі руки у Варшаві | HAWK.FIX",
+    "description": "Повний список: сантехніка, електрика, збірка меблів, техніка, карнизи, силікон, двері та замки, фарбування стін. Фіксована ціна біля кожної позиції.",
+    "h1": "Послуги"
+   },
+   "ru": {
+    "path": "/ru/uslugi/",
+    "title": "Услуги — русскоговорящий мастер в Варшаве | HAWK.FIX",
+    "description": "Полный список: сантехника, электрика, сборка мебели, техника, карнизы, силикон, двери и замки, покраска стен. Фиксированная цена рядом с каждой позицией.",
+    "h1": "Услуги"
+   },
+   "en": {
+    "path": "/en/services/",
+    "title": "Services — handyman in Warsaw | HAWK.FIX",
+    "description": "Full list: plumbing, electrics, furniture assembly, appliances, curtain rails, silicone, doors and locks, wall painting. A fixed price next to every job.",
+    "h1": "Services"
+   }
+  }
+ },
+ {
+  "key": "cennik",
+  "type": "prices",
+  "paths": {
+   "pl": "/cennik/",
+   "uk": "/uk/tsiny/",
+   "ru": "/ru/tseny/",
+   "en": "/en/prices/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/cennik/",
+    "title": "Cennik złotej rączki w Warszawie — HAWK.FIX",
+    "description": "Cennik HAWK.FIX Warszawa: wyjazd z podstawową diagnostyką 246 zł, lokalizacja usterki elektrycznej od 350 zł. Stawki i zasady rozliczeń.",
+    "h1": "Cennik bez gwiazdek"
+   },
+   "uk": {
+    "path": "/uk/tsiny/",
+    "title": "Ціни майстра у Варшаві — HAWK.FIX",
+    "description": "Прайс HAWK.FIX Варшава: виїзд із базовою діагностикою 246 zł, пошук несправності електрики від 350 zł. Ставки й умови оплати.",
+    "h1": "Ціни без зірочок"
+   },
+   "ru": {
+    "path": "/ru/tseny/",
+    "title": "Цены мастера на час в Варшаве — HAWK.FIX",
+    "description": "Прайс HAWK.FIX Варшава: выезд с базовой диагностикой 246 zł, поиск неисправности электрики от 350 zł. Ставки и условия оплаты.",
+    "h1": "Прайс без звёздочек"
+   },
+   "en": {
+    "path": "/en/prices/",
+    "title": "Handyman prices in Warsaw — HAWK.FIX",
+    "description": "HAWK.FIX Warsaw prices: call-out with basic diagnostics 246 zł, electrical fault location from 350 zł. Labour rates and billing terms.",
+    "h1": "Pricing without asterisks"
+   }
+  }
+ },
+ {
+  "key": "o-nas",
+  "type": "about",
+  "paths": {
+   "pl": "/o-nas/",
+   "uk": "/uk/pro-nas/",
+   "ru": "/ru/o-nas/",
+   "en": "/en/about/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/o-nas/",
+    "title": "O nas — jedna firma na wszystkie prace | HAWK.FIX Warszawa",
+    "description": "Jedna firma na wszystkie prace w mieszkaniu. Sześć lat praktyki, własny sprzęt, rozmowa po polsku, ukraińsku, rosyjsku i angielsku, cena ustalona przed pracą.",
+    "h1": "Własna ekipa, nie call center"
+   },
+   "uk": {
+    "path": "/uk/pro-nas/",
+    "title": "Про нас — одна фірма на всі роботи | HAWK.FIX Варшава",
+    "description": "Одна фірма на всі роботи у квартирі. Шість років практики, власний інструмент, розмова українською, ціна узгоджена до роботи.",
+    "h1": "Своя бригада, а не кол-центр"
+   },
+   "ru": {
+    "path": "/ru/o-nas/",
+    "title": "О нас — одна фирма на все работы | HAWK.FIX Варшава",
+    "description": "Одна фирма на все работы в квартире. Шесть лет практики, свой инструмент, разговор по-русски, цена согласована до работы.",
+    "h1": "Своя бригада, а не колл-центр"
+   },
+   "en": {
+    "path": "/en/about/",
+    "title": "About us — one firm for every job | HAWK.FIX Warsaw",
+    "description": "One firm for every job in your flat. Six years of practice, own tools, English spoken, and the price agreed before the work starts.",
+    "h1": "Our own crew, not a call centre"
+   }
+  }
+ },
+ {
+  "key": "kontakt",
+  "type": "contact",
+  "paths": {
+   "pl": "/kontakt/",
+   "uk": "/uk/kontakty/",
+   "ru": "/ru/kontakty/",
+   "en": "/en/contact/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/kontakt/",
+    "title": "Kontakt — zgłoś naprawę w minutę | HAWK.FIX Warszawa",
+    "description": "Wyślij zgłoszenie ze strony albo napisz na WhatsApp. Opisz problem i poznaj cenę. Warszawa i 25 km wokół, od poniedziałku do piątku 08:00–20:00.",
+    "h1": "Kontakt"
+   },
+   "uk": {
+    "path": "/uk/kontakty/",
+    "title": "Контакти — заявка за хвилину | HAWK.FIX Варшава",
+    "description": "Надішліть заявку з сайту або напишіть у WhatsApp. Опишіть проблему й дізнайтеся ціну. Варшава і 25 км навколо, з понеділка до п'ятниці 08:00–20:00.",
+    "h1": "Контакти"
+   },
+   "ru": {
+    "path": "/ru/kontakty/",
+    "title": "Контакты — заявка за минуту | HAWK.FIX Варшава",
+    "description": "Отправьте заявку с сайта или напишите в WhatsApp. Опишите проблему и узнайте цену. Варшава и 25 км вокруг, с понедельника по пятницу 08:00–20:00.",
+    "h1": "Контакты"
+   },
+   "en": {
+    "path": "/en/contact/",
+    "title": "Contact — send a request in a minute | HAWK.FIX Warsaw",
+    "description": "Send the request from the site or message on WhatsApp. Describe the problem and get a price. Warsaw and 25 km around, Monday to Friday 08:00–20:00.",
+    "h1": "Contact"
+   }
+  }
+ },
+ {
+  "key": "polityka-prywatnosci",
+  "type": "legal",
+  "paths": {
+   "pl": "/polityka-prywatnosci/",
+   "uk": "/uk/polityka-konfidentsiinosti/",
+   "ru": "/ru/politika-konfidencialnosti/",
+   "en": "/en/privacy/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/polityka-prywatnosci/",
+    "title": "Polityka prywatności | HAWK.FIX",
+    "description": "Jak przetwarzamy dane osobowe zgodnie z RODO: co zbiera formularz zgłoszenia, gdzie trafia, jak długo je trzymamy i jakie masz prawa.",
+    "h1": "Polityka prywatności"
+   },
+   "uk": {
+    "path": "/uk/polityka-konfidentsiinosti/",
+    "title": "Політика конфіденційності | HAWK.FIX",
+    "description": "Як ми обробляємо персональні дані за GDPR: що збирає форма заявки, куди вона потрапляє, скільки зберігається і які у вас права.",
+    "h1": "Політика конфіденційності"
+   },
+   "ru": {
+    "path": "/ru/politika-konfidencialnosti/",
+    "title": "Политика конфиденциальности | HAWK.FIX",
+    "description": "Как мы обрабатываем персональные данные по GDPR: что собирает форма заявки, куда она попадает, сколько хранится и какие у вас права.",
+    "h1": "Политика конфиденциальности"
+   },
+   "en": {
+    "path": "/en/privacy/",
+    "title": "Privacy policy | HAWK.FIX",
+    "description": "How personal data is handled under GDPR: what the request form collects, where it goes, how long it is kept and what your rights are.",
+    "h1": "Privacy policy"
+   }
+  }
+ },
+ {
+  "key": "polityka-cookies",
+  "type": "legal",
+  "paths": {
+   "pl": "/polityka-cookies/",
+   "uk": "/uk/polityka-cookie/",
+   "ru": "/ru/politika-cookie/",
+   "en": "/en/cookies-policy/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/polityka-cookies/",
+    "title": "Polityka cookies | HAWK.FIX",
+    "description": "Ta strona nie zapisuje plików cookie do analityki ani reklamy. Dokument opisuje, czego używamy zamiast nich i co się zmieni, gdy włączymy statystyki i reklamę.",
+    "h1": "Polityka cookies"
+   },
+   "uk": {
+    "path": "/uk/polityka-cookie/",
+    "title": "Політика cookie | HAWK.FIX",
+    "description": "Цей сайт не записує файли cookie для аналітики чи реклами. Що ми використовуємо замість них і що зміниться, коли увімкнемо статистику й рекламу.",
+    "h1": "Політика cookie"
+   },
+   "ru": {
+    "path": "/ru/politika-cookie/",
+    "title": "Политика cookie | HAWK.FIX",
+    "description": "Этот сайт не записывает файлы cookie для аналитики или рекламы. Что мы используем вместо них и что изменится, когда включим статистику и рекламу.",
+    "h1": "Политика cookie"
+   },
+   "en": {
+    "path": "/en/cookies-policy/",
+    "title": "Cookie policy | HAWK.FIX",
+    "description": "This site sets no cookies for analytics or advertising. What we use instead, and what changes once statistics and advertising are switched on.",
+    "h1": "Cookie policy"
+   }
+  }
+ },
+ {
+  "key": "regulamin",
+  "type": "legal",
+  "paths": {
+   "pl": "/regulamin/",
+   "uk": "/uk/pravyla/",
+   "ru": "/ru/pravila/",
+   "en": "/en/terms/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/regulamin/",
+    "title": "Regulamin usług | HAWK.FIX",
+    "description": "Zasady współpracy: skąd bierze się wycena, kiedy cena staje się wiążąca, jak wygląda płatność, kto kupuje części, odwołanie i zmiana terminu.",
+    "h1": "Regulamin"
+   },
+   "uk": {
+    "path": "/uk/pravyla/",
+    "title": "Правила надання послуг | HAWK.FIX",
+    "description": "Правила співпраці: звідки береться оцінка, коли ціна стає остаточною, як відбувається оплата, хто купує запчастини, скасування та зміна часу.",
+    "h1": "Правила надання послуг"
+   },
+   "ru": {
+    "path": "/ru/pravila/",
+    "title": "Правила оказания услуг | HAWK.FIX",
+    "description": "Правила работы: откуда берётся оценка, когда цена становится окончательной, как проходит оплата, кто покупает запчасти, отмена и перенос времени.",
+    "h1": "Регламент"
+   },
+   "en": {
+    "path": "/en/terms/",
+    "title": "Terms of service | HAWK.FIX",
+    "description": "How the work is agreed: where the estimate comes from, when the price becomes binding, how payment works, who buys the parts, cancellations and rescheduling.",
+    "h1": "Terms of service"
+   }
+  }
+ },
+ {
+  "key": "uslugi-hydraulik",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/hydraulik/",
+   "uk": "/uk/posluhy/santekhnik/",
+   "ru": "/ru/uslugi/santehnik/",
+   "en": "/en/services/plumber/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/hydraulik/",
+    "title": "Hydraulika — drobne naprawy Warszawa — HAWK.FIX",
+    "description": "Cieknący kran, zapchany syfon, spłuczka, podłączenie pralki. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Hydraulika — drobne naprawy",
+    "blurb": "Cieknący kran, zapchany syfon, spłuczka, podłączenie pralki."
+   },
+   "uk": {
+    "path": "/uk/posluhy/santekhnik/",
+    "title": "Сантехніка — дрібний ремонт у Варшаві — HAWK.FIX",
+    "description": "Тече кран, забився сифон, зливний бачок, підключення пральної машини. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Сантехніка — дрібний ремонт",
+    "blurb": "Тече кран, забився сифон, зливний бачок, підключення пральної машини."
+   },
+   "ru": {
+    "path": "/ru/uslugi/santehnik/",
+    "title": "Сантехника — мелкий ремонт в Варшаве",
+    "description": "Течёт кран, забился сифон, бачок, подключение стиральной машины. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Сантехника — мелкий ремонт",
+    "blurb": "Течёт кран, забился сифон, бачок, подключение стиральной машины."
+   },
+   "en": {
+    "path": "/en/services/plumber/",
+    "title": "Plumbing — small repairs in Warsaw — HAWK.FIX",
+    "description": "Dripping tap, blocked trap, cistern, washing machine hook-up. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Plumbing — small repairs",
+    "blurb": "Dripping tap, blocked trap, cistern, washing machine hook-up."
+   }
+  },
+  "image": "plumbing",
+  "group": "g-plumbing"
+ },
+ {
+  "key": "uslugi-udraznianie-rur",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/udraznianie-rur/",
+   "uk": "/uk/posluhy/prochyshchennia-trub/",
+   "ru": "/ru/uslugi/prochistka-trub/",
+   "en": "/en/services/drain-unblocking/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/udraznianie-rur/",
+    "title": "Udrażnianie rur i odpływów Warszawa — HAWK.FIX",
+    "description": "Woda nie schodzi w zlewie, wannie, toalecie. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Udrażnianie rur i odpływów",
+    "blurb": "Woda nie schodzi w zlewie, wannie, toalecie."
+   },
+   "uk": {
+    "path": "/uk/posluhy/prochyshchennia-trub/",
+    "title": "Прочищення труб і зливів у Варшаві — HAWK.FIX",
+    "description": "Не йде вода в раковині, ванні, унітазі. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Прочищення труб і зливів",
+    "blurb": "Не йде вода в раковині, ванні, унітазі."
+   },
+   "ru": {
+    "path": "/ru/uslugi/prochistka-trub/",
+    "title": "Прочистка труб и слива в Варшаве — русскоговорящий мастер",
+    "description": "Не уходит вода в раковине, ванне, унитазе. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Прочистка труб и слива",
+    "blurb": "Не уходит вода в раковине, ванне, унитазе."
+   },
+   "en": {
+    "path": "/en/services/drain-unblocking/",
+    "title": "Drain unblocking in Warsaw — HAWK.FIX",
+    "description": "Water won't drain in the sink, bath or toilet. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Drain unblocking",
+    "blurb": "Water won't drain in the sink, bath or toilet."
+   }
+  },
+  "image": "drains"
+ },
+ {
+  "key": "uslugi-elektryk",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/elektryk/",
+   "uk": "/uk/posluhy/elektryk/",
+   "ru": "/ru/uslugi/elektrik/",
+   "en": "/en/services/electrician/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/elektryk/",
+    "title": "Elektryka — drobne prace Warszawa — HAWK.FIX",
+    "description": "Gniazdka, włączniki, lampy, żyrandol, taśmy LED. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Elektryka — drobne prace",
+    "blurb": "Gniazdka, włączniki, lampy, żyrandol, taśmy LED."
+   },
+   "uk": {
+    "path": "/uk/posluhy/elektryk/",
+    "title": "Електрика — дрібні роботи у Варшаві — HAWK.FIX",
+    "description": "Розетки, вимикачі, світильники, люстра, LED-стрічки. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Електрика — дрібні роботи",
+    "blurb": "Розетки, вимикачі, світильники, люстра, LED-стрічки."
+   },
+   "ru": {
+    "path": "/ru/uslugi/elektrik/",
+    "title": "Электрика — мелкие работы в Варшаве — русскоговорящий мастер",
+    "description": "Розетки, выключатели, лампы, люстра, LED-ленты. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Электрика — мелкие работы",
+    "blurb": "Розетки, выключатели, лампы, люстра, LED-ленты."
+   },
+   "en": {
+    "path": "/en/services/electrician/",
+    "title": "Electrics — small jobs in Warsaw — HAWK.FIX",
+    "description": "Sockets, switches, lights, chandeliers, LED strips. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Electrics — small jobs",
+    "blurb": "Sockets, switches, lights, chandeliers, LED strips."
+   }
+  },
+  "image": "electrics",
+  "group": "g-electrics"
+ },
+ {
+  "key": "uslugi-montaz-mebli",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/montaz-mebli/",
+   "uk": "/uk/posluhy/zbirka-mebliv/",
+   "ru": "/ru/uslugi/sborka-mebeli/",
+   "en": "/en/services/furniture-assembly/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/montaz-mebli/",
+    "title": "Montaż mebli Warszawa — HAWK.FIX",
+    "description": "IKEA, BRW, meble z internetu i na wymiar. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Montaż mebli",
+    "blurb": "IKEA, BRW, meble z internetu i na wymiar."
+   },
+   "uk": {
+    "path": "/uk/posluhy/zbirka-mebliv/",
+    "title": "Збірка меблів у Варшаві — HAWK.FIX",
+    "description": "IKEA, BRW, меблі з інтернету та на замовлення. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Збірка меблів",
+    "blurb": "IKEA, BRW, меблі з інтернету та на замовлення."
+   },
+   "ru": {
+    "path": "/ru/uslugi/sborka-mebeli/",
+    "title": "Сборка мебели в Варшаве — русскоговорящий мастер",
+    "description": "IKEA, BRW, мебель из интернета и на заказ. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Сборка мебели",
+    "blurb": "IKEA, BRW, мебель из интернета и на заказ."
+   },
+   "en": {
+    "path": "/en/services/furniture-assembly/",
+    "title": "Furniture assembly in Warsaw — HAWK.FIX",
+    "description": "IKEA, BRW, online and made-to-measure furniture. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Furniture assembly",
+    "blurb": "IKEA, BRW, online and made-to-measure furniture."
+   }
+  },
+  "image": "furniture",
+  "group": "g-furniture"
+ },
+ {
+  "key": "uslugi-naprawa-mebli",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/naprawa-mebli/",
+   "uk": "/uk/posluhy/remont-mebliv/",
+   "ru": "/ru/uslugi/remont-mebeli/",
+   "en": "/en/services/furniture-repair/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/naprawa-mebli/",
+    "title": "Naprawa mebli Warszawa — HAWK.FIX",
+    "description": "Nie domykają się drzwiczki, obwisła szuflada, odpadł front. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Naprawa mebli",
+    "blurb": "Nie domykają się drzwiczki, obwisła szuflada, odpadł front."
+   },
+   "uk": {
+    "path": "/uk/posluhy/remont-mebliv/",
+    "title": "Ремонт меблів у Варшаві — HAWK.FIX",
+    "description": "Не зачиняються дверцята, провисла шухляда, відпав фасад. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Ремонт меблів",
+    "blurb": "Не зачиняються дверцята, провисла шухляда, відпав фасад."
+   },
+   "ru": {
+    "path": "/ru/uslugi/remont-mebeli/",
+    "title": "Ремонт мебели в Варшаве — русскоговорящий мастер",
+    "description": "Не закрывается дверца, провис ящик, отвалился фасад. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Ремонт мебели",
+    "blurb": "Не закрывается дверца, провис ящик, отвалился фасад."
+   },
+   "en": {
+    "path": "/en/services/furniture-repair/",
+    "title": "Furniture repair in Warsaw — HAWK.FIX",
+    "description": "A door that won't close, a sagging drawer, a front that fell off. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Furniture repair",
+    "blurb": "A door that won't close, a sagging drawer, a front that fell off."
+   }
+  },
+  "image": "furniture-repair"
+ },
+ {
+  "key": "uslugi-demontaz-i-montaz-mebli",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/demontaz-i-montaz-mebli/",
+   "uk": "/uk/posluhy/pereizd-rozbir-zbirka/",
+   "ru": "/ru/uslugi/perevozka-mebeli/",
+   "en": "/en/services/furniture-moving/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/demontaz-i-montaz-mebli/",
+    "title": "Demontaż i montaż mebli przy przeprowadzce Warszawa",
+    "description": "Rozebrać w starym mieszkaniu, złożyć w nowym. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Demontaż i montaż mebli przy przeprowadzce",
+    "blurb": "Rozebrać w starym mieszkaniu, złożyć w nowym."
+   },
+   "uk": {
+    "path": "/uk/posluhy/pereizd-rozbir-zbirka/",
+    "title": "Розбір і збірка меблів при переїзді у Варшаві — HAWK.FIX",
+    "description": "Розібрати на старій квартирі, зібрати на новій. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Розбір і збірка меблів при переїзді",
+    "blurb": "Розібрати на старій квартирі, зібрати на новій."
+   },
+   "ru": {
+    "path": "/ru/uslugi/perevozka-mebeli/",
+    "title": "Разбор и сборка мебели при переезде в Варшаве",
+    "description": "Разобрать на старой квартире, собрать на новой. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Разбор и сборка мебели при переезде",
+    "blurb": "Разобрать на старой квартире, собрать на новой."
+   },
+   "en": {
+    "path": "/en/services/furniture-moving/",
+    "title": "Furniture dismantling and reassembly for a move in Warsaw",
+    "description": "Taken apart in the old flat, put back together in the new one. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Furniture dismantling and reassembly for a move",
+    "blurb": "Taken apart in the old flat, put back together in the new one."
+   }
+  },
+  "image": "moving"
+ },
+ {
+  "key": "uslugi-wywoz-starych-mebli",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/wywoz-starych-mebli/",
+   "uk": "/uk/posluhy/vyvezennia-mebliv/",
+   "ru": "/ru/uslugi/vyvoz-mebeli/",
+   "en": "/en/services/furniture-removal/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/wywoz-starych-mebli/",
+    "title": "Wywóz starych mebli i gabarytów Warszawa — HAWK.FIX",
+    "description": "Rozebrać, znieść, odwieźć na PSZOK. Od 400 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Wywóz starych mebli i gabarytów",
+    "blurb": "Rozebrać, znieść, odwieźć na PSZOK."
+   },
+   "uk": {
+    "path": "/uk/posluhy/vyvezennia-mebliv/",
+    "title": "Вивезення старих меблів і габаритів у Варшаві — HAWK.FIX",
+    "description": "Розібрати, знести, відвезти на PSZOK. Від 400 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Вивезення старих меблів і габаритів",
+    "blurb": "Розібрати, знести, відвезти на PSZOK."
+   },
+   "ru": {
+    "path": "/ru/uslugi/vyvoz-mebeli/",
+    "title": "Вывоз старой мебели и крупногабарита в Варшаве",
+    "description": "Разобрать, снести, увезти на PSZOK. От 400 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Вывоз старой мебели и крупногабарита",
+    "blurb": "Разобрать, снести, увезти на PSZOK."
+   },
+   "en": {
+    "path": "/en/services/furniture-removal/",
+    "title": "Old furniture and bulky waste removal in Warsaw — HAWK.FIX",
+    "description": "Dismantled, carried out, taken to the recycling point. From 400 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Old furniture and bulky waste removal",
+    "blurb": "Dismantled, carried out, taken to the recycling point."
+   }
+  },
+  "image": "disposal"
+ },
+ {
+  "key": "uslugi-wiercenie-i-wieszanie",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/wiercenie-i-wieszanie/",
+   "uk": "/uk/posluhy/sverdlinnia/",
+   "ru": "/ru/uslugi/sverlenie/",
+   "en": "/en/services/drilling-and-mounting/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/wiercenie-i-wieszanie/",
+    "title": "Wiercenie i wieszanie Warszawa — HAWK.FIX",
+    "description": "Półki, lustro, karnisz, obraz, wieszaki. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Wiercenie i wieszanie",
+    "blurb": "Półki, lustro, karnisz, obraz, wieszaki."
+   },
+   "uk": {
+    "path": "/uk/posluhy/sverdlinnia/",
+    "title": "Свердління й монтаж на стіну у Варшаві — HAWK.FIX",
+    "description": "Полиці, дзеркало, карниз, картина, вішалки. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Свердління й монтаж на стіну",
+    "blurb": "Полиці, дзеркало, карниз, картина, вішалки."
+   },
+   "ru": {
+    "path": "/ru/uslugi/sverlenie/",
+    "title": "Сверление и навеска в Варшаве — русскоговорящий мастер",
+    "description": "Полки, зеркало, карниз, картина, вешалки. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Сверление и навеска",
+    "blurb": "Полки, зеркало, карниз, картина, вешалки."
+   },
+   "en": {
+    "path": "/en/services/drilling-and-mounting/",
+    "title": "Drilling and wall mounting in Warsaw — HAWK.FIX",
+    "description": "Shelves, mirror, curtain rail, picture, hooks. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Drilling and wall mounting",
+    "blurb": "Shelves, mirror, curtain rail, picture, hooks."
+   }
+  },
+  "image": "drilling",
+  "group": "g-mounting"
+ },
+ {
+  "key": "uslugi-montaz-telewizora",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/montaz-telewizora/",
+   "uk": "/uk/posluhy/montazh-televizora/",
+   "ru": "/ru/uslugi/montazh-televizora/",
+   "en": "/en/services/tv-wall-mounting/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/montaz-telewizora/",
+    "title": "Montaż telewizora na ścianie Warszawa — HAWK.FIX",
+    "description": "Uchwyt, równo do poziomu, kable schowane. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Montaż telewizora na ścianie",
+    "blurb": "Uchwyt, równo do poziomu, kable schowane."
+   },
+   "uk": {
+    "path": "/uk/posluhy/montazh-televizora/",
+    "title": "Монтаж телевізора на стіну у Варшаві — HAWK.FIX",
+    "description": "Кронштейн, рівно по рівню, кабелі сховані. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Монтаж телевізора на стіну",
+    "blurb": "Кронштейн, рівно по рівню, кабелі сховані."
+   },
+   "ru": {
+    "path": "/ru/uslugi/montazh-televizora/",
+    "title": "Монтаж телевизора на стену в Варшаве",
+    "description": "Кронштейн, ровно по уровню, кабели спрятаны. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Монтаж телевизора на стену",
+    "blurb": "Кронштейн, ровно по уровню, кабели спрятаны."
+   },
+   "en": {
+    "path": "/en/services/tv-wall-mounting/",
+    "title": "TV wall mounting in Warsaw — HAWK.FIX",
+    "description": "Bracket, dead level, cables hidden. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "TV wall mounting",
+    "blurb": "Bracket, dead level, cables hidden."
+   }
+  },
+  "image": "tv"
+ },
+ {
+  "key": "uslugi-drzwi-okna-zamki",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/drzwi-okna-zamki/",
+   "uk": "/uk/posluhy/dveri-vikna-zamky/",
+   "ru": "/ru/uslugi/dveri-okna-zamki/",
+   "en": "/en/services/doors-windows-locks/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/drzwi-okna-zamki/",
+    "title": "Drzwi, okna, zamki Warszawa — HAWK.FIX",
+    "description": "Skrzypią, nie domykają się, zamek się zaciął. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Drzwi, okna, zamki",
+    "blurb": "Skrzypią, nie domykają się, zamek się zaciął."
+   },
+   "uk": {
+    "path": "/uk/posluhy/dveri-vikna-zamky/",
+    "title": "Двері, вікна, замки у Варшаві — HAWK.FIX",
+    "description": "Скриплять, не зачиняються, замок заклинив. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Двері, вікна, замки",
+    "blurb": "Скриплять, не зачиняються, замок заклинив."
+   },
+   "ru": {
+    "path": "/ru/uslugi/dveri-okna-zamki/",
+    "title": "Двери, окна, замки в Варшаве — русскоговорящий мастер",
+    "description": "Скрипят, не закрываются, замок заклинило. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Двери, окна, замки",
+    "blurb": "Скрипят, не закрываются, замок заклинило."
+   },
+   "en": {
+    "path": "/en/services/doors-windows-locks/",
+    "title": "Doors, windows, locks in Warsaw — HAWK.FIX",
+    "description": "Squeaking, not closing, jammed lock. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Doors, windows, locks",
+    "blurb": "Squeaking, not closing, jammed lock."
+   }
+  },
+  "image": "doors",
+  "group": "g-doors"
+ },
+ {
+  "key": "uslugi-montaz-agd",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/montaz-agd/",
+   "uk": "/uk/posluhy/montazh-tekhniky/",
+   "ru": "/ru/uslugi/montazh-tehniki/",
+   "en": "/en/services/appliance-installation/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/montaz-agd/",
+    "title": "Montaż AGD Warszawa — HAWK.FIX",
+    "description": "Okap, płyta, piekarnik, pralka, zmywarka. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Montaż AGD",
+    "blurb": "Okap, płyta, piekarnik, pralka, zmywarka."
+   },
+   "uk": {
+    "path": "/uk/posluhy/montazh-tekhniky/",
+    "title": "Монтаж техніки у Варшаві — HAWK.FIX",
+    "description": "Витяжка, плита, духовка, пральна й посудомийна машина. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Монтаж техніки",
+    "blurb": "Витяжка, плита, духовка, пральна й посудомийна машина."
+   },
+   "ru": {
+    "path": "/ru/uslugi/montazh-tehniki/",
+    "title": "Монтаж бытовой техники в Варшаве — русскоговорящий мастер",
+    "description": "Вытяжка, варочная панель, духовка, стиралка, посудомойка. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Монтаж бытовой техники",
+    "blurb": "Вытяжка, варочная панель, духовка, стиралка, посудомойка."
+   },
+   "en": {
+    "path": "/en/services/appliance-installation/",
+    "title": "Appliance installation in Warsaw — HAWK.FIX",
+    "description": "Hood, hob, oven, washing machine, dishwasher. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Appliance installation",
+    "blurb": "Hood, hob, oven, washing machine, dishwasher."
+   }
+  },
+  "image": "appliances",
+  "group": "g-appliances"
+ },
+ {
+  "key": "uslugi-lazienka-silikon",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/lazienka-silikon/",
+   "uk": "/uk/posluhy/vanna-sylikon/",
+   "ru": "/ru/uslugi/vannaya-germetik/",
+   "en": "/en/services/bathroom-sealant/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/lazienka-silikon/",
+    "title": "Łazienka i silikon Warszawa — HAWK.FIX",
+    "description": "Kabina przecieka, silikon czarny, fuga skruszona. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Łazienka i silikon",
+    "blurb": "Kabina przecieka, silikon czarny, fuga skruszona."
+   },
+   "uk": {
+    "path": "/uk/posluhy/vanna-sylikon/",
+    "title": "Ванна й силікон у Варшаві — HAWK.FIX",
+    "description": "Кабіна протікає, силікон почорнів, шви розсипались. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Ванна й силікон",
+    "blurb": "Кабіна протікає, силікон почорнів, шви розсипались."
+   },
+   "ru": {
+    "path": "/ru/uslugi/vannaya-germetik/",
+    "title": "Ванная и герметик в Варшаве — русскоговорящий мастер",
+    "description": "Кабина течёт, силикон чёрный, затирка раскрошилась. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Ванная и герметик",
+    "blurb": "Кабина течёт, силикон чёрный, затирка раскрошилась."
+   },
+   "en": {
+    "path": "/en/services/bathroom-sealant/",
+    "title": "Bathroom and silicone in Warsaw — HAWK.FIX",
+    "description": "Leaking shower, black silicone, crumbling grout. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Bathroom and silicone",
+    "blurb": "Leaking shower, black silicone, crumbling grout."
+   }
+  },
+  "image": "bathroom"
+ },
+ {
+  "key": "uslugi-wentylacja-lazienka",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/wentylacja-lazienka/",
+   "uk": "/uk/posluhy/ventyliatsiia/",
+   "ru": "/ru/uslugi/ventilyaciya/",
+   "en": "/en/services/bathroom-ventilation/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/wentylacja-lazienka/",
+    "title": "Wentylacja: wentylator, kanał wentylacyjny Warszawa",
+    "description": "W łazience paruje lustro, na suficie pleśń. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Wentylacja: wentylator, kanał wentylacyjny",
+    "blurb": "W łazience paruje lustro, na suficie pleśń."
+   },
+   "uk": {
+    "path": "/uk/posluhy/ventyliatsiia/",
+    "title": "Вентиляція: витяжний вентилятор, вентканал у Варшаві",
+    "description": "У ванній пітніє дзеркало, на стелі пліснява. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Вентиляція: витяжний вентилятор, вентканал",
+    "blurb": "У ванній пітніє дзеркало, на стелі пліснява."
+   },
+   "ru": {
+    "path": "/ru/uslugi/ventilyaciya/",
+    "title": "Вентиляция: вытяжной вентилятор, вентканал в Варшаве",
+    "description": "В ванной запотевает зеркало, на потолке плесень. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Вентиляция: вытяжной вентилятор, вентканал",
+    "blurb": "В ванной запотевает зеркало, на потолке плесень."
+   },
+   "en": {
+    "path": "/en/services/bathroom-ventilation/",
+    "title": "Ventilation: extractor fan and duct in Warsaw — HAWK.FIX",
+    "description": "The bathroom mirror fogs up, the ceiling goes black. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Ventilation: extractor fan and duct",
+    "blurb": "The bathroom mirror fogs up, the ceiling goes black."
+   }
+  },
+  "image": "ventilation"
+ },
+ {
+  "key": "uslugi-drobne-naprawy",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/drobne-naprawy/",
+   "uk": "/uk/posluhy/dribnyi-remont/",
+   "ru": "/ru/uslugi/melkiy-remont/",
+   "en": "/en/services/small-repairs/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/drobne-naprawy/",
+    "title": "Drobne naprawy w domu Warszawa — HAWK.FIX",
+    "description": "Lista drobnych spraw, które zbierały się miesiącami. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Drobne naprawy w domu",
+    "blurb": "Lista drobnych spraw, które zbierały się miesiącami."
+   },
+   "uk": {
+    "path": "/uk/posluhy/dribnyi-remont/",
+    "title": "Дрібний ремонт у домі у Варшаві — HAWK.FIX",
+    "description": "Список дрібних справ, що збиралися місяцями. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Дрібний ремонт у домі",
+    "blurb": "Список дрібних справ, що збиралися місяцями."
+   },
+   "ru": {
+    "path": "/ru/uslugi/melkiy-remont/",
+    "title": "Мелкий ремонт по дому в Варшаве — русскоговорящий мастер",
+    "description": "Список мелких дел, которые копились месяцами. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Мелкий ремонт по дому",
+    "blurb": "Список мелких дел, которые копились месяцами."
+   },
+   "en": {
+    "path": "/en/services/small-repairs/",
+    "title": "Small repairs around the home in Warsaw — HAWK.FIX",
+    "description": "The list of small jobs that has been piling up for months. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Small repairs around the home",
+    "blurb": "The list of small jobs that has been piling up for months."
+   }
+  },
+  "image": "repairs"
+ },
+ {
+  "key": "uslugi-panele-podlogowe-listwy",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/panele-podlogowe-listwy/",
+   "uk": "/uk/posluhy/laminat-plintusy/",
+   "ru": "/ru/uslugi/laminat-plintusy/",
+   "en": "/en/services/flooring-and-skirting/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/panele-podlogowe-listwy/",
+    "title": "Podłogi: panele, listwy, progi Warszawa — HAWK.FIX",
+    "description": "Ułożyć, dobić, wymienić listwę, zamknąć styk. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Podłogi: panele, listwy, progi",
+    "blurb": "Ułożyć, dobić, wymienić listwę, zamknąć styk."
+   },
+   "uk": {
+    "path": "/uk/posluhy/laminat-plintusy/",
+    "title": "Підлога: ламінат, плінтуси, пороги у Варшаві — HAWK.FIX",
+    "description": "Покласти, підбити, замінити плінтус, закрити стик. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Підлога: ламінат, плінтуси, пороги",
+    "blurb": "Покласти, підбити, замінити плінтус, закрити стик."
+   },
+   "ru": {
+    "path": "/ru/uslugi/laminat-plintusy/",
+    "title": "Полы: ламинат, плинтусы, пороги в Варшаве",
+    "description": "Уложить, подбить, поменять плинтус, закрыть стык. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Полы: ламинат, плинтусы, пороги",
+    "blurb": "Уложить, подбить, поменять плинтус, закрыть стык."
+   },
+   "en": {
+    "path": "/en/services/flooring-and-skirting/",
+    "title": "Floors: laminate, skirting, thresholds in Warsaw — HAWK.FIX",
+    "description": "Lay it, tap it back, change the skirting, close the joint. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Floors: laminate, skirting, thresholds",
+    "blurb": "Lay it, tap it back, change the skirting, close the joint."
+   }
+  },
+  "image": "floors"
+ },
+ {
+  "key": "uslugi-sciany-malowanie",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/sciany-malowanie/",
+   "uk": "/uk/posluhy/stiny-farbuvannia/",
+   "ru": "/ru/uslugi/remont-sten-pokraska/",
+   "en": "/en/services/wall-repair-and-painting/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/sciany-malowanie/",
+    "title": "Ściany: naprawa, wyrównanie, malowanie Warszawa — HAWK.FIX",
+    "description": "Pęknięcia, krzywa ściana, sufit po zalaniu, malowanie. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Ściany: naprawa, wyrównanie, malowanie",
+    "blurb": "Pęknięcia, krzywa ściana, sufit po zalaniu, malowanie."
+   },
+   "uk": {
+    "path": "/uk/posluhy/stiny-farbuvannia/",
+    "title": "Стіни: ремонт, вирівнювання, фарбування у Варшаві — HAWK.FIX",
+    "description": "Тріщини, крива стіна, стеля після залиття, фарбування. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Стіни: ремонт, вирівнювання, фарбування",
+    "blurb": "Тріщини, крива стіна, стеля після залиття, фарбування."
+   },
+   "ru": {
+    "path": "/ru/uslugi/remont-sten-pokraska/",
+    "title": "Стены: ремонт, выравнивание, покраска в Варшаве",
+    "description": "Трещины, кривая стена, потолок после залива, покраска. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Стены: ремонт, выравнивание, покраска",
+    "blurb": "Трещины, кривая стена, потолок после залива, покраска."
+   },
+   "en": {
+    "path": "/en/services/wall-repair-and-painting/",
+    "title": "Walls: repair, levelling, painting in Warsaw — HAWK.FIX",
+    "description": "Cracks, an uneven wall, a ceiling after a leak, painting. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Walls: repair, levelling, painting",
+    "blurb": "Cracks, an uneven wall, a ceiling after a leak, painting."
+   }
+  },
+  "image": "painting",
+  "group": "g-walls"
+ },
+ {
+  "key": "uslugi-karnisze-rolety-zaluzje",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/karnisze-rolety-zaluzje/",
+   "uk": "/uk/posluhy/karnyzy-rolety/",
+   "ru": "/ru/uslugi/karnizy-zhalyuzi/",
+   "en": "/en/services/curtain-rails-and-blinds/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/karnisze-rolety-zaluzje/",
+    "title": "Karnisze, rolety, żaluzje Warszawa — HAWK.FIX",
+    "description": "Rolety dzień-noc, plisy, karnisze sufitowe. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Karnisze, rolety, żaluzje",
+    "blurb": "Rolety dzień-noc, plisy, karnisze sufitowe."
+   },
+   "uk": {
+    "path": "/uk/posluhy/karnyzy-rolety/",
+    "title": "Карнизи, ролети, жалюзі у Варшаві — HAWK.FIX",
+    "description": "Ролети день-ніч, плісе, стельові карнизи. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Карнизи, ролети, жалюзі",
+    "blurb": "Ролети день-ніч, плісе, стельові карнизи."
+   },
+   "ru": {
+    "path": "/ru/uslugi/karnizy-zhalyuzi/",
+    "title": "Карнизы, рулонные шторы, жалюзи в Варшаве",
+    "description": "Шторы день-ночь, плиссе, потолочные карнизы. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Карнизы, рулонные шторы, жалюзи",
+    "blurb": "Шторы день-ночь, плиссе, потолочные карнизы."
+   },
+   "en": {
+    "path": "/en/services/curtain-rails-and-blinds/",
+    "title": "Curtain rails, roller blinds, shutters in Warsaw — HAWK.FIX",
+    "description": "Day-night blinds, pleated blinds, ceiling rails. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Curtain rails, roller blinds, shutters",
+    "blurb": "Day-night blinds, pleated blinds, ceiling rails."
+   }
+  },
+  "image": "blinds"
+ },
+ {
+  "key": "uslugi-awaria-tego-samego-dnia",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/awaria-tego-samego-dnia/",
+   "uk": "/uk/posluhy/avariia-sohodni/",
+   "ru": "/ru/uslugi/avariya-segodnya/",
+   "en": "/en/services/same-day-emergency/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/awaria-tego-samego-dnia/",
+    "title": "Awaria — dziś Warszawa — HAWK.FIX",
+    "description": "Zalanie, brak prądu, nie domykają się drzwi. Od 369 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Awaria — dziś",
+    "blurb": "Zalanie, brak prądu, nie domykają się drzwi."
+   },
+   "uk": {
+    "path": "/uk/posluhy/avariia-sohodni/",
+    "title": "Аварія — сьогодні у Варшаві — HAWK.FIX",
+    "description": "Затопило, немає струму, двері не зачиняються. Від 369 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Аварія — сьогодні",
+    "blurb": "Затопило, немає струму, двері не зачиняються."
+   },
+   "ru": {
+    "path": "/ru/uslugi/avariya-segodnya/",
+    "title": "Авария — сегодня в Варшаве — русскоговорящий мастер",
+    "description": "Залив, нет света, дверь не закрывается. От 369 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Авария — сегодня",
+    "blurb": "Залив, нет света, дверь не закрывается."
+   },
+   "en": {
+    "path": "/en/services/same-day-emergency/",
+    "title": "Emergency — today in Warsaw — HAWK.FIX",
+    "description": "Flooding, no power, a door that will not close. From 369 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Emergency — today",
+    "blurb": "Flooding, no power, a door that will not close."
+   }
+  },
+  "image": "urgent"
+ },
+ {
+  "key": "uslugi-sprzatanie-mieszkan",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/sprzatanie-mieszkan/",
+   "uk": "/uk/posluhy/prybyrannia-kvartyr/",
+   "ru": "/ru/uslugi/uborka-kvartir/",
+   "en": "/en/services/home-cleaning/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/sprzatanie-mieszkan/",
+    "title": "Sprzątanie mieszkań i domów Warszawa — HAWK.FIX",
+    "description": "Trzy poziomy, rozliczenie za godzinę. Od 270 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Sprzątanie mieszkań i domów",
+    "blurb": "Trzy poziomy, rozliczenie za godzinę."
+   },
+   "uk": {
+    "path": "/uk/posluhy/prybyrannia-kvartyr/",
+    "title": "Прибирання квартир і будинків у Варшаві — HAWK.FIX",
+    "description": "Три рівні, розрахунок за годину. Від 270 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Прибирання квартир і будинків",
+    "blurb": "Три рівні, розрахунок за годину."
+   },
+   "ru": {
+    "path": "/ru/uslugi/uborka-kvartir/",
+    "title": "Уборка квартир и домов в Варшаве — русскоговорящий мастер",
+    "description": "Три уровня, расчёт за час. От 270 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Уборка квартир и домов",
+    "blurb": "Три уровня, расчёт за час."
+   },
+   "en": {
+    "path": "/en/services/home-cleaning/",
+    "title": "Home and flat cleaning in Warsaw — HAWK.FIX",
+    "description": "Three levels, charged by the hour. From 270 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Home and flat cleaning",
+    "blurb": "Three levels, charged by the hour."
+   }
+  },
+  "image": "cleaning",
+  "group": "g-home-cleaning"
+ },
+ {
+  "key": "uslugi-sprzatanie-pod-zwrot-kaucji",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/sprzatanie-pod-zwrot-kaucji/",
+   "uk": "/uk/posluhy/prybyrannia-pid-povernennia-kautsii/",
+   "ru": "/ru/uslugi/uborka-pod-vozvrat-zaloga/",
+   "en": "/en/services/end-of-tenancy-cleaning/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/sprzatanie-pod-zwrot-kaucji/",
+    "title": "Sprzątanie pod zwrot kaucji Warszawa — HAWK.FIX",
+    "description": "Protokół, poprawki i sprzątanie w jednym wyjeździe. Od 400 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Sprzątanie pod zwrot kaucji",
+    "blurb": "Protokół, poprawki i sprzątanie w jednym wyjeździe."
+   },
+   "uk": {
+    "path": "/uk/posluhy/prybyrannia-pid-povernennia-kautsii/",
+    "title": "Прибирання під повернення застави у Варшаві — HAWK.FIX",
+    "description": "Протокол, поправки і прибирання за один виїзд. Від 400 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Прибирання під повернення застави",
+    "blurb": "Протокол, поправки і прибирання за один виїзд."
+   },
+   "ru": {
+    "path": "/ru/uslugi/uborka-pod-vozvrat-zaloga/",
+    "title": "Уборка под возврат залога в Варшаве — русскоговорящий мастер",
+    "description": "Протокол, поправки и уборка за один выезд. От 400 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Уборка под возврат залога",
+    "blurb": "Протокол, поправки и уборка за один выезд."
+   },
+   "en": {
+    "path": "/en/services/end-of-tenancy-cleaning/",
+    "title": "End-of-tenancy cleaning in Warsaw — HAWK.FIX",
+    "description": "Protocol, small fixes and cleaning in one visit. From 400 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "End-of-tenancy cleaning",
+    "blurb": "Protocol, small fixes and cleaning in one visit."
+   }
+  },
+  "image": "moveout",
+  "group": "g-moveout"
+ },
+ {
+  "key": "uslugi-sprzatanie-po-remoncie",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/sprzatanie-po-remoncie/",
+   "uk": "/uk/posluhy/prybyrannia-pislia-remontu/",
+   "ru": "/ru/uslugi/uborka-posle-remonta/",
+   "en": "/en/services/cleaning-after-renovation/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/sprzatanie-po-remoncie/",
+    "title": "Sprzątanie po remoncie Warszawa — HAWK.FIX",
+    "description": "Pył budowlany, resztki farby, zacieki po kleju. Od 600 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Sprzątanie po remoncie",
+    "blurb": "Pył budowlany, resztki farby, zacieki po kleju."
+   },
+   "uk": {
+    "path": "/uk/posluhy/prybyrannia-pislia-remontu/",
+    "title": "Прибирання після ремонту у Варшаві — HAWK.FIX",
+    "description": "Будівельний пил, залишки фарби, патьоки клею. Від 600 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Прибирання після ремонту",
+    "blurb": "Будівельний пил, залишки фарби, патьоки клею."
+   },
+   "ru": {
+    "path": "/ru/uslugi/uborka-posle-remonta/",
+    "title": "Уборка после ремонта в Варшаве — русскоговорящий мастер",
+    "description": "Строительная пыль, следы краски, потёки клея. От 600 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Уборка после ремонта",
+    "blurb": "Строительная пыль, следы краски, потёки клея."
+   },
+   "en": {
+    "path": "/en/services/cleaning-after-renovation/",
+    "title": "Cleaning after renovation in Warsaw — HAWK.FIX",
+    "description": "Building dust, paint specks, glue runs. From 600 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Cleaning after renovation",
+    "blurb": "Building dust, paint specks, glue runs."
+   }
+  },
+  "image": "renovation-cleaning"
+ },
+ {
+  "key": "uslugi-mycie-okien",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/mycie-okien/",
+   "uk": "/uk/posluhy/myttia-vikon/",
+   "ru": "/ru/uslugi/mytyo-okon/",
+   "en": "/en/services/window-cleaning/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/mycie-okien/",
+    "title": "Mycie okien Warszawa — HAWK.FIX",
+    "description": "Szyby z obu stron, liczone za godzinę. Od 300 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Mycie okien",
+    "blurb": "Szyby z obu stron, liczone za godzinę."
+   },
+   "uk": {
+    "path": "/uk/posluhy/myttia-vikon/",
+    "title": "Миття вікон у Варшаві — HAWK.FIX",
+    "description": "Скло з обох боків, рахуємо за годину. Від 300 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Миття вікон",
+    "blurb": "Скло з обох боків, рахуємо за годину."
+   },
+   "ru": {
+    "path": "/ru/uslugi/mytyo-okon/",
+    "title": "Мытьё окон в Варшаве — русскоговорящий мастер",
+    "description": "Стёкла с обеих сторон, считаем за час. От 300 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Мытьё окон",
+    "blurb": "Стёкла с обеих сторон, считаем за час."
+   },
+   "en": {
+    "path": "/en/services/window-cleaning/",
+    "title": "Window cleaning in Warsaw — HAWK.FIX",
+    "description": "Glass both sides, charged by the hour. From 300 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Window cleaning",
+    "blurb": "Glass both sides, charged by the hour."
+   }
+  },
+  "image": "windows-cleaning"
+ },
+ {
+  "key": "uslugi-przesadzanie-roslin",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/przesadzanie-roslin/",
+   "uk": "/uk/posluhy/peresadka-roslyn/",
+   "ru": "/ru/uslugi/peresadka-rasteniy/",
+   "en": "/en/services/plant-repotting/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/przesadzanie-roslin/",
+    "title": "Rośliny doniczkowe: przesadzanie i opieka Warszawa",
+    "description": "Przesadzimy, przytniemy, podlejemy. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Rośliny doniczkowe: przesadzanie i opieka",
+    "blurb": "Przesadzimy, przytniemy, podlejemy."
+   },
+   "uk": {
+    "path": "/uk/posluhy/peresadka-roslyn/",
+    "title": "Кімнатні рослини: пересадка й догляд у Варшаві — HAWK.FIX",
+    "description": "Пересадимо, обріжемо, поллємо. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Кімнатні рослини: пересадка й догляд",
+    "blurb": "Пересадимо, обріжемо, поллємо."
+   },
+   "ru": {
+    "path": "/ru/uslugi/peresadka-rasteniy/",
+    "title": "Комнатные растения: пересадка и уход в Варшаве",
+    "description": "Пересадим, обрежем, польём. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Комнатные растения: пересадка и уход",
+    "blurb": "Пересадим, обрежем, польём."
+   },
+   "en": {
+    "path": "/en/services/plant-repotting/",
+    "title": "House plants: repotting and care in Warsaw — HAWK.FIX",
+    "description": "Repotted, pruned, watered. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "House plants: repotting and care",
+    "blurb": "Repotted, pruned, watered."
+   }
+  },
+  "image": "plants",
+  "group": "g-plants"
+ },
+ {
+  "key": "uslugi-przeprowadzki-warszawa",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/przeprowadzki-warszawa/",
+   "uk": "/uk/posluhy/pereizdy-varshava/",
+   "ru": "/ru/uslugi/pereezdy-varshava/",
+   "en": "/en/services/moving-warsaw/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/przeprowadzki-warszawa/",
+    "title": "Przeprowadzki po Warszawie — HAWK.FIX",
+    "description": "Bus, dwie osoby, meble rozebrane i złożone. Od 450 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Przeprowadzki po Warszawie",
+    "blurb": "Bus, dwie osoby, meble rozebrane i złożone."
+   },
+   "uk": {
+    "path": "/uk/posluhy/pereizdy-varshava/",
+    "title": "Переїзди по Варшаві — HAWK.FIX",
+    "description": "Бус, двоє людей, меблі розібрані та зібрані. Від 450 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Переїзди по Варшаві",
+    "blurb": "Бус, двоє людей, меблі розібрані та зібрані."
+   },
+   "ru": {
+    "path": "/ru/uslugi/pereezdy-varshava/",
+    "title": "Переезды по Варшаве — русскоговорящий мастер",
+    "description": "Бус, двое, мебель разобрана и собрана. От 450 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Переезды по Варшаве",
+    "blurb": "Бус, двое, мебель разобрана и собрана."
+   },
+   "en": {
+    "path": "/en/services/moving-warsaw/",
+    "title": "Moving within Warsaw — HAWK.FIX",
+    "description": "Van, two movers, furniture taken apart and rebuilt. From 450 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Moving within Warsaw",
+    "blurb": "Van, two movers, furniture taken apart and rebuilt."
+   }
+  },
+  "image": "relocation",
+  "group": "g-moving"
+ },
+ {
+  "key": "uslugi-przeprowadzki-po-polsce",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/przeprowadzki-po-polsce/",
+   "uk": "/uk/posluhy/pereizdy-po-polshchi/",
+   "ru": "/ru/uslugi/pereezdy-po-polshe/",
+   "en": "/en/services/moving-across-poland/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/przeprowadzki-po-polsce/",
+    "title": "Przeprowadzki po Polsce Warszawa — HAWK.FIX",
+    "description": "Z Warszawy do Krakowa, Gdańska, Wrocławia i dalej. Od 1480 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Przeprowadzki po Polsce",
+    "blurb": "Z Warszawy do Krakowa, Gdańska, Wrocławia i dalej."
+   },
+   "uk": {
+    "path": "/uk/posluhy/pereizdy-po-polshchi/",
+    "title": "Переїзди по Польщі у Варшаві — HAWK.FIX",
+    "description": "З Варшави до Кракова, Гданська, Вроцлава і далі. Від 1480 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Переїзди по Польщі",
+    "blurb": "З Варшави до Кракова, Гданська, Вроцлава і далі."
+   },
+   "ru": {
+    "path": "/ru/uslugi/pereezdy-po-polshe/",
+    "title": "Переезды по Польше в Варшаве — русскоговорящий мастер",
+    "description": "Из Варшавы в Краков, Гданьск, Вроцлав и дальше. От 1480 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Переезды по Польше",
+    "blurb": "Из Варшавы в Краков, Гданьск, Вроцлав и дальше."
+   },
+   "en": {
+    "path": "/en/services/moving-across-poland/",
+    "title": "Moving across Poland in Warsaw — HAWK.FIX",
+    "description": "Warsaw to Kraków, Gdańsk, Wrocław and beyond. From 1480 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Moving across Poland",
+    "blurb": "Warsaw to Kraków, Gdańsk, Wrocław and beyond."
+   }
+  },
+  "image": "relocation-pl"
+ },
+ {
+  "key": "uslugi-ogrod-i-dzialka",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/ogrod-i-dzialka/",
+   "uk": "/uk/posluhy/sad-i-dilianka/",
+   "ru": "/ru/uslugi/sad-i-uchastok/",
+   "en": "/en/services/garden-and-grounds/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/ogrod-i-dzialka/",
+    "title": "Prace w ogrodzie i na działce Warszawa — HAWK.FIX",
+    "description": "Kosa, sekator i piła w jednym przyjeździe. Od 246 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Prace w ogrodzie i na działce",
+    "blurb": "Kosa, sekator i piła w jednym przyjeździe."
+   },
+   "uk": {
+    "path": "/uk/posluhy/sad-i-dilianka/",
+    "title": "Роботи в саду і на ділянці у Варшаві — HAWK.FIX",
+    "description": "Коса, секатор і пилка за один приїзд. Від 246 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Роботи в саду і на ділянці",
+    "blurb": "Коса, секатор і пилка за один приїзд."
+   },
+   "ru": {
+    "path": "/ru/uslugi/sad-i-uchastok/",
+    "title": "Работы в саду и на участке в Варшаве",
+    "description": "Коса, секатор и пила за один приезд. От 246 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Работы в саду и на участке",
+    "blurb": "Коса, секатор и пила за один приезд."
+   },
+   "en": {
+    "path": "/en/services/garden-and-grounds/",
+    "title": "Garden and grounds work in Warsaw — HAWK.FIX",
+    "description": "Mower, shears and saw in one visit. From 246 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Garden and grounds work",
+    "blurb": "Mower, shears and saw in one visit."
+   }
+  },
+  "image": "garden",
+  "group": "g-garden"
+ },
+ {
+  "key": "uslugi-remont-kosmetyczny",
+  "type": "service",
+  "paths": {
+   "pl": "/uslugi/remont-kosmetyczny/",
+   "uk": "/uk/posluhy/kosmetychnyi-remont/",
+   "ru": "/ru/uslugi/kosmeticheskiy-remont/",
+   "en": "/en/services/cosmetic-refurbishment/"
+  },
+  "tr": {
+   "pl": {
+    "path": "/uslugi/remont-kosmetyczny/",
+    "title": "Remont mieszkania — trzy poziomy zakresu Warszawa — HAWK.FIX",
+    "description": "Orientacyjna robocizna za m² podłogi, trzy poziomy zakresu. Od 1490 zł, cena znana przed wizytą. Warszawa i 25 km wokół, zgłoszenie przez WhatsApp.",
+    "h1": "Remont mieszkania — trzy poziomy zakresu",
+    "blurb": "Orientacyjna robocizna za m² podłogi, trzy poziomy zakresu."
+   },
+   "uk": {
+    "path": "/uk/posluhy/kosmetychnyi-remont/",
+    "title": "Ремонт квартири — три рівні обсягу у Варшаві — HAWK.FIX",
+    "description": "Орієнтовна робота за м² підлоги, три рівні обсягу. Від 1490 zł, ціну знаєте до візиту. Варшава і 25 км навколо, заявка у WhatsApp.",
+    "h1": "Ремонт квартири — три рівні обсягу",
+    "blurb": "Орієнтовна робота за м² підлоги, три рівні обсягу."
+   },
+   "ru": {
+    "path": "/ru/uslugi/kosmeticheskiy-remont/",
+    "title": "Ремонт квартиры — три уровня объёма в Варшаве",
+    "description": "Ориентировочная работа за м² пола, три уровня объёма. От 1490 zł, цену знаете до визита. Варшава и 25 км вокруг, заявка в WhatsApp.",
+    "h1": "Ремонт квартиры — три уровня объёма",
+    "blurb": "Ориентировочная работа за м² пола, три уровня объёма."
+   },
+   "en": {
+    "path": "/en/services/cosmetic-refurbishment/",
+    "title": "Flat refurbishment — three levels of scope in Warsaw",
+    "description": "Indicative labour per m² of floor area, three levels of scope. From 1490 zł, price known before the visit. Warsaw and 25 km around, book on WhatsApp.",
+    "h1": "Flat refurbishment — three levels of scope",
+    "blurb": "Indicative labour per m² of floor area, three levels of scope."
+   }
+  },
+  "image": "renovation",
+  "group": "g-renovation"
+ }
+]

@@ -1,0 +1,126 @@
+[
+ {
+  "key": "damp",
+  "trigger": [
+   "mold-biocide"
+  ],
+  "visits": 1,
+  "minPrice": 0,
+  "steps": [
+   "damp-strip",
+   "mold-biocide"
+  ],
+  "name": {
+   "pl": "Usunięcie pleśni: skucie warstwy i biocyd",
+   "uk": "Видалення плісняви: збивання шару та біоцид",
+   "ru": "Удаление плесени: сбить слой и обработать",
+   "en": "Mould removal: strip the layer, then treat"
+  },
+  "unless": {
+   "pl": "Jeśli tynk i farba dookoła trzymają się dobrze, sam oprysk wystarczy.",
+   "uk": "Якщо штукатурка й фарба навколо тримаються, самого обприскування достатньо.",
+   "ru": "Если штукатурка и краска вокруг держатся, хватит одной обработки.",
+   "en": "If the plaster and paint around it are sound, the treatment alone is enough."
+  }
+ },
+ {
+  "key": "hob",
+  "trigger": [
+   "hob-install"
+  ],
+  "visits": 1,
+  "minPrice": 0,
+  "steps": [
+   "hob-install",
+   "hob-connect"
+  ],
+  "name": {
+   "pl": "Płyta grzewcza: montaż i podłączenie",
+   "uk": "Варильна панель: монтаж і підключення",
+   "ru": "Варочная панель: установка и подключение",
+   "en": "Hob: fitting and connection"
+  },
+  "unless": {
+   "pl": "Jeśli gniazdo pod płytę już jest i działa, wystarczy sam montaż.",
+   "uk": "Якщо розетка під панель уже є і працює, достатньо самого монтажу.",
+   "ru": "Если розетка под панель уже есть и работает, хватит одной установки.",
+   "en": "If the connection point is already in place, fitting alone is enough."
+  }
+ },
+ {
+  "key": "moveout-walls",
+  "trigger": [
+   "moveout-holes"
+  ],
+  "visits": 1,
+  "minPrice": 0,
+  "steps": [
+   "moveout-holes",
+   "moveout-touchup"
+  ],
+  "name": {
+   "pl": "Ściany pod zwrot kaucji: szpachlowanie i zamalowanie",
+   "uk": "Стіни під повернення застави: шпаклювання і підфарбування",
+   "ru": "Стены под возврат кауции: шпаклёвка и подкраска",
+   "en": "Walls for the deposit: filling and touching up"
+  },
+  "unless": {
+   "pl": "Jeśli ściany i tak idą do malowania w całości, samo szpachlowanie wystarczy.",
+   "uk": "Якщо стіни й так підуть під повне фарбування, достатньо шпаклювання.",
+   "ru": "Если стены всё равно красят целиком, хватит одной шпаклёвки.",
+   "en": "If the walls are being repainted anyway, filling alone is enough."
+  }
+ },
+ {
+  "key": "cuttings",
+  "trigger": [
+   "tree-cut",
+   "tree-cut-large",
+   "branch-prune",
+   "crown-prune",
+   "hedge-trim",
+   "hedge-trim-tall"
+  ],
+  "visits": 1,
+  "minPrice": 0,
+  "steps": [
+   "disposal-run"
+  ],
+  "name": {
+   "pl": "Wywóz gałęzi po cięciu",
+   "uk": "Вивезення гілок після різання",
+   "ru": "Вывоз веток после спила",
+   "en": "Taking the cuttings away"
+  },
+  "unless": {
+   "pl": "Jeśli gałęzie zostają u Ciebie — na opał albo do kompostu — wywóz nie jest potrzebny.",
+   "uk": "Якщо гілки лишаються у вас — на дрова чи компост — вивезення не потрібне.",
+   "ru": "Если ветки остаются у вас — на дрова или в компост — вывоз не нужен.",
+   "en": "If the cuttings stay with you, for firewood or compost, no removal is needed."
+  }
+ },
+ {
+  "key": "floor",
+  "trigger": [
+   "laminate-m2"
+  ],
+  "visits": 1,
+  "minPrice": 0,
+  "steps": [
+   "laminate-m2",
+   "skirting-m"
+  ],
+  "name": {
+   "pl": "Podłoga: panele i listwa przypodłogowa",
+   "uk": "Підлога: панелі та плінтус",
+   "ru": "Пол: ламинат и плинтус",
+   "en": "Floor: panels and skirting"
+  },
+  "unless": {
+   "pl": "Jeśli listwy już są i wracają na miejsce, sam montaż paneli wystarczy.",
+   "uk": "Якщо плінтуси вже є і повертаються на місце, достатньо укладання панелей.",
+   "ru": "Если плинтусы уже есть и вернутся на место, хватит укладки панелей.",
+   "en": "If the skirting is already there and goes back on, panels alone are enough."
+  }
+ }
+]

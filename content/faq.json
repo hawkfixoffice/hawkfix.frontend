@@ -1,0 +1,86 @@
+{
+ "pl": {
+  "heading": "Cztery rzeczy, które zwykle niepokoją",
+  "items": [
+   {
+    "q": "Nie wiem, ile zapłacę",
+    "a": "Kalkulator pokazuje koszt według wybranych pozycji. Cenę potwierdzamy przed pracą. Dodatkowy zakres realizujemy dopiero po uzgodnieniu kosztu i Twojej zgodzie."
+   },
+   {
+    "q": "A jeśli nie przyjadą",
+    "a": "Potwierdzamy konkretną godzinę przed wyjazdem. Jeśli termin się zmieni lub będziemy się spóźniać, informujemy wcześniej."
+   },
+   {
+    "q": "Zostawią bałagan",
+    "a": "Folia na meble, odkurzacz przy wiertarce, opakowania jadą z nami. Mieszkanie zostaje w stanie do życia."
+   },
+   {
+    "q": "Wezmą się za coś, na czym się nie znają",
+    "a": "Zakres elektryki potwierdzamy przed wizytą; nie wykonujemy prac przy instalacjach gazowych ani przyłączu zasilającym budynku."
+   }
+  ]
+ },
+ "uk": {
+  "heading": "Чотири речі, які зазвичай непокоять",
+  "items": [
+   {
+    "q": "Не знаю, скільки заплачу",
+    "a": "Калькулятор показує вартість обраних позицій. Ціну підтверджуємо до роботи. Додатковий обсяг виконуємо лише після погодження вартості та вашої згоди."
+   },
+   {
+    "q": "А якщо не приїдуть",
+    "a": "Підтверджуємо конкретну годину до виїзду. Якщо час зміниться або запізнюватимемося, повідомимо заздалегідь."
+   },
+   {
+    "q": "Залишать безлад",
+    "a": "Плівка на меблі, пилосос біля перфоратора, упаковка їде з нами. Квартира залишається придатною для життя."
+   },
+   {
+    "q": "Візьмуться за те, чого не знають",
+    "a": "Обсяг електрики підтверджуємо до візиту; не працюємо з газовими системами та ввідним підключенням будинку."
+   }
+  ]
+ },
+ "ru": {
+  "heading": "Четыре вещи, которые обычно беспокоят",
+  "items": [
+   {
+    "q": "Не знаю, сколько заплачу",
+    "a": "Калькулятор показывает стоимость выбранных позиций. Цену подтверждаем до работы. Дополнительный объём выполняем только после согласования стоимости и вашего согласия."
+   },
+   {
+    "q": "А если не приедут",
+    "a": "Подтверждаем конкретное время до выезда. Если оно изменится или будем опаздывать, предупредим заранее."
+   },
+   {
+    "q": "Оставят бардак",
+    "a": "Плёнка на мебель, пылесос у перфоратора, упаковка уезжает с нами. Квартира остаётся пригодной для жизни."
+   },
+   {
+    "q": "Возьмутся за то, чего не знают",
+    "a": "Объём электрики подтверждаем до визита; не работаем с газовыми системами и вводным подключением здания."
+   }
+  ]
+ },
+ "en": {
+  "heading": "The four things people usually worry about",
+  "items": [
+   {
+    "q": "I don't know what I'll pay",
+    "a": "The calculator prices your selected items. We confirm the price before starting. Additional work proceeds only after you approve its cost."
+   },
+   {
+    "q": "What if they don't show up",
+    "a": "We confirm an arrival time before departure. If it changes or we are running late, we let you know in advance."
+   },
+   {
+    "q": "They'll leave a mess",
+    "a": "Sheeting on the furniture, vacuum at the drill, packaging leaves with us. The flat stays liveable."
+   },
+   {
+    "q": "They'll take on something they don't know",
+    "a": "Electrical scope is confirmed before the visit; we do not work on gas systems or the building supply connection."
+   }
+  ]
+ }
+}

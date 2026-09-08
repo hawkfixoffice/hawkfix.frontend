@@ -1,0 +1,78 @@
+/* HAWK.FIX — контентные страницы: шапка страницы, документы, прайс, крошки. */
+
+.pagehead { padding-block: clamp(32px, 6vw, 72px) clamp(20px, 3vw, 36px); }
+.pagehead h1 { max-width: 20ch; margin-top: var(--sp-4); }
+.pagehead__lead { margin-top: var(--sp-4); font-size: var(--fs-lead); color: var(--ink-2); }
+.pagehead__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-5); }
+
+.crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); font-size: 0.8125rem; color: var(--ink-3); }
+.crumbs li { display: flex; align-items: center; gap: var(--sp-2); }
+.crumbs a { text-decoration: none; }
+.crumbs a:hover { color: var(--ink); text-decoration: underline; }
+.crumbs svg { color: var(--line); transform: rotate(-90deg); }
+
+/* Документы: политика, регламент — длинный текст */
+.doc { max-width: var(--maxw-text); }
+.doc--wide { max-width: 82ch; }
+.doc h2 { font-size: clamp(1.4rem, 2.6vw, 2rem); margin-top: var(--sp-7); margin-bottom: var(--sp-3); }
+.doc h3 { margin-top: var(--sp-5); margin-bottom: var(--sp-2); }
+.doc > *:first-child { margin-top: 0; }
+.doc p { color: var(--ink-2); }
+
+.checklist { display: grid; gap: var(--sp-2); margin-block: var(--sp-3); }
+.checklist li { display: flex; gap: var(--sp-3); align-items: flex-start; color: var(--ink-2); font-size: var(--fs-sm); }
+.checklist svg { flex: none; margin-top: 4px; color: var(--accent-text); }
+
+/* Страница услуги */
+.detail { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(20px, 3vw, 48px); align-items: start; }
+.detail__media { position: sticky; top: 92px; }
+.detail__media .media { border-radius: var(--r-card); }
+.detail__body { display: grid; gap: var(--sp-5); }
+.detail__blurb { font-size: var(--fs-lead); color: var(--ink-2); margin: 0; }
+.detail__price { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-4); }
+.detail__priceNum { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1; margin: 0; }
+.detail__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+
+/* Прайс */
+.toc { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-bottom: clamp(24px, 4vw, 44px); }
+.toc .chip { text-decoration: none; transition: border-color var(--dur-fast) var(--ease); }
+.toc .chip:hover { border-color: var(--ink); }
+.toc .num { color: var(--ink-3); font-size: 0.75rem; }
+
+.pricegroups { display: grid; gap: clamp(20px, 3vw, 40px); }
+.pricegroup { scroll-margin-top: 96px; }
+.pricegroup__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.pricegroup__head h2 { font-size: clamp(1.3rem, 2.4vw, 1.9rem); }
+.pricegroup__head p { color: var(--accent-text); font-size: var(--fs-sm); margin: 0; }
+
+.pricelist { background: var(--card); border: 1px solid var(--line-card); border-radius: var(--r-card); overflow: hidden; }
+.pricelist li {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: var(--sp-2) var(--sp-5); padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--line-card); font-size: var(--fs-sm);
+}
+.pricelist li:last-child { border-bottom: 0; }
+.pricelist li:nth-child(odd) { background: color-mix(in srgb, var(--paper) 45%, transparent); }
+.pricelist .num { white-space: nowrap; font-weight: 500; }
+.pricelist small { color: var(--ink-3); font-weight: 400; }
+.pricenotes { margin-top: clamp(32px, 5vw, 64px); }
+
+/* Полоса призыва к действию */
+.ctaband { background: var(--paper-2); }
+.ctaband__in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-5); }
+.ctaband h2 { margin-block: var(--sp-3); max-width: 18ch; }
+.ctaband__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+
+.notfound { padding-block: clamp(64px, 12vw, 140px); text-align: center; }
+.notfound h1 { margin-block: var(--sp-4); font-size: clamp(1.6rem, 4vw, 2.6rem); }
+.notfound .prose { margin-inline: auto; }
+.notfound .pagehead__actions { justify-content: center; }
+
+@media (max-width: 900px) {
+  .detail { grid-template-columns: minmax(0, 1fr); }
+  .detail__media { position: static; }
+}
+
+.detail__intro { color: var(--ink-2); margin: 0; }
+.detail__note { font-size: 0.8125rem; color: var(--ink-3); line-height: 1.55; }
+.detail__note p { margin: 0; }

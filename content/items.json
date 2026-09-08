@@ -1,0 +1,1718 @@
+[
+ {
+  "key": "tap",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 220,
+  "hours": 1,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wymiana lub montaż baterii",
+   "uk": "Заміна або встановлення змішувача",
+   "ru": "Замена или установка смесителя",
+   "en": "Replace or fit a tap"
+  }
+ },
+ {
+  "key": "siphon",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 110,
+  "hours": 0.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż lub wymiana syfonu",
+   "uk": "Встановлення або заміна сифона",
+   "ru": "Установка или замена сифона",
+   "en": "Fit or replace a sink trap"
+  }
+ },
+ {
+  "key": "hoses",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 90,
+  "hours": 0.4,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wymiana wężyków przyłączeniowych",
+   "uk": "Заміна гнучких підводок",
+   "ru": "Замена гибких подводок",
+   "en": "Replace flexible supply hoses"
+  }
+ },
+ {
+  "key": "washer-hookup",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 150,
+  "hours": 0.6,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Podłączenie pralki",
+   "uk": "Підключення пральної машини",
+   "ru": "Подключение стиральной машины",
+   "en": "Connect a washing machine"
+  }
+ },
+ {
+  "key": "dishwasher-hookup",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 220,
+  "hours": 1,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Podłączenie zmywarki",
+   "uk": "Підключення посудомийної машини",
+   "ru": "Подключение посудомоечной машины",
+   "en": "Connect a dishwasher"
+  }
+ },
+ {
+  "key": "toilet",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 240,
+  "hours": 1.2,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż lub wymiana sedesu",
+   "uk": "Встановлення або заміна унітаза",
+   "ru": "Установка или замена унитаза",
+   "en": "Fit or replace a toilet"
+  }
+ },
+ {
+  "key": "basin",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 200,
+  "hours": 1,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż umywalki",
+   "uk": "Встановлення умивальника",
+   "ru": "Установка умывальника",
+   "en": "Fit a washbasin"
+  }
+ },
+ {
+  "key": "bidet",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 250,
+  "hours": 1.25,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż bidetu",
+   "uk": "Встановлення біде",
+   "ru": "Установка биде",
+   "en": "Fit a bidet"
+  }
+ },
+ {
+  "key": "cistern",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 170,
+  "hours": 0.8,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Naprawa spłuczki",
+   "uk": "Ремонт зливного бачка",
+   "ru": "Ремонт сливного бачка",
+   "en": "Repair a toilet cistern"
+  }
+ },
+ {
+  "key": "drain",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 260,
+  "hours": 1,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "s": true,
+  "name": {
+   "pl": "Udrożnienie odpływu",
+   "uk": "Прочищення зливу",
+   "ru": "Прочистка слива",
+   "en": "Unblock a drain"
+  }
+ },
+ {
+  "key": "sanitary-removal",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 110,
+  "hours": 0.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Demontaż sanitariatu",
+   "uk": "Демонтаж сантехніки",
+   "ru": "Демонтаж сантехники",
+   "en": "Remove a sanitary fitting"
+  }
+ },
+ {
+  "key": "silicone",
+  "group": "g-plumbing",
+  "dept": "fix",
+  "price": 39,
+  "hours": 0.2,
+  "unit": "mb",
+  "min": 1,
+  "max": 999,
+  "name": {
+   "pl": "Wymiana silikonu: wanna, brodzik, blat",
+   "uk": "Заміна силікону: ванна, піддон, стільниця",
+   "ru": "Замена силикона: ванна, поддон, столешница",
+   "en": "Replacing silicone: bath, shower tray, worktop"
+  }
+ },
+ {
+  "key": "bulb",
+  "group": "g-electrics",
+  "dept": "fix",
+  "price": 40,
+  "hours": 0.15,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wymiana żarówki lub halogenu",
+   "uk": "Заміна лампочки або галогена",
+   "ru": "Замена лампочки или галогена",
+   "en": "Replace a bulb or halogen"
+  }
+ },
+ {
+  "key": "socket",
+  "group": "g-electrics",
+  "dept": "fix",
+  "price": 90,
+  "hours": 0.3,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż lub wymiana gniazdka",
+   "uk": "Встановлення або заміна розетки",
+   "ru": "Установка или замена розетки",
+   "en": "Fit or replace a socket"
+  }
+ },
+ {
+  "key": "switch",
+  "group": "g-electrics",
+  "dept": "fix",
+  "price": 90,
+  "hours": 0.3,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż lub wymiana włącznika",
+   "uk": "Встановлення або заміна вимикача",
+   "ru": "Установка или замена выключателя",
+   "en": "Fit or replace a light switch"
+  }
+ },
+ {
+  "key": "chandelier",
+  "group": "g-electrics",
+  "dept": "fix",
+  "price": 130,
+  "hours": 0.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż i podłączenie żyrandola",
+   "uk": "Встановлення та підключення люстри",
+   "ru": "Установка и подключение люстры",
+   "en": "Fit and wire a ceiling light"
+  }
+ },
+ {
+  "key": "lamp-repair",
+  "group": "g-electrics",
+  "dept": "fix",
+  "price": 160,
+  "hours": 0.8,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Naprawa lampy lub żyrandola",
+   "uk": "Ремонт лампи або люстри",
+   "ru": "Ремонт лампы или люстры",
+   "en": "Repair a lamp or ceiling light"
+  }
+ },
+ {
+  "key": "led-strip",
+  "group": "g-electrics",
+  "dept": "fix",
+  "price": 150,
+  "hours": 0.7,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż taśmy LED",
+   "uk": "Монтаж LED-стрічки",
+   "ru": "Монтаж LED-ленты",
+   "en": "Fit an LED strip"
+  }
+ },
+ {
+  "key": "wiring-repair",
+  "group": "g-electrics",
+  "dept": "fix",
+  "price": 140,
+  "hours": 0.6,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Naprawa połączeń elektrycznych",
+   "uk": "Ремонт електричних з'єднань",
+   "ru": "Ремонт электрических соединений",
+   "en": "Repair electrical connections"
+  }
+ },
+ {
+  "key": "rcd",
+  "group": "g-electrics",
+  "dept": "fix",
+  "price": 160,
+  "hours": 0.7,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wymiana różnicówki lub bezpiecznika",
+   "uk": "Заміна диференціала або запобіжника",
+   "ru": "Замена дифавтомата или предохранителя",
+   "en": "Replace an RCD or fuse"
+  }
+ },
+ {
+  "key": "circuit-point",
+  "group": "g-electrics",
+  "dept": "fix",
+  "price": 200,
+  "hours": 0.8,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wykonanie punktu elektrycznego",
+   "uk": "Влаштування електроточки",
+   "ru": "Устройство электроточки",
+   "en": "Run a new electrical point"
+  }
+ },
+ {
+  "key": "hob-connect",
+  "group": "g-electrics",
+  "dept": "fix",
+  "price": 250,
+  "hours": 1,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Podłączenie płyty elektrycznej",
+   "uk": "Підключення електричної варильної панелі",
+   "ru": "Подключение электрической варочной панели",
+   "en": "Connect an electric hob"
+  }
+ },
+ {
+  "key": "diagnostics",
+  "group": "g-electrics",
+  "dept": "fix",
+  "price": 350,
+  "hours": 1.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "s": true,
+  "name": {
+   "pl": "Lokalizacja usterki instalacji elektrycznej",
+   "uk": "Пошук несправності електропроводки",
+   "ru": "Поиск неисправности электропроводки",
+   "en": "Electrical fault location"
+  }
+ },
+ {
+  "key": "hooks",
+  "group": "g-mounting",
+  "dept": "fix",
+  "price": 50,
+  "hours": 0.2,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż wieszaków i haczyków",
+   "uk": "Монтаж вішалок і гачків",
+   "ru": "Монтаж вешалок и крючков",
+   "en": "Fit hooks and rails"
+  }
+ },
+ {
+  "key": "picture",
+  "group": "g-mounting",
+  "dept": "fix",
+  "price": 60,
+  "hours": 0.25,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Powieszenie obrazu lub lustra",
+   "uk": "Повісити картину або дзеркало",
+   "ru": "Повесить картину или зеркало",
+   "en": "Hang a picture or mirror"
+  }
+ },
+ {
+  "key": "shelf",
+  "group": "g-mounting",
+  "dept": "fix",
+  "price": 50,
+  "hours": 0.25,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż półki",
+   "uk": "Монтаж полиці",
+   "ru": "Монтаж полки",
+   "en": "Put up a shelf"
+  }
+ },
+ {
+  "key": "curtain-rail",
+  "group": "g-mounting",
+  "dept": "fix",
+  "price": 120,
+  "hours": 0.6,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż karnisza",
+   "uk": "Монтаж карниза",
+   "ru": "Монтаж карниза",
+   "en": "Fit a curtain rail"
+  }
+ },
+ {
+  "key": "blind",
+  "group": "g-mounting",
+  "dept": "fix",
+  "price": 110,
+  "hours": 0.4,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż rolety lub żaluzji",
+   "uk": "Монтаж ролети або жалюзі",
+   "ru": "Монтаж рулонной шторы или жалюзи",
+   "en": "Fit a blind"
+  }
+ },
+ {
+  "key": "tv-mount",
+  "group": "g-mounting",
+  "dept": "fix",
+  "price": 240,
+  "hours": 1.2,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż telewizora na ścianie",
+   "uk": "Монтаж телевізора на стіну",
+   "ru": "Монтаж телевизора на стену",
+   "en": "Mount a TV on the wall"
+  }
+ },
+ {
+  "key": "mirror-glue",
+  "group": "g-mounting",
+  "dept": "fix",
+  "price": 160,
+  "hours": 0.8,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Klejenie lustra",
+   "uk": "Приклеювання дзеркала",
+   "ru": "Приклеивание зеркала",
+   "en": "Glue a mirror in place"
+  }
+ },
+ {
+  "key": "assembly-small",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 110,
+  "hours": 0.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż mebla: komoda, stolik, krzesło",
+   "uk": "Збирання меблів: комод, столик, стілець",
+   "ru": "Сборка мебели: комод, столик, стул",
+   "en": "Assemble a chest, table or chair"
+  }
+ },
+ {
+  "key": "assembly-bed",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 220,
+  "hours": 1,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż łóżka",
+   "uk": "Збирання ліжка",
+   "ru": "Сборка кровати",
+   "en": "Assemble a bed"
+  }
+ },
+ {
+  "key": "assembly-wardrobe",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 360,
+  "hours": 1.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż szafy",
+   "uk": "Збирання шафи",
+   "ru": "Сборка шкафа",
+   "en": "Assemble a wardrobe"
+  }
+ },
+ {
+  "key": "kitchen-cabinet-mid",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 129,
+  "hours": 0.65,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Powieszenie szafki kuchennej średniej, do 60 × 70 cm",
+   "uk": "Навішування кухонної шафки середньої, до 60 × 70 см",
+   "ru": "Повесить кухонный шкафчик средний, до 60 × 70 см",
+   "en": "Hanging a medium kitchen cabinet, up to 60 × 70 cm"
+  }
+ },
+ {
+  "key": "kitchen-cabinet-large",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 189,
+  "hours": 0.95,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Powieszenie szafki kuchennej dużej, od 80 × 90 cm lub narożnej",
+   "uk": "Навішування кухонної шафки великої, від 80 × 90 см або кутової",
+   "ru": "Повесить кухонный шкаф большой, от 80 × 90 см или угловой",
+   "en": "Hanging a large kitchen cabinet, from 80 × 90 cm or a corner unit"
+  }
+ },
+ {
+  "key": "kitchen-cabinet-base",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 110,
+  "hours": 0.55,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż szafki stojącej z wypoziomowaniem",
+   "uk": "Монтаж напільної шафки з вирівнюванням",
+   "ru": "Монтаж напольного шкафа с выравниванием",
+   "en": "Fitting a base cabinet, levelled"
+  }
+ },
+ {
+  "key": "kitchen-assembly",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 220,
+  "hours": 1,
+  "unit": "mb",
+  "min": 1,
+  "max": 999,
+  "name": {
+   "pl": "Montaż mebli kuchennych",
+   "uk": "Збирання кухонних меблів",
+   "ru": "Сборка кухонной мебели",
+   "en": "Fit kitchen units"
+  }
+ },
+ {
+  "key": "hinge",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 90,
+  "hours": 0.4,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wymiana zawiasu, regulacja frontu",
+   "uk": "Заміна завіси, регулювання фасаду",
+   "ru": "Замена петли, регулировка фасада",
+   "en": "Replace a hinge, adjust a door front"
+  }
+ },
+ {
+  "key": "drawer",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 110,
+  "hours": 0.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Naprawa prowadnicy szuflady",
+   "uk": "Ремонт напрямної шухляди",
+   "ru": "Ремонт направляющей ящика",
+   "en": "Repair a drawer runner"
+  }
+ },
+ {
+  "key": "bed-repair",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 170,
+  "hours": 0.8,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Naprawa łóżka lub tapczanu",
+   "uk": "Ремонт ліжка або тахти",
+   "ru": "Ремонт кровати или тахты",
+   "en": "Repair a bed or divan"
+  }
+ },
+ {
+  "key": "sliding-wardrobe",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 320,
+  "hours": 1.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Naprawa szafy przesuwnej",
+   "uk": "Ремонт шафи-купе",
+   "ru": "Ремонт шкафа-купе",
+   "en": "Repair a sliding wardrobe"
+  }
+ },
+ {
+  "key": "fridge-hinge",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 200,
+  "hours": 1,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wymiana zawiasów w lodówce",
+   "uk": "Заміна завіс у холодильнику",
+   "ru": "Замена петель в холодильнике",
+   "en": "Replace fridge door hinges"
+  }
+ },
+ {
+  "key": "disassembly",
+  "group": "g-furniture",
+  "dept": "fix",
+  "price": 130,
+  "hours": 0.6,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Demontaż mebla",
+   "uk": "Розбирання меблів",
+   "ru": "Разборка мебели",
+   "en": "Take a piece of furniture apart"
+  }
+ },
+ {
+  "key": "handle",
+  "group": "g-doors",
+  "dept": "fix",
+  "price": 90,
+  "hours": 0.4,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wymiana klamki",
+   "uk": "Заміна ручки",
+   "ru": "Замена ручки",
+   "en": "Replace a door handle"
+  }
+ },
+ {
+  "key": "mailbox-lock",
+  "group": "g-doors",
+  "dept": "fix",
+  "price": 100,
+  "hours": 0.4,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wymiana zamka w skrzynce pocztowej",
+   "uk": "Заміна замка в поштовій скриньці",
+   "ru": "Замена замка в почтовом ящике",
+   "en": "Replace a mailbox lock"
+  }
+ },
+ {
+  "key": "lock-cylinder",
+  "group": "g-doors",
+  "dept": "fix",
+  "price": 200,
+  "hours": 0.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wymiana wkładki zamka",
+   "uk": "Заміна циліндра замка",
+   "ru": "Замена личинки замка",
+   "en": "Replace a lock cylinder"
+  }
+ },
+ {
+  "key": "door-adjust",
+  "group": "g-doors",
+  "dept": "fix",
+  "price": 120,
+  "hours": 0.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Regulacja drzwi",
+   "uk": "Регулювання дверей",
+   "ru": "Регулировка двери",
+   "en": "Adjust a door"
+  }
+ },
+ {
+  "key": "window-adjust",
+  "group": "g-doors",
+  "dept": "fix",
+  "price": 120,
+  "hours": 0.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Regulacja okna, serwis okucia",
+   "uk": "Регулювання вікна, сервіс фурнітури",
+   "ru": "Регулировка окна, сервис фурнитуры",
+   "en": "Adjust a window, service the hardware"
+  }
+ },
+ {
+  "key": "window-seal",
+  "group": "g-doors",
+  "dept": "fix",
+  "price": 140,
+  "hours": 0.6,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wymiana uszczelki w oknie",
+   "uk": "Заміна ущільнювача у вікні",
+   "ru": "Замена уплотнителя в окне",
+   "en": "Replace a window seal"
+  }
+ },
+ {
+  "key": "lock-door",
+  "group": "g-doors",
+  "dept": "fix",
+  "price": 280,
+  "hours": 0.8,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż lub wymiana zamka",
+   "uk": "Встановлення або заміна замка",
+   "ru": "Установка или замена замка",
+   "en": "Fit or replace a door lock"
+  }
+ },
+ {
+  "key": "alu-door",
+  "group": "g-doors",
+  "dept": "fix",
+  "price": 340,
+  "hours": 1.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Naprawa i regulacja drzwi aluminiowych",
+   "uk": "Ремонт і регулювання алюмінієвих дверей",
+   "ru": "Ремонт и регулировка алюминиевых дверей",
+   "en": "Repair and adjust an aluminium door"
+  }
+ },
+ {
+  "key": "door-install",
+  "group": "g-doors",
+  "dept": "fix",
+  "price": 440,
+  "hours": 2.2,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż drzwi wewnętrznych",
+   "uk": "Встановлення міжкімнатних дверей",
+   "ru": "Установка межкомнатной двери",
+   "en": "Fit an internal door"
+  }
+ },
+ {
+  "key": "bathroom-fan",
+  "group": "g-appliances",
+  "dept": "fix",
+  "price": 160,
+  "hours": 0.7,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż wentylatora w łazience",
+   "uk": "Встановлення вентилятора у ванній",
+   "ru": "Установка вентилятора в ванной",
+   "en": "Fit a bathroom extractor fan"
+  }
+ },
+ {
+  "key": "oven",
+  "group": "g-appliances",
+  "dept": "fix",
+  "price": 200,
+  "hours": 1,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Zabudowa piekarnika",
+   "uk": "Вбудовування духової шафи",
+   "ru": "Встраивание духового шкафа",
+   "en": "Fit a built-in oven"
+  }
+ },
+ {
+  "key": "hob-install",
+  "group": "g-appliances",
+  "dept": "fix",
+  "price": 200,
+  "hours": 1,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Osadzenie płyty grzewczej w gotowym otworze",
+   "uk": "Монтаж варильної панелі в готовий отвір",
+   "ru": "Монтаж варочной панели в готовый вырез",
+   "en": "Fit a hob into an existing cut-out"
+  }
+ },
+ {
+  "key": "water-filter",
+  "group": "g-appliances",
+  "dept": "fix",
+  "price": 200,
+  "hours": 1,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż filtra wody",
+   "uk": "Встановлення фільтра для води",
+   "ru": "Установка фильтра для воды",
+   "en": "Fit a water filter"
+  }
+ },
+ {
+  "key": "hood",
+  "group": "g-appliances",
+  "dept": "fix",
+  "price": 300,
+  "hours": 1.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż okapu z wyprowadzeniem",
+   "uk": "Монтаж витяжки з відведенням",
+   "ru": "Монтаж вытяжки с отводом",
+   "en": "Fit an extractor hood with ducting"
+  }
+ },
+ {
+  "key": "paint-wall",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 35,
+  "hours": 0.15,
+  "unit": "m2",
+  "min": 1,
+  "max": 999,
+  "su": true,
+  "wet": true,
+  "name": {
+   "pl": "Malowanie ścian, dwie warstwy, dowolny kolor",
+   "uk": "Фарбування стін, два шари, будь-який колір",
+   "ru": "Покраска стен, два слоя, любой цвет",
+   "en": "Painting walls, two coats, any colour"
+  }
+ },
+ {
+  "key": "paint-third-coat",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 15,
+  "hours": 0.07,
+  "unit": "m2",
+  "min": 1,
+  "max": 999,
+  "a": true,
+  "wet": true,
+  "name": {
+   "pl": "Trzecia warstwa: krycie ciemnego koloru albo intensywny kolor",
+   "uk": "Третій шар: перекриття темного кольору або інтенсивний колір",
+   "ru": "Третий слой: перекрыть тёмный цвет или положить интенсивный",
+   "en": "Third coat: covering a dark colour, or an intense one"
+  }
+ },
+ {
+  "key": "paint-ceiling",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 35,
+  "hours": 0.15,
+  "unit": "m2",
+  "min": 1,
+  "max": 999,
+  "su": true,
+  "wet": true,
+  "name": {
+   "pl": "Malowanie sufitu, dwie warstwy",
+   "uk": "Фарбування стелі, два шари",
+   "ru": "Покраска потолка, два слоя",
+   "en": "Paint a ceiling, two coats"
+  }
+ },
+ {
+  "key": "damp-strip",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 45,
+  "hours": 0.2,
+  "unit": "m2",
+  "min": 1,
+  "max": 999,
+  "s": true,
+  "su": true,
+  "name": {
+   "pl": "Skucie odparzonego tynku i łuszczącej się farby",
+   "uk": "Збивання відсталої штукатурки та фарби, що лущиться",
+   "ru": "Сбить отслоившуюся штукатурку и облупившуюся краску",
+   "en": "Strip blown plaster and flaking paint"
+  }
+ },
+ {
+  "key": "mold-biocide",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 45,
+  "hours": 0.25,
+  "unit": "m2",
+  "min": 1,
+  "max": 999,
+  "s": true,
+  "su": true,
+  "dry": true,
+  "name": {
+   "pl": "Usunięcie pleśni i grzyba, oprysk biobójczy",
+   "uk": "Видалення плісняви та грибка, біоцидна обробка",
+   "ru": "Удалить плесень и грибок, обработать биоцидом",
+   "en": "Remove mould and treat with biocide"
+  }
+ },
+ {
+  "key": "damp-replaster",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 45,
+  "hours": 0.35,
+  "unit": "m2",
+  "min": 1,
+  "max": 999,
+  "s": true,
+  "su": true,
+  "dry": true,
+  "wet": true,
+  "name": {
+   "pl": "Odtworzenie tynku po zawilgoceniu",
+   "uk": "Відновлення штукатурки після замокання",
+   "ru": "Восстановить штукатурку после залива",
+   "en": "Re-plaster after water damage"
+  }
+ },
+ {
+  "key": "wall-primer",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 12,
+  "hours": 0.05,
+  "unit": "m2",
+  "min": 1,
+  "max": 999,
+  "a": true,
+  "wet": true,
+  "name": {
+   "pl": "Gruntowanie ścian lub sufitu",
+   "uk": "Ґрунтування стін або стелі",
+   "ru": "Грунтовка стен или потолка",
+   "en": "Prime walls or ceiling"
+  }
+ },
+ {
+  "key": "wall-prep",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 25,
+  "hours": 0.1,
+  "unit": "m2",
+  "min": 1,
+  "max": 999,
+  "a": true,
+  "wet": true,
+  "name": {
+   "pl": "Przygotowanie powierzchni: szpachlowanie i szlifowanie",
+   "uk": "Підготовка поверхні: шпаклювання та шліфування",
+   "ru": "Подготовка поверхности: шпаклёвка и шлифовка",
+   "en": "Prep the surface: filling and sanding"
+  }
+ },
+ {
+  "key": "room-setup",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 199,
+  "hours": 1,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "a": true,
+  "au": true,
+  "name": {
+   "pl": "Przygotowanie i zabezpieczenie pomieszczenia",
+   "uk": "Підготовка та захист приміщення",
+   "ru": "Подготовка и защита помещения",
+   "en": "Room preparation and protection"
+  }
+ },
+ {
+  "key": "skirting-m",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 25,
+  "hours": 0.12,
+  "unit": "mb",
+  "min": 1,
+  "max": 999,
+  "name": {
+   "pl": "Montaż listwy przypodłogowej",
+   "uk": "Монтаж плінтуса",
+   "ru": "Монтаж плинтуса",
+   "en": "Fit skirting board"
+  }
+ },
+ {
+  "key": "laminate-m2",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 50,
+  "hours": 0.25,
+  "unit": "m2",
+  "min": 1,
+  "max": 999,
+  "su": true,
+  "name": {
+   "pl": "Układanie paneli podłogowych",
+   "uk": "Укладання ламінату",
+   "ru": "Укладка ламината",
+   "en": "Lay laminate flooring"
+  }
+ },
+ {
+  "key": "threshold",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 80,
+  "hours": 0.4,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Montaż progu",
+   "uk": "Встановлення порога",
+   "ru": "Установка порога",
+   "en": "Fit a threshold strip"
+  }
+ },
+ {
+  "key": "patch",
+  "group": "g-walls",
+  "dept": "fix",
+  "price": 140,
+  "hours": 0.7,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "s": true,
+  "name": {
+   "pl": "Naprawa dziury lub pęknięcia w ścianie",
+   "uk": "Ремонт дірки або тріщини у стіні",
+   "ru": "Ремонт дырки или трещины в стене",
+   "en": "Patch a hole or crack in a wall"
+  }
+ },
+ {
+  "key": "cleaning-light",
+  "group": "g-home-cleaning",
+  "dept": "clean",
+  "price": 90,
+  "hours": 1,
+  "unit": "h",
+  "min": 3,
+  "max": 999,
+  "name": {
+   "pl": "Sprzątanie lekkie: kurze, podłogi, kuchnia, łazienka, balkon",
+   "uk": "Легке прибирання: пил, підлоги, кухня, ванна, балкон",
+   "ru": "Лёгкая уборка: пыль, полы, кухня, ванная, балкон",
+   "en": "Light clean: dust, floors, kitchen, bathroom, balcony"
+  }
+ },
+ {
+  "key": "cleaning-medium",
+  "group": "g-home-cleaning",
+  "dept": "clean",
+  "price": 100,
+  "hours": 1,
+  "unit": "h",
+  "min": 3,
+  "max": 999,
+  "name": {
+   "pl": "Sprzątanie średnie: generalne — okna, piekarnik, lodówka, szafki w środku",
+   "uk": "Середнє прибирання: генеральне — вікна, духовка, холодильник, шафи всередині",
+   "ru": "Средняя уборка: генеральная — окна, духовка, холодильник, шкафы внутри",
+   "en": "Medium clean: deep — windows, oven, fridge, inside cupboards"
+  }
+ },
+ {
+  "key": "cleaning-heavy",
+  "group": "g-home-cleaning",
+  "dept": "clean",
+  "price": 150,
+  "hours": 1,
+  "unit": "h",
+  "min": 4,
+  "max": 999,
+  "name": {
+   "pl": "Sprzątanie ciężkie: po remoncie, pył budowlany, zacieki",
+   "uk": "Важке прибирання: після ремонту, будівельний пил, патьоки",
+   "ru": "Тяжёлая уборка: после ремонта, строительная пыль, подтёки",
+   "en": "Heavy clean: after building work, dust, splashes"
+  }
+ },
+ {
+  "key": "ironing",
+  "group": "g-home-cleaning",
+  "dept": "clean",
+  "price": 90,
+  "hours": 1,
+  "unit": "h",
+  "min": 1,
+  "max": 999,
+  "name": {
+   "pl": "Prasowanie",
+   "uk": "Прасування",
+   "ru": "Глажка",
+   "en": "Ironing"
+  }
+ },
+ {
+  "key": "moveout-check",
+  "group": "g-moveout",
+  "dept": "clean",
+  "price": 149,
+  "hours": 0.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Przegląd przed zdaniem: protokół z listą usterek i zdjęciami",
+   "uk": "Огляд перед здачею: протокол зі списком зауважень і фото",
+   "ru": "Осмотр перед сдачей: протокол со списком замечаний и фото",
+   "en": "Walkthrough before handover: a snag list with photos"
+  }
+ },
+ {
+  "key": "moveout-holes",
+  "group": "g-moveout",
+  "dept": "clean",
+  "price": 149,
+  "hours": 0.8,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Zaszpachlowanie otworów po kołkach i karniszach, do 10 sztuk",
+   "uk": "Замазування отворів від дюбелів і карнизів, до 10 штук",
+   "ru": "Заделка отверстий от дюбелей и карнизов, до 10 штук",
+   "en": "Filling dowel and rail holes, up to 10 of them"
+  }
+ },
+ {
+  "key": "moveout-touchup",
+  "group": "g-moveout",
+  "dept": "clean",
+  "price": 129,
+  "hours": 0.7,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Punktowe malowanie po szpachlowaniu, do 2 m²",
+   "uk": "Точкове фарбування після шпаклювання, до 2 м²",
+   "ru": "Точечная подкраска после шпаклёвки, до 2 м²",
+   "en": "Touching up paint after filling, up to 2 m²"
+  }
+ },
+ {
+  "key": "moveout-wallpaper",
+  "group": "g-moveout",
+  "dept": "clean",
+  "price": 120,
+  "hours": 0.6,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Podklejenie odchodzącej tapety",
+   "uk": "Підклеїти шпалери, що відійшли",
+   "ru": "Подклеить отошедшие обои",
+   "en": "Re-gluing lifted wallpaper"
+  }
+ },
+ {
+  "key": "moveout-return",
+  "group": "g-moveout",
+  "dept": "clean",
+  "price": 149,
+  "hours": 0.75,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Powrót po uwagach właściciela, w ciągu 7 dni",
+   "uk": "Повернення за зауваженнями власника, протягом 7 днів",
+   "ru": "Повторный выезд по замечаниям владельца, в течение 7 дней",
+   "en": "A return visit on the landlord's remarks, within 7 days"
+  }
+ },
+ {
+  "key": "repot-small",
+  "group": "g-plants",
+  "dept": "fix",
+  "price": 45,
+  "hours": 0.3,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Przesadzenie rośliny w doniczce do 30 cm",
+   "uk": "Пересадка рослини в горщику до 30 см",
+   "ru": "Пересадка растения в горшке до 30 см",
+   "en": "Repotting a plant in a pot up to 30 cm"
+  }
+ },
+ {
+  "key": "repot-large",
+  "group": "g-plants",
+  "dept": "fix",
+  "price": 70,
+  "hours": 0.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Przesadzenie dużej rośliny od 30 cm",
+   "uk": "Пересадка великої рослини від 30 см",
+   "ru": "Пересадка крупного растения от 30 см",
+   "en": "Repotting a large plant from 30 cm"
+  }
+ },
+ {
+  "key": "plant-trim",
+  "group": "g-plants",
+  "dept": "fix",
+  "price": 42,
+  "hours": 0.3,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Przycięcie, podwiązanie i oprysk na szkodniki",
+   "uk": "Обрізка, підв'язування та обробка від шкідників",
+   "ru": "Обрезка, подвязка и обработка от вредителей",
+   "en": "Pruning, staking and pest treatment"
+  }
+ },
+ {
+  "key": "plant-move",
+  "group": "g-plants",
+  "dept": "fix",
+  "price": 21,
+  "hours": 0.2,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "a": true,
+  "name": {
+   "pl": "Przeniesienie dużej rośliny do innego pokoju",
+   "uk": "Перенесення великої рослини в іншу кімнату",
+   "ru": "Перенос крупного растения в другую комнату",
+   "en": "Moving a large plant to another room"
+  }
+ },
+ {
+  "key": "plant-sitting",
+  "group": "g-plants",
+  "dept": "fix",
+  "price": 246,
+  "hours": 0.5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Podlewanie roślin pod nieobecność: jedna wizyta",
+   "uk": "Полив рослин за вашої відсутності: один візит",
+   "ru": "Полив растений в ваше отсутствие: один визит",
+   "en": "Watering plants while you are away: one visit"
+  }
+ },
+ {
+  "key": "move-hour",
+  "group": "g-moving",
+  "dept": "move",
+  "price": 270,
+  "hours": 1,
+  "unit": "h",
+  "min": 2,
+  "max": 999,
+  "name": {
+   "pl": "Bus i dwie osoby, do 80 km w cenie",
+   "uk": "Бус і двоє вантажників, до 80 км у ціні",
+   "ru": "Бус и двое грузчиков, до 80 км в цене",
+   "en": "Van and two movers, 80 km included"
+  }
+ },
+ {
+  "key": "loader-hour",
+  "group": "g-moving",
+  "dept": "move",
+  "price": 75,
+  "hours": 0,
+  "unit": "h",
+  "min": 1,
+  "max": 999,
+  "a": true,
+  "name": {
+   "pl": "Dodatkowa osoba do noszenia",
+   "uk": "Додаткова людина на перенесення",
+   "ru": "Дополнительный грузчик",
+   "en": "One extra mover"
+  }
+ },
+ {
+  "key": "packing-hour",
+  "group": "g-moving",
+  "dept": "move",
+  "price": 65,
+  "hours": 1,
+  "unit": "h",
+  "min": 1,
+  "max": 999,
+  "a": true,
+  "name": {
+   "pl": "Pakowanie rzeczy",
+   "uk": "Пакування речей",
+   "ru": "Упаковка вещей",
+   "en": "Packing"
+  }
+ },
+ {
+  "key": "floor-no-lift",
+  "group": "g-moving",
+  "dept": "move",
+  "price": 47,
+  "hours": 0.2,
+  "unit": "floor",
+  "min": 1,
+  "max": 999,
+  "a": true,
+  "name": {
+   "pl": "Noszenie po schodach, bez windy",
+   "uk": "Перенесення сходами, без ліфта",
+   "ru": "Перенос по лестнице, без лифта",
+   "en": "Carrying up stairs, no lift"
+  }
+ },
+ {
+  "key": "heavy-item",
+  "group": "g-moving",
+  "dept": "move",
+  "price": 450,
+  "hours": 2,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wniesienie ciężkiego przedmiotu: pianino, sejf",
+   "uk": "Занесення важкого предмета: піаніно, сейф",
+   "ru": "Занос тяжёлого предмета: пианино, сейф",
+   "en": "Carry a heavy item: piano, safe"
+  }
+ },
+ {
+  "key": "km-outside",
+  "group": "g-moving",
+  "dept": "move",
+  "price": 4,
+  "hours": 0,
+  "unit": "km",
+  "min": 1,
+  "max": 999,
+  "a": true,
+  "name": {
+   "pl": "Dojazd poza Warszawę, za kilometr",
+   "uk": "Виїзд за межі Варшави, за кілометр",
+   "ru": "Выезд за пределы Варшавы, за километр",
+   "en": "Travel outside Warsaw, per kilometre"
+  }
+ },
+ {
+  "key": "disposal-run",
+  "group": "g-moving",
+  "dept": "move",
+  "price": 400,
+  "hours": 1.75,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wywóz na PSZOK: do 4 rzeczy, stare meble, gruz, gałęzie",
+   "uk": "Вивезення на PSZOK: до 4 речей, старі меблі, сміття, гілки",
+   "ru": "Вывоз на PSZOK: до 4 вещей, старая мебель, мусор, ветки",
+   "en": "A run to the tip: up to 4 items, old furniture, rubble, branches"
+  }
+ },
+ {
+  "key": "disposal-room",
+  "group": "g-moving",
+  "dept": "move",
+  "price": 650,
+  "hours": 3,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wywóz na PSZOK: pełny bus, cały pokój albo piwnica",
+   "uk": "Вивезення на PSZOK: повний бус, ціла кімната або підвал",
+   "ru": "Вывоз на PSZOK: полный бус, целая комната или подвал",
+   "en": "A run to the tip: a full van, a whole room or cellar"
+  }
+ },
+ {
+  "key": "disposal-flat",
+  "group": "g-moving",
+  "dept": "move",
+  "price": 900,
+  "hours": 5,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "s": true,
+  "name": {
+   "pl": "Opróżnienie mieszkania: kilka kursów na PSZOK",
+   "uk": "Звільнення квартири: кілька рейсів на PSZOK",
+   "ru": "Освобождение квартиры: несколько рейсов на PSZOK",
+   "en": "Clearing a flat: several runs to the tip"
+  }
+ },
+ {
+  "key": "lawn-mow",
+  "group": "g-garden",
+  "dept": "garden",
+  "price": 119,
+  "hours": 1,
+  "unit": "h",
+  "min": 1,
+  "max": 999,
+  "name": {
+   "pl": "Koszenie trawnika",
+   "uk": "Косіння газону",
+   "ru": "Покос газона",
+   "en": "Mowing a lawn"
+  }
+ },
+ {
+  "key": "hedge-trim",
+  "group": "g-garden",
+  "dept": "garden",
+  "price": 16,
+  "hours": 0.13,
+  "unit": "mb",
+  "min": 5,
+  "max": 999,
+  "name": {
+   "pl": "Przycinanie żywopłotu do 2 m",
+   "uk": "Обрізання живоплоту до 2 м",
+   "ru": "Стрижка живой изгороди до 2 м",
+   "en": "Trimming a hedge up to 2 m"
+  }
+ },
+ {
+  "key": "hedge-trim-tall",
+  "group": "g-garden",
+  "dept": "garden",
+  "price": 26,
+  "hours": 0.2,
+  "unit": "mb",
+  "min": 5,
+  "max": 999,
+  "name": {
+   "pl": "Przycinanie żywopłotu 2–4 m",
+   "uk": "Обрізання живоплоту 2–4 м",
+   "ru": "Стрижка живой изгороди 2–4 м",
+   "en": "Trimming a hedge 2–4 m"
+  }
+ },
+ {
+  "key": "branch-prune",
+  "group": "g-garden",
+  "dept": "garden",
+  "price": 300,
+  "hours": 2.3,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Przycinanie drzewa do 5 m",
+   "uk": "Обрізання дерева до 5 м",
+   "ru": "Обрезка дерева до 5 м",
+   "en": "Pruning a tree up to 5 m"
+  }
+ },
+ {
+  "key": "crown-prune",
+  "group": "g-garden",
+  "dept": "garden",
+  "price": 700,
+  "hours": 4.65,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "s": true,
+  "name": {
+   "pl": "Przycinanie korony drzewa powyżej 5 m",
+   "uk": "Обрізання крони дерева понад 5 м",
+   "ru": "Обрезка кроны дерева выше 5 м",
+   "en": "Crown pruning a tree over 5 m"
+  }
+ },
+ {
+  "key": "tree-cut",
+  "group": "g-garden",
+  "dept": "garden",
+  "price": 500,
+  "hours": 2,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "name": {
+   "pl": "Wycinka małego drzewa do 5 m, pień zostaje",
+   "uk": "Зрізання малого дерева до 5 м, пень залишається",
+   "ru": "Спил небольшого дерева до 5 м, пень остаётся",
+   "en": "Felling a small tree up to 5 m, the stump stays"
+  }
+ },
+ {
+  "key": "tree-cut-large",
+  "group": "g-garden",
+  "dept": "garden",
+  "price": 1000,
+  "hours": 4,
+  "unit": "szt",
+  "min": 1,
+  "max": 99,
+  "s": true,
+  "name": {
+   "pl": "Wycinka dużego drzewa powyżej 5 m, pień zostaje",
+   "uk": "Зрізання великого дерева понад 5 м, пень залишається",
+   "ru": "Спил большого дерева выше 5 м, пень остаётся",
+   "en": "Felling a large tree over 5 m, the stump stays"
+  }
+ },
+ {
+  "key": "firewood-split",
+  "group": "g-garden",
+  "dept": "garden",
+  "price": 119,
+  "hours": 1,
+  "unit": "h",
+  "min": 1,
+  "max": 999,
+  "name": {
+   "pl": "Rąbanie i cięcie drewna opałowego",
+   "uk": "Рубання та різання дров",
+   "ru": "Колка и распил дров",
+   "en": "Splitting and sawing firewood"
+  }
+ },
+ {
+  "key": "plot-cleanup",
+  "group": "g-garden",
+  "dept": "garden",
+  "price": 119,
+  "hours": 1,
+  "unit": "h",
+  "min": 1,
+  "max": 999,
+  "name": {
+   "pl": "Porządki na działce: chwasty, liście, gałęzie",
+   "uk": "Прибирання ділянки: бур'ян, листя, гілки",
+   "ru": "Уборка участка: сорняки, листья, ветки",
+   "en": "Clearing the plot: weeds, leaves, branches"
+  }
+ },
+ {
+  "key": "reno-light",
+  "group": "g-renovation",
+  "dept": "fix",
+  "price": 149,
+  "hours": 0.75,
+  "unit": "m2",
+  "min": 10,
+  "max": 999,
+  "s": true,
+  "name": {
+   "pl": "Remont kosmetyczny, poziom lekki: gruntowanie, ściany, sufity",
+   "uk": "Косметичний ремонт, легкий рівень: ґрунтування, стіни, стелі",
+   "ru": "Косметический ремонт, лёгкий уровень: грунтовка, стены, потолки",
+   "en": "Cosmetic refurbishment, light: priming, walls, ceilings"
+  }
+ },
+ {
+  "key": "reno-medium",
+  "group": "g-renovation",
+  "dept": "fix",
+  "price": 279,
+  "hours": 1.4,
+  "unit": "m2",
+  "min": 10,
+  "max": 999,
+  "s": true,
+  "name": {
+   "pl": "Remont kosmetyczny, poziom średni: gładzie, podłoga, drzwi, osprzęt",
+   "uk": "Косметичний ремонт, середній рівень: шпаклівка, підлога, двері, розетки",
+   "ru": "Косметический ремонт, средний уровень: шпаклёвка, пол, двери, розетки",
+   "en": "Cosmetic refurbishment, medium: skim coat, floor, doors, fittings"
+  }
+ },
+ {
+  "key": "reno-heavy",
+  "group": "g-renovation",
+  "dept": "fix",
+  "price": 429,
+  "hours": 2.15,
+  "unit": "m2",
+  "min": 10,
+  "max": 999,
+  "s": true,
+  "name": {
+   "pl": "Remont kosmetyczny, poziom ciężki: skuwanie, płytki, instalacje",
+   "uk": "Косметичний ремонт, важкий рівень: збивання, плитка, комунікації",
+   "ru": "Косметический ремонт, тяжёлый уровень: демонтаж, плитка, коммуникации",
+   "en": "Cosmetic refurbishment, heavy: strip-out, tiling, services"
+  }
+ }
+]

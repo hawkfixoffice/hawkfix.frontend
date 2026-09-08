@@ -1,0 +1,80 @@
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+  # Пересборка по кнопке — нужна после правки контента в Supabase,
+  # потому что страницы статические и пересобираются на билде.
+  workflow_dispatch:
+  # Пересборка из внешнего триггера (вебхук Supabase → repository_dispatch)
+  repository_dispatch:
+    types: [content-updated]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Параллельные деплои не нужны: держим один, новый отменяет предыдущий
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Pull content from Supabase
+        # Если ключи не заданы — собираем из закоммиченного content/,
+        # чтобы деплой не падал у того, у кого нет доступа к базе.
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_SERVICE_KEY" ]; then
+            npm run content:pull
+          else
+            echo "Ключи Supabase не заданы — собираю из content/ в репозитории"
+          fi
+
+      - name: Build
+        env:
+          VITE_LEAD_ENDPOINT: ${{ vars.VITE_LEAD_ENDPOINT }}
+        run: npm run build
+
+      - name: Check output
+        run: |
+          pages=$(find dist -name index.html | wc -l | tr -d ' ')
+          echo "Собрано страниц: $pages"
+          test "$pages" -ge 140 || { echo "Ожидалось ≥140 страниц"; exit 1; }
+          test -f dist/sitemap.xml
+          test -f dist/robots.txt
+          test -f dist/404.html
+          test -f dist/CNAME
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

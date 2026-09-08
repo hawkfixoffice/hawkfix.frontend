@@ -1,0 +1,80 @@
+{
+ "g-plumbing": {
+  "pl": "hydraulika — drobne naprawy cieknący kran, zapchany syfon, spłuczka, podłączenie pralki. wymiana baterii, syfonu, elastycznych węży naprawa spłuczki i deski sedesowej podłączenie pralki i zmywarki usuwanie przecieków, wymiana zaworów kątowych",
+  "uk": "сантехніка — дрібний ремонт тече кран, забився сифон, зливний бачок, підключення пральної машини. заміна змішувача, сифона, гнучких шлангів ремонт зливного бачка й сидіння підключення пральної та посудомийної машини усунення протікань, заміна кутових вентилів",
+  "ru": "сантехника — мелкий ремонт течёт кран, забился сифон, бачок, подключение стиральной машины. замена смесителя, сифона, гибких шлангов ремонт бачка и сиденья унитаза подключение стиральной и посудомоечной машины устранение протечек, замена угловых вентилей",
+  "en": "plumbing — small repairs dripping tap, blocked trap, cistern, washing machine hook-up. replacing mixers, traps and flexible hoses cistern and toilet seat repairs washing machine and dishwasher hook-up stopping leaks, replacing angle valves"
+ },
+ "g-electrics": {
+  "pl": "elektryka — drobne prace gniazdka, włączniki, lampy, żyrandol, taśmy led. wymiana gniazdek i włączników montaż lamp, żyrandoli, kinkietów taśmy led i oświetlenie pod szafkami szukanie zwarcia i naprawa obwodu",
+  "uk": "електрика — дрібні роботи розетки, вимикачі, світильники, люстра, led-стрічки. заміна розеток і вимикачів монтаж люстр, світильників, бра led-стрічки й підсвітка під шафками пошук короткого замикання й ремонт кола",
+  "ru": "электрика — мелкие работы розетки, выключатели, лампы, люстра, led-ленты. замена розеток и выключателей монтаж люстр, светильников, бра led-ленты и подсветка под шкафами поиск короткого замыкания и ремонт цепи",
+  "en": "electrics — small jobs sockets, switches, lights, chandeliers, led strips. replacing sockets and switches fitting ceiling lights, chandeliers, wall lamps led strips and under-cabinet lighting tracing a short circuit and repairing it"
+ },
+ "g-furniture": {
+  "pl": "montaż mebli ikea, brw, meble z internetu i na wymiar. szafy, komody, łóżka, biurka szafki kuchenne wieszane na wymiar: średnie do 60 × 70, duże od 80 × 90 cm kuchnie modułowe, fronty, blaty regulacja szuflad i zawiasów przykręcenie do ściany — bezpiecznie dla dzieci",
+  "uk": "збірка меблів ikea, brw, меблі з інтернету та на замовлення. шафи, комоди, ліжка, столи кухонні шафки навішуємо за розміром: середні до 60 × 70, великі від 80 × 90 см модульні кухні, фасади, стільниці регулювання шухляд і завіс кріплення до стіни — безпечно для дітей",
+  "ru": "сборка мебели ikea, brw, мебель из интернета и на заказ. шкафы, комоды, кровати, столы кухонные шкафы вешаем по размеру: средние до 60 × 70, большие от 80 × 90 см модульные кухни, фасады, столешницы регулировка ящиков и петель крепление к стене — безопасно для детей",
+  "en": "furniture assembly ikea, brw, online and made-to-measure furniture. wardrobes, chests, beds, desks kitchen cabinets hung to size: medium up to 60 × 70, large from 80 × 90 cm modular kitchens, fronts, worktops adjusting drawers and hinges anchoring to the wall — child-safe"
+ },
+ "g-mounting": {
+  "pl": "wiercenie i wieszanie półki, lustro, karnisz, obraz, wieszaki. półki, lustra, obrazy, wieszaki ciężkie przedmioty na kotwach chemicznych wiercenie w betonie, płytkach, gipsie odkurzacz przy wiertarce — bez kurzu",
+  "uk": "свердління й монтаж на стіну полиці, дзеркало, карниз, картина, вішалки. полиці, дзеркала, картини, вішалки важкі предмети на хімічних анкерах свердління в бетоні, плитці, гіпсокартоні пилосос при свердлінні — без пилу",
+  "ru": "сверление и навеска полки, зеркало, карниз, картина, вешалки. полки, зеркала, картины, вешалки тяжёлые предметы на химических анкерах сверление в бетоне, плитке, гипсокартоне пылесос при сверлении — без пыли",
+  "en": "drilling and wall mounting shelves, mirror, curtain rail, picture, hooks. shelves, mirrors, pictures, hooks heavy items on chemical anchors drilling concrete, tiles and plasterboard vacuum at the drill — no dust"
+ },
+ "g-doors": {
+  "pl": "drzwi, okna, zamki skrzypią, nie domykają się, zamek się zaciął. regulacja drzwi i okien wymiana wkładki, zamka, klamki montaż samozamykacza nowe uszczelki — cieplej i ciszej",
+  "uk": "двері, вікна, замки скриплять, не зачиняються, замок заклинив. регулювання дверей і вікон заміна циліндра, замка, ручки монтаж дотягувача нові гумки на дверях — тепліше й тихіше",
+  "ru": "двери, окна, замки скрипят, не закрываются, замок заклинило. регулировка дверей и окон замена личинки, замка, ручки установка доводчика новые уплотнители — теплее и тише",
+  "en": "doors, windows, locks squeaking, not closing, jammed lock. adjusting doors and windows replacing cylinders, locks, handles fitting a door closer new seals — warmer and quieter"
+ },
+ "g-appliances": {
+  "pl": "montaż agd okap, płyta, piekarnik, pralka, zmywarka. okap z wyprowadzeniem do kanału płyta indukcyjna i piekarnik do zabudowy pralka i zmywarka pod blatem test szczelności i pierwsze uruchomienie",
+  "uk": "монтаж техніки витяжка, плита, духовка, пральна й посудомийна машина. витяжка з виведенням у канал індукційна плита й вбудована духовка пральна й посудомийна машина під стільницю перевірка герметичності й перший запуск",
+  "ru": "монтаж бытовой техники вытяжка, варочная панель, духовка, стиралка, посудомойка. вытяжка с выводом в канал индукционная панель и встроенная духовка стиральная и посудомоечная машина под столешницу проверка герметичности и первый запуск",
+  "en": "appliance installation hood, hob, oven, washing machine, dishwasher. extractor hood with ducting induction hob and built-in oven washing machine and dishwasher under the worktop leak test and first run"
+ },
+ "g-walls": {
+  "pl": "ściany: naprawa, wyrównanie, malowanie pęknięcia, krzywa ściana, sufit po zalaniu, malowanie. ściany i sufity, dwie warstwy, dowolny kolor w tej samej cenie trzecia warstwa osobno — ciemne podłoże albo intensywny kolor gruntowanie, szpachlowanie i szlifowanie liczone za metr przygotowanie i zabezpieczenie pomieszczenia — osobna pozycja dodawana w kalkulatorze",
+  "uk": "стіни: ремонт, вирівнювання, фарбування тріщини, крива стіна, стеля після залиття, фарбування. стіни і стелі, два шари, будь-який колір за тією самою ціною третій шар окремо — темна основа або інтенсивний колір ґрунтування, шпаклювання і шліфування рахуємо за метр підготовка й захист приміщення — окрема позиція в калькуляторі",
+  "ru": "стены: ремонт, выравнивание, покраска трещины, кривая стена, потолок после залива, покраска. стены и потолки, два слоя, любой цвет по одной цене третий слой отдельно — тёмная основа или интенсивный цвет грунтовка, шпаклёвка и шлифовка считаются за метр подготовка и защита помещения — отдельная позиция в калькуляторе",
+  "en": "walls: repair, levelling, painting cracks, an uneven wall, a ceiling after a leak, painting. walls and ceilings, two coats, any colour at the same price third coat priced separately — dark base or an intense colour priming, filling and sanding charged by the square metre room preparation and protection: a separate calculator item"
+ },
+ "g-home-cleaning": {
+  "pl": "sprzątanie mieszkań i domów trzy poziomy, rozliczenie za godzinę. poziom lekki: kurze, podłogi, kuchnia, łazienka, balkon poziom średni: generalne — okna, piekarnik, lodówka, szafki w środku żadnych dopłat za okno czy piekarnik — są w godzinie środki, mopy i odkurzacz po naszej stronie",
+  "uk": "прибирання квартир і будинків три рівні, розрахунок за годину. легкий рівень: пил, підлоги, кухня, ванна, балкон середній рівень: генеральне — вікна, духовка, холодильник, шафи всередині жодних доплат за вікно чи духовку — вони в годині засоби, швабри й пилосос з нашого боку",
+  "ru": "уборка квартир и домов три уровня, расчёт за час. лёгкий уровень: пыль, полы, кухня, ванная, балкон средний уровень: генеральная — окна, духовка, холодильник, шкафы внутри никаких доплат за окно или духовку — они в часе средства, швабры и пылесос с нашей стороны",
+  "en": "home and flat cleaning three levels, charged by the hour. light: dust, floors, kitchen, bathroom, balcony medium: deep clean — windows, oven, fridge, inside cupboards no surcharge for a window or an oven — they are in the hour products, mops and the vacuum are on us"
+ },
+ "g-moveout": {
+  "pl": "sprzątanie pod zwrot kaucji protokół, poprawki i sprzątanie w jednym wyjeździe. przegląd przed zdaniem: protokół z listą usterek i zdjęciami otwory po kołkach zaszpachlowane i zamalowane punktowo sprzątanie według zwykłego cennika godzinowego i minimum wizyty dodatkowe poprawki po uwagach właściciela w ciągu 7 dni — osobna, uzgodniona wycena",
+  "uk": "прибирання під повернення застави протокол, поправки і прибирання за один виїзд. огляд перед здачею: протокол зі списком зауважень і фото отвори від дюбелів замазані й точково зафарбовані прибирання за звичайними погодинними ставками та мінімумом візиту додаткові роботи за зауваженнями власника протягом 7 днів — окреме погоджене кошторисування",
+  "ru": "уборка под возврат залога протокол, поправки и уборка за один выезд. осмотр перед сдачей: протокол со списком замечаний и фото отверстия от дюбелей заделаны и точечно закрашены уборка по обычным почасовым ставкам и минимуму визита дополнительные работы по замечаниям владельца в течение 7 дней — отдельная согласованная оценка",
+  "en": "end-of-tenancy cleaning protocol, small fixes and cleaning in one visit. walkthrough before handover: a snag list with photos dowel holes filled and touched up with paint cleaning at the standard hourly rates and visit minimum additional work requested after handover within 7 days: separately agreed pricing"
+ },
+ "g-plants": {
+  "pl": "rośliny doniczkowe: przesadzanie i opieka przesadzimy, przytniemy, podlejemy. przesadzanie roślin małych i dużych, do donicy klienta lub naszej ziemię, keramzyt, donice i materiały ochronne wyceniamy osobno przycięcie, podwiązanie i oprysk na szkodniki podlewanie roślin, kiedy jesteś na urlopie",
+  "uk": "кімнатні рослини: пересадка й догляд пересадимо, обріжемо, поллємо. пересадка малих і великих рослин, у ваш горщик або в наш землю, керамзит, горщики й захисні матеріали оцінюємо окремо обрізка, підв'язування та обробка від шкідників полив рослин, поки ви у відпустці",
+  "ru": "комнатные растения: пересадка и уход пересадим, обрежем, польём. пересадка мелких и крупных растений, в ваш горшок или в наш землю, керамзит, горшки и защитные материалы оцениваем отдельно обрезка, подвязка и обработка от вредителей полив растений, пока вы в отъезде",
+  "en": "house plants: repotting and care repotted, pruned, watered. repotting small and large plants, into your pot or ours soil, drainage aggregate, pots and protective materials are priced separately pruning, staking and treatment against pests watering your plants while you are away"
+ },
+ "g-moving": {
+  "pl": "przeprowadzki po warszawie bus, dwie osoby, meble rozebrane i złożone. bus i dwie osoby w cenie godziny, do 80 km bez dopłaty demontaż i ponowny montaż mebli — osobne pozycje kosztorysu zabezpieczenie kocami, folią stretch i pasami noszenie po schodach bez windy — dopłata według cennika",
+  "uk": "переїзди по варшаві бус, двоє людей, меблі розібрані та зібрані. бус і двоє людей у ціні години, до 80 км без доплати розбирання та повторне збирання меблів — окремі позиції кошторису захист ковдрами, стретч-плівкою та ременями перенесення сходами без ліфта — доплата за прайсом",
+  "ru": "переезды по варшаве бус, двое, мебель разобрана и собрана. бус и двое грузчиков в цене часа, до 80 км без доплаты разборка и повторная сборка мебели — отдельные позиции сметы защита одеялами, стретч-плёнкой и ремнями перенос по лестнице без лифта — доплата по прайсу",
+  "en": "moving within warsaw van, two movers, furniture taken apart and rebuilt. van and two movers included in the hourly rate, 80 km with no extra furniture dismantling and reassembly: separate estimate items blankets, stretch wrap and straps as standard carrying on stairs without a lift: surcharge at the listed rate"
+ },
+ "g-garden": {
+  "pl": "prace w ogrodzie i na działce kosa, sekator i piła w jednym przyjeździe. koszenie trawnika, porządki na działce, rąbanie drewna — za godzinę żywopłot do 2 m i wyższy 2–4 m liczone osobno, bo to inna praca wycinka drzewa do 5 m lub powyżej — zakres i cena po ocenie warunków pień zostaje w ziemi; zgłoszenie albo zezwolenie gminy jest po twojej stronie",
+  "uk": "роботи в саду і на ділянці коса, секатор і пилка за один приїзд. косіння газону, прибирання ділянки, рубання дров — за годину живопліт до 2 м і вищий 2–4 м рахуємо окремо, бо це різна робота зрізання дерева до 5 м або вище — обсяг і ціна після оцінки умов пень лишається в землі; погодження чи дозвіл гміни — на вашому боці",
+  "ru": "работы в саду и на участке коса, секатор и пила за один приезд. покос газона, уборка участка, колка дров — за час живая изгородь до 2 м и высокая 2–4 м считаются отдельно, это разная работа спил дерева до 5 м или выше — объём и цена после оценки условий пень остаётся в земле; согласование или разрешение гмины — на вашей стороне",
+  "en": "garden and grounds work mower, shears and saw in one visit. mowing, clearing the plot and splitting firewood — charged by the hour hedges up to 2 m and 2–4 m priced separately, because they are different work felling trees up to 5 m or taller: scope and price after assessing the conditions the stump stays in the ground; the council notice or permit is on you"
+ },
+ "g-renovation": {
+  "pl": "remont mieszkania — trzy poziomy zakresu orientacyjna robocizna za m² podłogi, trzy poziomy zakresu. poziom lekki: gruntowanie i malowanie ścian oraz sufitów poziom średni: gładzie na całych ścianach, podłoga, drzwi, listwy, osprzęt poziom ciężki: skuwanie, płytki, przeróbki elektryki i hydrauliki, biały montaż orientacyjna robocizna za m² podłogi; ilości, zakres i cenę potwierdzamy po oględzinach",
+  "uk": "ремонт квартири — три рівні обсягу орієнтовна робота за м² підлоги, три рівні обсягу. легкий рівень: ґрунтування та фарбування стін і стель середній рівень: шпаклівка по всіх стінах, підлога, двері, плінтуси, розетки важкий рівень: збивання, плитка, переробка електрики й сантехніки, білий монтаж орієнтовна робота за м² підлоги; кількості, обсяг і ціну погоджуємо після огляду",
+  "ru": "ремонт квартиры — три уровня объёма ориентировочная работа за м² пола, три уровня объёма. лёгкий уровень: грунтовка и покраска стен и потолков средний уровень: шпаклёвка по всем стенам, пол, двери, плинтусы, розетки тяжёлый уровень: сбивание, плитка, переделка электрики и сантехники, белый монтаж ориентировочная работа за м² пола; количества, объём и цену согласуем после осмотра",
+  "en": "flat refurbishment — three levels of scope indicative labour per m² of floor area, three levels of scope. light level: priming and painting walls and ceilings medium: skim coat across the walls, floor, doors, skirting, fittings heavy: strip-out, tiling, reworked wiring and plumbing, sanitaryware indicative labour per m² of floor area; quantities, scope and price confirmed after inspection"
+ }
+}

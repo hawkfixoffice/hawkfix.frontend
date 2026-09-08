@@ -1,0 +1,66 @@
+import { Head } from 'vite-react-ssg'
+import { HREFLANG, OG_LOCALE, SITE, type Locale, LOCALES } from '../lib/types'
+import type { PageRec } from '../lib/types'
+
+interface Props {
+  page: PageRec
+  locale: Locale
+  /** JSON-LD @graph целиком */
+  schema?: object
+  /** Переопределения, если страница хочет свои title/description */
+  title?: string
+  description?: string
+  ogImage?: string
+}
+
+/**
+ * Полная SEO-голова страницы. Планка задана старым сайтом и её нельзя ронять:
+ * уникальные title/description, canonical == фактический URL,
+ * пять взаимных hreflang (4 языка + x-default), Open Graph и JSON-LD.
+ */
+export default function Seo({ page, locale, schema, title, description, ogImage }: Props) {
+  const tr = page.tr[locale]
+  const url = SITE + page.paths[locale]
+  const t = title ?? tr.title
+  const d = description ?? tr.description
+  const img = SITE + (ogImage ?? `/og/og-${locale}.png`)
+
+  return (
+    <Head>
+      <html lang={HREFLANG[locale]} />
+      <title>{t}</title>
+      <meta name="description" content={d} />
+      <link rel="canonical" href={url} />
+
+      {LOCALES.filter((l) => page.paths[l]).map((l) => (
+        <link key={l} rel="alternate" hrefLang={HREFLANG[l]} href={SITE + page.paths[l]} />
+      ))}
+      <link rel="alternate" hrefLang="x-default" href={SITE + page.paths.pl} />
+
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+      <meta name="author" content="HAWK.FIX" />
+      <meta name="theme-color" content="#14161a" />
+
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="HAWK.FIX" />
+      <meta property="og:locale" content={OG_LOCALE[locale]} />
+      {LOCALES.filter((l) => l !== locale && page.paths[l]).map((l) => (
+        <meta key={l} property="og:locale:alternate" content={OG_LOCALE[l]} />
+      ))}
+      <meta property="og:title" content={t} />
+      <meta property="og:description" content={d} />
+      <meta property="og:url" content={url} />
+      <meta property="og:image" content={img} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={t} />
+      <meta name="twitter:description" content={d} />
+      <meta name="twitter:image" content={img} />
+
+      {schema ? (
+        <script type="application/ld+json">{JSON.stringify(schema)}</script>
+      ) : null}
+    </Head>
+  )
+}

@@ -1,0 +1,119 @@
+[
+ {
+  "key": "g-plumbing",
+  "name": {
+   "pl": "Hydraulika — drobne naprawy",
+   "uk": "Сантехніка — дрібний ремонт",
+   "ru": "Сантехника — мелкий ремонт",
+   "en": "Plumbing — small repairs"
+  }
+ },
+ {
+  "key": "g-electrics",
+  "name": {
+   "pl": "Elektryka — drobne prace",
+   "uk": "Електрика — дрібні роботи",
+   "ru": "Электрика — мелкие работы",
+   "en": "Electrics — small jobs"
+  }
+ },
+ {
+  "key": "g-mounting",
+  "name": {
+   "pl": "Wiercenie i wieszanie",
+   "uk": "Свердління й монтаж на стіну",
+   "ru": "Сверление и навеска",
+   "en": "Drilling and wall mounting"
+  }
+ },
+ {
+  "key": "g-furniture",
+  "name": {
+   "pl": "Montaż mebli",
+   "uk": "Збірка меблів",
+   "ru": "Сборка мебели",
+   "en": "Furniture assembly"
+  }
+ },
+ {
+  "key": "g-doors",
+  "name": {
+   "pl": "Drzwi, okna, zamki",
+   "uk": "Двері, вікна, замки",
+   "ru": "Двери, окна, замки",
+   "en": "Doors, windows, locks"
+  }
+ },
+ {
+  "key": "g-appliances",
+  "name": {
+   "pl": "Montaż AGD",
+   "uk": "Монтаж техніки",
+   "ru": "Монтаж бытовой техники",
+   "en": "Appliance installation"
+  }
+ },
+ {
+  "key": "g-walls",
+  "name": {
+   "pl": "Ściany: naprawa, wyrównanie, malowanie",
+   "uk": "Стіни: ремонт, вирівнювання, фарбування",
+   "ru": "Стены: ремонт, выравнивание, покраска",
+   "en": "Walls: repair, levelling, painting"
+  }
+ },
+ {
+  "key": "g-home-cleaning",
+  "name": {
+   "pl": "Sprzątanie mieszkań i domów",
+   "uk": "Прибирання квартир і будинків",
+   "ru": "Уборка квартир и домов",
+   "en": "Home and flat cleaning"
+  }
+ },
+ {
+  "key": "g-moveout",
+  "name": {
+   "pl": "Sprzątanie pod zwrot kaucji",
+   "uk": "Прибирання під повернення застави",
+   "ru": "Уборка под возврат залога",
+   "en": "End-of-tenancy cleaning"
+  }
+ },
+ {
+  "key": "g-plants",
+  "name": {
+   "pl": "Rośliny doniczkowe: przesadzanie i opieka",
+   "uk": "Кімнатні рослини: пересадка й догляд",
+   "ru": "Комнатные растения: пересадка и уход",
+   "en": "House plants: repotting and care"
+  }
+ },
+ {
+  "key": "g-moving",
+  "name": {
+   "pl": "Przeprowadzki po Warszawie",
+   "uk": "Переїзди по Варшаві",
+   "ru": "Переезды по Варшаве",
+   "en": "Moving within Warsaw"
+  }
+ },
+ {
+  "key": "g-garden",
+  "name": {
+   "pl": "Prace w ogrodzie i na działce",
+   "uk": "Роботи в саду і на ділянці",
+   "ru": "Работы в саду и на участке",
+   "en": "Garden and grounds work"
+  }
+ },
+ {
+  "key": "g-renovation",
+  "name": {
+   "pl": "Remont mieszkania — trzy poziomy zakresu",
+   "uk": "Ремонт квартири — три рівні обсягу",
+   "ru": "Ремонт квартиры — три уровня объёма",
+   "en": "Flat refurbishment — three levels of scope"
+  }
+ }
+]
