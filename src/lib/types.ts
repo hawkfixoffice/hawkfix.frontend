@@ -14,7 +14,26 @@ export const LOCALE_NAME: Record<Locale, string> = {
   pl: 'Polski', uk: 'Українська', ru: 'Русский', en: 'English',
 }
 
-export const SITE = 'https://hawkfix.pl'
+/** Боевой адрес. */
+export const PROD_SITE = 'https://hawkfix.pl'
+
+/**
+ * Адрес, от которого строятся canonical, hreflang, og:image и schema.org.
+ *
+ * Одна сборка живёт ровно на одном адресе: og-разметку читают краулеры
+ * из статического HTML, JS они не выполняют, поэтому ссылка на картинку
+ * обязана быть абсолютной и вести туда же, где лежит сборка. Отсюда
+ * параметр сборки, а не константа:
+ *
+ *     VITE_SITE=https://hawnfix.barabashflow.pl npm run build
+ *
+ * Без переменной собирается боевой адрес.
+ */
+export const SITE = (import.meta.env.VITE_SITE || PROD_SITE).replace(/\/+$/, '')
+
+/** Витрина для проверки. В индекс её пускать нельзя: тот же контент на двух
+ *  адресах — это дубль, который отбирает позиции у боевого домена. */
+export const IS_STAGING = SITE !== PROD_SITE
 
 export type Block =
   | { type: 'p'; text: string }

@@ -4,7 +4,10 @@ import json, pathlib, re, html, sys
 from html.parser import HTMLParser
 
 DIST = pathlib.Path(__file__).resolve().parent.parent / "dist"
-SITE = "https://hawkfix.pl"
+import os
+# Адрес берём из той же переменной, что и сборка (см. src/lib/types.ts).
+SITE = (os.environ.get("VITE_SITE") or "https://hawkfix.pl").rstrip("/")
+IS_STAGING = SITE != "https://hawkfix.pl"
 problems, notes = [], []
 
 class P(HTMLParser):
@@ -59,7 +62,13 @@ for f in pages:
     if len(alts) != 5: problems.append(f"{where}: hreflang = {len(alts)}")
     if "x-default" not in [a.get("hreflang") for a in alts]: problems.append(f"{where}: нет x-default")
     if not d.meta("property", "og:image"): problems.append(f"{where}: нет og:image")
-    if "max-image-preview:large" not in d.meta("name", "robots"): problems.append(f"{where}: robots без max-image-preview")
+    # На витрине для проверки robots ровно противоположный: её задача — не
+    # попасть в индекс, поэтому там ждём noindex, а не директивы превью.
+    robots = d.meta("name", "robots")
+    if IS_STAGING:
+        if "noindex" not in robots: problems.append(f"{where}: витрина без noindex")
+    elif "max-image-preview:large" not in robots:
+        problems.append(f"{where}: robots без max-image-preview")
     if d.meta("name", "keywords"): stats["kw"] += 1
 
     for img in d.imgs:
@@ -78,10 +87,14 @@ for f in pages:
         if not any(t.endswith("Page") for t in types): problems.append(f"{where}: нет узла *Page")
 
 # ---- служебные файлы ----
-for name, must in [("robots.txt", ["Sitemap:", "User-agent"]), ("sitemap.xml", ["<loc>", "hreflang", "image:image"]),
+HOST = SITE.split("//", 1)[1]
+# На витрине robots закрыт целиком и строки Sitemap в нём нет — это норма,
+# а CNAME совпадает с адресом сборки, а не с боевым доменом.
+for name, must in [("robots.txt", ["User-agent"] if IS_STAGING else ["Sitemap:", "User-agent"]),
+                   ("sitemap.xml", ["<loc>", "hreflang", "image:image"]),
                    ("llms.txt", ["# HAWK.FIX", "## Usługi"]), ("manifest.webmanifest", ["short_name", "theme_color"]),
                    ("humans.txt", ["TEAM"]), (".well-known/security.txt", ["Contact:", "Expires:"]),
-                   ("404.html", ["noindex"]), ("CNAME", ["hawkfix.pl"])]:
+                   ("404.html", ["noindex"]), ("CNAME", [HOST])]:
     p = DIST / name
     if not p.exists(): problems.append(f"нет файла {name}"); continue
     txt = p.read_text(encoding="utf-8", errors="replace")

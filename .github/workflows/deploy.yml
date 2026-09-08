@@ -52,6 +52,11 @@ jobs:
       - name: Build
         env:
           VITE_LEAD_ENDPOINT: ${{ vars.VITE_LEAD_ENDPOINT }}
+          # Адрес, по которому будет жить эта сборка: canonical, hreflang,
+          # og:image, sitemap, robots и CNAME берутся отсюда.
+          # Переменная не задана — собирается боевой https://hawkfix.pl.
+          # Для витрины: Settings → Variables → VITE_SITE = https://hawnfix.barabashflow.pl
+          VITE_SITE: ${{ vars.VITE_SITE }}
         run: npm run build
 
       - name: Check output

@@ -1,5 +1,5 @@
 import { Head } from 'vite-react-ssg'
-import { HREFLANG, OG_LOCALE, SITE, type Locale, LOCALES } from '../lib/types'
+import { HREFLANG, IS_STAGING, OG_LOCALE, SITE, type Locale, LOCALES } from '../lib/types'
 import type { PageRec } from '../lib/types'
 import { keywords } from '../data/keywords'
 
@@ -39,7 +39,14 @@ export default function Seo({ page, locale, schema, title, description, ogImage 
       ))}
       <link rel="alternate" hrefLang="x-default" href={SITE + page.paths.pl} />
 
-      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      {/* Витрину для проверки в индекс не пускаем: тот же контент на двух
+          адресах — дубль, который отбирает позиции у боевого домена. */}
+      <meta
+        name="robots"
+        content={IS_STAGING
+          ? 'noindex, nofollow'
+          : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
+      />
       {/* Google этот тег игнорирует с 2009-го; держим для Яндекса и внутренней
           навигации по семантике. Настоящая работа с запросами — в title,
           description, заголовках, alt и schema.org keywords. */}

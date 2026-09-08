@@ -17,7 +17,8 @@
     "seo:audit": "python3 tools/audit-seo-full.py",
     "assets:images": "sh tools/build-images.sh",
     "assets:lottie": "python3 tools/build-lottie.py",
-    "assets:og": "node tools/make-og.mjs"
+    "assets:og": "node tools/make-og.mjs",
+    "build:test": "VITE_SITE=https://hawnfix.barabashflow.pl npm run build"
   },
   "dependencies": {
     "lottie-web": "^5.13.0",

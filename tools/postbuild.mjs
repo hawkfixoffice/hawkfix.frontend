@@ -6,8 +6,12 @@
 import { readFile, writeFile, cp, mkdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 
-const SITE = 'https://hawkfix.pl'
-const DOMAIN = 'hawkfix.pl'
+// Адрес сборки задаётся тем же VITE_SITE, что и в src/lib/types.ts, — иначе
+// sitemap, robots и CNAME разъедутся с canonical и og внутри страниц.
+const PROD_SITE = 'https://hawkfix.pl'
+const SITE = (process.env.VITE_SITE || PROD_SITE).replace(/\/+$/, '')
+const DOMAIN = new URL(SITE).host
+const IS_STAGING = SITE !== PROD_SITE
 const HREFLANG = { pl: 'pl-PL', uk: 'uk-UA', ru: 'ru', en: 'en' }
 const LOCALES = ['pl', 'uk', 'ru', 'en']
 
@@ -59,8 +63,16 @@ const sitemap =
 
 await writeFile('dist/sitemap.xml', sitemap, 'utf8')
 
-await writeFile('dist/robots.txt', [
-  '# https://hawkfix.pl — robots.txt',
+// Витрину для проверки закрываем целиком: одинаковый контент на двух адресах
+// уводит позиции с боевого домена. На проде — обычный открытый robots.
+await writeFile('dist/robots.txt', IS_STAGING ? [
+  `# ${SITE} — витрина для проверки, не для индекса`,
+  '',
+  'User-agent: *',
+  'Disallow: /',
+  '',
+].join('\n') : [
+  `# ${SITE} — robots.txt`,
   '',
   'User-agent: *',
   'Allow: /',
@@ -175,5 +187,6 @@ await writeFile('dist/.nojekyll', '', 'utf8')
 await writeFile('dist/CNAME', `${DOMAIN}\n`, 'utf8')
 
 const withImg = urls.filter((u) => u.includes('<image:image>')).length
+console.log(`адрес сборки: ${SITE}${IS_STAGING ? '  (витрина: noindex + Disallow: /)' : ''}`)
 console.log(`sitemap.xml: ${urls.length} URL, из них с картинкой ${withImg}`)
 console.log('robots.txt, llms.txt, manifest.webmanifest, security.txt, humans.txt, 404.html, .nojekyll, CNAME — записаны')
