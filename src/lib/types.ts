@@ -18,18 +18,33 @@ export const LOCALE_NAME: Record<Locale, string> = {
 export const PROD_SITE = 'https://hawkfix.pl'
 
 /**
- * Адрес, от которого строятся canonical, hreflang, og:image и schema.org.
+ * Адрес, по которому живёт эта сборка. Отсюда строятся canonical, hreflang,
+ * og:image, schema.org, sitemap и CNAME.
  *
- * Одна сборка живёт ровно на одном адресе: og-разметку читают краулеры
- * из статического HTML, JS они не выполняют, поэтому ссылка на картинку
- * обязана быть абсолютной и вести туда же, где лежит сборка. Отсюда
- * параметр сборки, а не константа:
+ * Одна сборка живёт ровно на одном адресе: og-разметку краулеры читают из
+ * статического HTML и JS не выполняют, поэтому ссылка на картинку обязана
+ * быть абсолютной и вести туда же, где лежит сборка. Отсюда параметр сборки,
+ * а не константа:
  *
  *     VITE_SITE=https://hawnfix.barabashflow.pl npm run build
  *
- * Без переменной собирается боевой адрес.
+ * В GitHub Actions переменную подставляет `actions/configure-pages` — берётся
+ * тот домен, который реально настроен у Pages, руками задавать ничего не надо.
+ *
+ * Адрес с путём (`user.github.io/repo`) не годится: у нас все ссылки от корня.
+ * Такой — и любой битый — откатываем на боевой.
  */
-export const SITE = (import.meta.env.VITE_SITE || PROD_SITE).replace(/\/+$/, '')
+function siteFrom(raw: string | undefined): string {
+  if (!raw) return PROD_SITE
+  try {
+    const u = new URL(raw)
+    return u.pathname === '/' ? u.origin : PROD_SITE
+  } catch {
+    return PROD_SITE
+  }
+}
+
+export const SITE = siteFrom(import.meta.env.VITE_SITE)
 
 /** Витрина для проверки. В индекс её пускать нельзя: тот же контент на двух
  *  адресах — это дубль, который отбирает позиции у боевого домена. */

@@ -9,7 +9,15 @@ import { existsSync } from 'node:fs'
 // Адрес сборки задаётся тем же VITE_SITE, что и в src/lib/types.ts, — иначе
 // sitemap, robots и CNAME разъедутся с canonical и og внутри страниц.
 const PROD_SITE = 'https://hawkfix.pl'
-const SITE = (process.env.VITE_SITE || PROD_SITE).replace(/\/+$/, '')
+const SITE = (() => {
+  const raw = process.env.VITE_SITE
+  if (!raw) return PROD_SITE
+  try {
+    const u = new URL(raw)
+    // Адрес с путём (user.github.io/repo) не годится: ссылки у нас от корня
+    return u.pathname === '/' ? u.origin : PROD_SITE
+  } catch { return PROD_SITE }
+})()
 const DOMAIN = new URL(SITE).host
 const IS_STAGING = SITE !== PROD_SITE
 const HREFLANG = { pl: 'pl-PL', uk: 'uk-UA', ru: 'ru', en: 'en' }
