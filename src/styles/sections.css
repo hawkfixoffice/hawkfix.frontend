@@ -49,10 +49,16 @@
   .herox__bottom .blk--accent { grid-column: 1 / -1; padding-inline: clamp(24px, 4vw, 40px); }
 }
 @media (max-width: 640px) {
-  /* На телефоне заголовок героя — главный элемент экрана: крупно, плотно */
-  .herox__h1 { font-size: clamp(2.3rem, 10.4vw, 3.4rem); line-height: 1; letter-spacing: -0.045em; max-width: none; }
-  .herox__sub { font-size: var(--fs-body); }
-  .herox__text { gap: 20px; padding: 18px 16px 22px; }
+  /* Заголовок героя остаётся главным на экране, но экран он занимать не должен:
+     на 390px пять строк по 10.4vw съедали первый экран целиком. */
+  .herox__h1 { font-size: clamp(2rem, 8.6vw, 2.9rem); line-height: 1.02; letter-spacing: -0.042em; max-width: none; }
+  .herox__sub { font-size: 1rem; line-height: 1.4; max-width: 34ch; }
+  .herox__text { gap: 14px; padding: 16px 16px 20px; }
+  .herox__box { margin-bottom: 30px; }
+  .herox .pill { padding: 9px 16px; font-size: 0.75rem; }
+  /* Две кнопки в строку: столбиком они добавляли ещё сотню пикселей высоты */
+  .herox__actions { gap: 8px; margin-top: 2px; }
+  .herox__actions .btn { padding: 13px 18px; font-size: 0.9375rem; }
 }
 @media (max-width: 560px) {
   .herox__panels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -459,4 +465,64 @@ a.toc__card:hover { transform: translateY(-3px); }
 @media (max-width: 1200px) and (min-width: 901px) {
   .herox__badge { left: auto; right: 12px; transform: none; padding: 6px; }
   .herox__badge .badge__text { display: none; }
+}
+
+/* ============ Калькулятор на телефоне: цена внизу, форма — листом ============ */
+/* На десктопе ни панели, ни подложки нет: смета и так стоит колонкой справа. */
+.calcbar, .calcsheet__back, .sum__close { display: none; }
+
+@media (max-width: 900px) {
+  /* Смета больше не тянется простынёй под списком работ: она уезжает в лист
+     поверх страницы, а цена всё время видна в нижней панели. Разметка та же —
+     стилями меняется только положение. */
+  .calc__sum {
+    position: fixed; z-index: var(--z-modal); inset: auto 0 0 0;
+    max-height: 88dvh; overflow-y: auto; overscroll-behavior: contain;
+    padding: 0 8px calc(8px + env(safe-area-inset-bottom));
+    transform: translateY(101%); visibility: hidden;
+    transition: transform 300ms var(--ease), visibility 300ms;
+  }
+  .calc__sum[data-open='true'] { transform: none; visibility: visible; }
+  .calc__sum .sum { border-radius: var(--r-media); }
+
+  .sum__close {
+    display: grid; place-items: center; flex: none;
+    width: 38px; height: 38px; margin-inline-start: auto;
+    border: 0; border-radius: 50%; background: var(--paper); color: var(--ink);
+  }
+  .sum__head { gap: var(--sp-2); }
+
+  .calcsheet__back {
+    display: block; position: fixed; inset: 0; z-index: calc(var(--z-modal) - 1);
+    border: 0; padding: 0; background: rgb(17 19 18 / 46%);
+    animation: calcBack 240ms var(--ease);
+  }
+
+  .calcbar {
+    display: flex; align-items: center; gap: 12px;
+    position: fixed; z-index: var(--z-sticky); inset: auto 10px calc(10px + env(safe-area-inset-bottom));
+    padding: 8px 8px 8px 20px; border-radius: var(--r-pill);
+    background: var(--ink); color: var(--on-dark);
+    box-shadow: 0 16px 44px -16px rgb(0 0 0 / 60%);
+    transform: translateY(calc(100% + 24px));
+    transition: transform 320ms var(--ease);
+  }
+  .calcbar[data-show='true'] { transform: none; }
+  .calcbar__info { display: grid; gap: 1px; min-width: 0; }
+  .calcbar__label { font-size: 0.75rem; color: var(--on-dark-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .calcbar__sum { font-size: 1.35rem; letter-spacing: -0.02em; line-height: 1.1; }
+  .calcbar__go { margin-inline-start: auto; flex: none; padding: 12px 20px; }
+}
+
+@keyframes calcBack { from { opacity: 0 } to { opacity: 1 } }
+
+@media (prefers-reduced-motion: reduce) {
+  .calc__sum, .calcbar { transition: none; }
+  .calcsheet__back { animation: none; }
+}
+
+@media (max-width: 640px) {
+  /* «Часто выбирают» на телефоне — четыре позиции: полный список из двенадцати
+     чипов отодвигал сами группы работ за пределы экрана. */
+  .calc__chips .chip:nth-child(n + 5) { display: none; }
 }

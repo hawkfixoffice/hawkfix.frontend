@@ -10,6 +10,24 @@ page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()) })
 page.on('pageerror', (e) => errors.push(String(e)))
 await page.setViewport({ width: 1440, height: 950, deviceScaleFactor: 2 })
 
+// Заявку до сервера не пускаем: иначе каждый прогон тестов кладёт фиктивную
+// строку в leads и шлёт письмо в офис. Проверяем путь до отправки и разбор
+// ответа, а сам приём заявки покрыт отдельной проверкой самой функции.
+let submitted = null
+await page.setRequestInterception(true)
+page.on('request', (req) => {
+  if (req.method() === 'POST' && /\/functions\/v1\/lead$/.test(req.url())) {
+    submitted = JSON.parse(req.postData() || '{}')
+    return req.respond({
+      status: 200,
+      contentType: 'application/json',
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify({ ok: true, id: 'e2e', orderNo: 'HF-E2E-0001' }),
+    })
+  }
+  req.continue()
+})
+
 const ok = []
 const bad = []
 const check = (cond, msg) => (cond ? ok : bad).push(msg)
@@ -65,6 +83,10 @@ await page.screenshot({ path: `${SHOTS}/e2e-form.png`, clip: await page.$eval('.
 await page.click('.lead__submit')
 await page.waitForSelector('.lead--ok', { timeout: 20000 })
 check(true, 'заявка отправлена, показан экран успеха')
+check(submitted?.contact?.name === 'TEST E2E' && Array.isArray(submitted?.items),
+      `в запросе ушли контакт и ${submitted?.items?.length ?? 0} позиц.`)
+check(await page.$eval('.lead__order b', (e) => e.textContent.trim()) === 'HF-E2E-0001',
+      'номер заказа из ответа показан клиенту')
 
 // --- Lottie реально отрисовался ---
 await new Promise((r) => setTimeout(r, 1200))

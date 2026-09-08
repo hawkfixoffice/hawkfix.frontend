@@ -28,6 +28,10 @@ export default function Calculator() {
   const [open, setOpen] = useState<string | null>(null)
   const [sent, setSent] = useState(false)
   const [flash, setFlash] = useState<string | null>(null)
+  // На телефоне смета и форма живут в нижнем листе, а не в колонке справа
+  const [sheet, setSheet] = useState(false)
+  const [near, setNear] = useState(false)
+  const root = useRef<HTMLDivElement>(null)
 
   const quote = useMemo(() => calcQuote(p.selection, items, settings, p.urgent), [p.selection, p.urgent])
   const suggestions = useMemo(() => suggestedChains(p.selection, chains), [p.selection])
@@ -44,6 +48,27 @@ export default function Calculator() {
     const id = setTimeout(() => setFlash(null), 900)
     return () => clearTimeout(id)
   }, [p.selection])
+
+  // Нижняя панель с ценой нужна, только пока человек выбирает работы:
+  // на остальной странице она бы просто закрывала контент.
+  useEffect(() => {
+    const el = root.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver(([e]) => setNear(e.isIntersecting), {
+      rootMargin: '-12% 0px -12% 0px',
+    })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  // Лист закрывается по Esc и держит прокрутку страницы под собой
+  useEffect(() => {
+    if (!sheet) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setSheet(false) }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
+  }, [sheet])
 
   const q = query.trim().toLocaleLowerCase(locale)
   let found: typeof items | null = null
@@ -62,7 +87,7 @@ export default function Calculator() {
   const rowLabels = { add: t.a11y.add, minus: t.a11y.minus, plus: t.a11y.plus, remove: t.a11y.remove }
 
   return (
-    <div className="calc" id="wycena">
+    <div className="calc" id="wycena" ref={root}>
       {/* ------------------------- выбор работ ------------------------- */}
       <div className="calc__pick">
         <div className="calc__search">
@@ -190,14 +215,33 @@ export default function Calculator() {
         ))}
       </div>
 
-      {/* --------------------------- смета --------------------------- */}
-      <aside className="calc__sum" aria-label={t.home.calcLabel}>
+      {/* --------------------------- смета ---------------------------
+          На десктопе — липкая колонка справа. На телефоне тот же блок
+          превращается стилями в нижний лист: разметка и состояние одни,
+          дублировать форму во второй экземпляр не нужно. */}
+      {sheet && (
+        <button
+          type="button" className="calcsheet__back" aria-label={t.a11y.close}
+          onClick={() => setSheet(false)}
+        />
+      )}
+      <aside
+        className="calc__sum" aria-label={t.home.calcLabel}
+        data-open={sheet || undefined}
+        role={sheet ? 'dialog' : undefined}
+        aria-modal={sheet ? true : undefined}
+      >
         <div className="sum">
           <div className="sum__head">
             <p className="calc__subhead">{t.home.calcLabel}</p>
             {quote.count > 0 && !sent && (
               <button type="button" className="sum__clear" onClick={p.clear}>{clearLabel(locale)}</button>
             )}
+            <button
+              type="button" className="sum__close" onClick={() => setSheet(false)} aria-label={t.a11y.close}
+            >
+              <Icon name="x" size={18} />
+            </button>
           </div>
 
           {sent ? null : quote.lines.length === 0 ? (
@@ -251,6 +295,20 @@ export default function Calculator() {
           <LeadForm quote={quote} urgent={p.urgent} onSent={() => { p.clear(); setSent(true) }} />
         </div>
       </aside>
+
+      {/* Панель с ценой на телефоне: цена копится внизу, форма — по кнопке */}
+      <div className="calcbar" data-show={near && !sheet && !sent ? 'true' : undefined}>
+        <div className="calcbar__info">
+          <span className="calcbar__label">
+            {totalLabel(locale)}
+            {quote.count > 0 && <> · {quote.count} {t.prices.positions}</>}
+          </span>
+          <span className="calcbar__sum num">{formatMoney(shownTotal, settings, locale)}</span>
+        </div>
+        <button type="button" className="btn btn--primary calcbar__go" onClick={() => setSheet(true)}>
+          {settings.strings[locale].next} <Icon name="arrow" size={17} />
+        </button>
+      </div>
     </div>
   )
 }
