@@ -19,7 +19,7 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--fw-head);       /* светлые заголовки, как на слайдах */
   letter-spacing: var(--ls-display);
   line-height: var(--lh-head);
   margin: 0;
@@ -27,7 +27,7 @@ h1, h2, h3, h4 {
 }
 h1 { font-size: var(--fs-h1); }
 h2 { font-size: var(--fs-h2); }
-h3 { font-size: var(--fs-h3); letter-spacing: -0.02em; }
+h3 { font-size: var(--fs-h3); letter-spacing: -0.02em; line-height: 1.15; }
 
 p { margin: 0 0 1em; text-wrap: pretty; }
 p:last-child { margin-bottom: 0; }
@@ -53,7 +53,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 ::selection { background: var(--accent); color: var(--ink); }
 
 /* --- примитивы раскладки --- */
-.wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.wrap { width: 100%; margin-inline: auto; padding-inline: var(--gutter); }
 .stack > * + * { margin-top: var(--stack-gap, var(--sp-4)); }
 .prose { max-width: var(--maxw-text); }
 .prose p, .prose li { color: var(--ink-2); }
@@ -75,11 +75,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 
 /* --- полосы/секции --- */
-.band { padding-block: clamp(48px, 8vw, 112px); }
-.band--tight { padding-block: clamp(32px, 5vw, 64px); }
+/* Секции дышат: между блоками много пустого — это и даёт ощущение премиум */
+.band { padding-block: clamp(80px, 10vw, 168px); }
+.band--tight { padding-block: clamp(56px, 7vw, 120px); }
 .band--dark { background: var(--ink); color: var(--on-dark); }
 .band--dark h1, .band--dark h2, .band--dark h3 { color: var(--on-dark); }
 .band--dark .prose p, .band--dark .prose li { color: var(--on-dark-2); }
 
 /* Цифры и цены — табличные, чтобы не прыгали при пересчёте */
-.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
+.num { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }

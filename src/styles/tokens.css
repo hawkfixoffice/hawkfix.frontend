@@ -1,81 +1,77 @@
-/* HAWK.FIX — дизайн-токены.
-   Палитра снята с референса-презентации: мятно-зелёный акцент, тёмно-зелёный,
-   почти-чёрный и светло-серая бумага. Контраст проверен расчётом:
-   тёмный текст на мяте — 12.65, белый на мяте — 1.47, поэтому на акцентных
-   плашках текст ВСЕГДА тёмный. */
+/* HAWK.FIX — дизайн-токены, сняты с презентации-референса (12 слайдов, 1280px).
+   Фон белый, карточки серые/мятные/тёмно-зелёные/почти-чёрные, радиусы
+   крупные, заголовки светлого начертания огромного кегля. */
 
 :root {
-  /* --- цвет --- */
-  --ink: #111312;            /* основной текст, чёрные плашки */
-  --ink-2: #4a4f4c;          /* вторичный текст        7.39 на бумаге */
-  --ink-3: #626864;          /* приглушённый           4.72 на бумаге */
-  --paper: #f1f1ef;          /* фон страницы */
-  --paper-2: #e7e7e4;        /* серая плашка */
+  /* --- цвет (измерено по слайдам) --- */
+  --ink: #1c1c1c;            /* тёмный контейнер и основной текст */
+  --ink-2: #303030;          /* текст абзацев на светлом */
+  --ink-3: #6b6b6b;          /* приглушённый               5.3 на белом */
+  --paper: #ffffff;          /* фон страницы — белый */
+  --paper-2: #e9e9e9;        /* серая карточка */
+  --grey-2: #d2d2d2;         /* серая потемнее: контейнер под тёмной карточкой */
   --card: #ffffff;
-  --line: #dedcd7;
-  --line-card: #eae9e4;
+  --line: #dcdcdc;
+  --line-card: #e6e6e6;
 
-  --accent: #74ec9f;         /* мята — заливки; текст на ней только тёмный */
-  --accent-hover: #5fe28f;
-  --accent-soft: #dff8e9;
-  --accent-text: #0e5c3a;    /* зелёный для текста     7.11 на бумаге */
+  --accent: #6eefa0;         /* мята — заливки; текст на ней только тёмный */
+  --accent-hover: #5ee993;
+  --accent-soft: #dcf9e8;
+  --accent-text: #146b3c;    /* зелёный для мелкого текста на белом */
 
-  --forest: #123c29;         /* тёмно-зелёная плашка */
-  --forest-2: #a9c6b6;       /* вторичный текст на ней 6.71 */
+  --forest: #1a4a2e;         /* тёмно-зелёная карточка и заливка кнопки */
+  --forest-2: #a6c9b4;       /* вторичный текст на forest */
 
   --on-dark: #ffffff;
-  --on-dark-2: #b4b9b6;      /* вторичный на чёрном    9.38 */
-  --dark-line: #272b29;
+  --on-dark-2: #8c8c8c;      /* приглушённый на тёмном       4.9 */
+  --dark-line: #2e2e2e;
 
-  --ok: #0e5c3a;
+  --ok: #146b3c;
   --warn: #8a5a00;
 
-  /* --- типографика --- */
-  --font-display: 'Wix Madefor Display', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-body: 'Wix Madefor Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* --- типографика: один гротеск, заголовки светлые --- */
+  --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Inter', system-ui, sans-serif;   /* моно в референсе нет — цифры табличным Inter */
 
-  /* Крупные заголовки во всю ширину — главный приём референса */
-  --fs-mega: clamp(3.5rem, 15.5vw, 15rem);   /* вордмарк */
-  --fs-h1: clamp(2.6rem, 7vw, 5.8rem);
-  --fs-h2: clamp(2.1rem, 5.8vw, 4.8rem);
-  --fs-h3: clamp(1.2rem, 1.8vw, 1.55rem);
-  --fs-lead: clamp(1.0625rem, 1.5vw, 1.3rem);
-  --fs-body: 1.0625rem;
+  /* На слайде 1280px заголовок ≈ 90px → ~7vw; все заголовки секций одного кегля */
+  --fs-h1: clamp(2.8rem, 7vw, 5.8rem);
+  --fs-h2: clamp(2.6rem, 6.6vw, 5.4rem);
+  --fs-h3: clamp(1.35rem, 2vw, 1.75rem);    /* заголовок карточки ≈ 26px */
+  --fs-lead: 1.0625rem;
+  --fs-body: 1.0625rem;                     /* 17px */
   --fs-sm: 1rem;
   --fs-xs: 0.875rem;
 
-  --lh-tight: 0.95;
-  --lh-head: 1.04;
-  --lh-body: 1.55;
-  --ls-display: -0.032em;
+  --fw-head: 400;            /* заголовки НЕ жирные */
+  --lh-tight: 0.92;
+  --lh-head: 0.96;
+  --lh-body: 1.45;
+  --ls-display: -0.03em;
 
-  /* --- геометрия --- */
-  /* В референсе карточки компактные, радиус небольшой */
-  --r-card: 14px;
-  --r-panel: 18px;
-  --r-media: 14px;
-  --r-sm: 10px;
+  /* --- радиусы (измерено): мелкая карточка 20, фото 28, карточка 40, контейнер 48 --- */
+  --r-xs: 20px;
+  --r-media: 28px;
+  --r-card: 40px;
+  --r-box: 48px;
+  --r-sm: 14px;
   --r-pill: 999px;
 
   --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
   --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
   --sp-9: 96px; --sp-10: 128px;
 
-  --gutter: clamp(16px, 4vw, 40px);
-  --maxw: 1440px;
-  --maxw-text: 68ch;
-
+  /* Контент во всю ширину окна: ограничения по максимуму нет, воздух
+     задают только боковые поля, растущие вместе с экраном. */
+  --gutter: clamp(20px, 5.2vw, 132px);
+  --maxw-text: 66ch;
   --tap: 44px;
 
   --z-base: 1; --z-sticky: 10; --z-header: 20; --z-overlay: 30; --z-modal: 40; --z-toast: 50;
-
-  --dur-fast: 150ms;
-  --dur: 220ms;
+  --dur-fast: 150ms; --dur: 220ms;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-
-  --shadow-card: 0 1px 2px rgb(17 19 18 / 4%), 0 8px 24px -14px rgb(17 19 18 / 14%);
-  --shadow-lift: 0 2px 4px rgb(17 19 18 / 6%), 0 18px 40px -18px rgb(17 19 18 / 20%);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 4%), 0 8px 24px -14px rgb(0 0 0 / 12%);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 6%), 0 18px 40px -18px rgb(0 0 0 / 18%);
 }
 
 @media (prefers-reduced-motion: reduce) {

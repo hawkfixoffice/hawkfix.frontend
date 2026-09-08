@@ -22,6 +22,7 @@ type State = 'idle' | 'sending' | 'ok' | 'error'
 export default function LeadForm({ quote, urgent, onSent }: { quote: Quote; urgent: boolean; onSent: () => void }) {
   const { locale, t } = usePage()
   const [state, setState] = useState<State>('idle')
+  const [orderNo, setOrderNo] = useState('')
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [f, setF] = useState({ name: '', phone: '', email: '', district: '', address: '', comment: '', when: '' })
 
@@ -31,6 +32,8 @@ export default function LeadForm({ quote, urgent, onSent }: { quote: Quote; urge
 
   const errName = touched.name && !f.name.trim()
   const errPhone = touched.phone && f.phone.replace(/\D/g, '').length < 9
+  // Почта необязательна, но если введена — должна быть похожа на адрес
+  const errEmail = touched.email && f.email.trim() !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.trim())
   const empty = quote.lines.length === 0 && !f.comment.trim()
 
   // Выходные форма не принимает — бригады работают пн–пт
@@ -41,6 +44,9 @@ export default function LeadForm({ quote, urgent, onSent }: { quote: Quote; urge
     e.preventDefault()
     setTouched({ name: true, phone: true })
     if (!f.name.trim() || f.phone.replace(/\D/g, '').length < 9 || empty) return
+    if (f.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.trim())) {
+      setTouched((v) => ({ ...v, email: true })); return
+    }
 
     setState('sending')
     const payload = {
@@ -62,6 +68,8 @@ export default function LeadForm({ quote, urgent, onSent }: { quote: Quote; urge
         body: JSON.stringify(payload),
       })
       if (!res.ok) throw new Error(String(res.status))
+      const data = await res.json().catch(() => ({}))
+      setOrderNo(data?.orderNo ?? '')
       setState('ok')
       onSent()
     } catch {
@@ -75,6 +83,12 @@ export default function LeadForm({ quote, urgent, onSent }: { quote: Quote; urge
         <Lottie name="check" size={72} className="lead__lottie"
                 still={<span className="lead__tick"><Icon name="check" size={22} /></span>} />
         <p className="lead__okTitle">{t.form.ok}</p>
+        {orderNo && (
+          <p className="lead__order">
+            <span>{t.form.orderNo}</span>
+            <b className="num">{orderNo}</b>
+          </p>
+        )}
         <p className="lead__okNote">{t.form.okNote}</p>
       </div>
     )
@@ -102,6 +116,19 @@ export default function LeadForm({ quote, urgent, onSent }: { quote: Quote; urge
             aria-describedby={errPhone ? 'lf-phone-err' : undefined}
           />
           {errPhone && <p className="field__err" id="lf-phone-err">{t.form.required}</p>}
+        </div>
+
+        <div className="field field--wide">
+          <label htmlFor="lf-email">
+            {t.form.email} <span className="field__opt">{t.form.emailHint}</span>
+          </label>
+          <input
+            id="lf-email" name="email" type="email" inputMode="email" value={f.email}
+            onChange={set('email')} onBlur={blur('email')} autoComplete="email"
+            placeholder="nazwa@example.com" aria-invalid={errEmail || undefined}
+            aria-describedby={errEmail ? 'lf-email-err' : undefined}
+          />
+          {errEmail && <p className="field__err" id="lf-email-err">{t.form.emailBad}</p>}
         </div>
 
         <div className="field">

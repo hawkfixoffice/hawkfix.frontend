@@ -31,9 +31,11 @@ interface Props {
   delay?: number
   as?: 'div' | 'section' | 'li' | 'article'
   className?: string
+  /** Явная колонка сетки — для смещённых рядов оглавления */
+  col?: number
 }
 
-export default function Reveal({ children, delay = 0, as: Tag = 'div', className }: Props) {
+export default function Reveal({ children, delay = 0, as: Tag = 'div', className, col }: Props) {
   const ref = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -56,7 +58,10 @@ export default function Reveal({ children, delay = 0, as: Tag = 'div', className
       ref={ref as never}
       className={className}
       data-reveal=""
-      style={delay ? ({ '--reveal-delay': `${delay}ms` } as React.CSSProperties) : undefined}
+      style={{
+        ...(delay ? { '--reveal-delay': `${delay}ms` } : {}),
+        ...(col ? { gridColumn: col } : {}),
+      } as React.CSSProperties}
     >
       {children}
     </Tag>

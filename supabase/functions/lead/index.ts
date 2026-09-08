@@ -11,6 +11,197 @@ const ALLOWED_ORIGINS = [
 
 const LOCALES = ['pl', 'uk', 'ru', 'en']
 
+/** Куда падают заявки и от кого шлём. Домен hawkfix.pl подтверждён в Resend. */
+const MAIL_TO = 'hawk.fix.office@gmail.com'
+const MAIL_FROM = 'HAWK.FIX <zgloszenia@hawkfix.pl>'
+
+const esc = (v: unknown) =>
+  String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+interface Item { name?: string; qty?: number; sum?: number }
+
+/** Письмо владельцу в фирменном оформлении сайта.
+ *  Вёрстка на таблицах и с инлайновыми стилями — иначе Outlook разъедет.
+ *  Скругления в нём игнорируются, углы станут прямыми: это допустимо. */
+function buildEmail(row: Record<string, unknown>, orderNo: string) {
+  const items = (row.items as Item[]) ?? []
+  const totals = (row.totals ?? {}) as Record<string, number>
+  const money = (n: unknown) => (typeof n === 'number' ? `${Math.round(n)} zł` : '—')
+
+  const INK = '#111312', MINT = '#6eefa0', FOREST = '#1a4a2e'
+  const PAPER = '#f1f1ef', GREY = '#e9e9e9', MUTED = '#6b6b6b'
+  // Кавычки ТОЛЬКО одинарные: стек попадает в style="...", и двойная кавычка
+  // внутри обрывает атрибут — стиль тогда отваливается целиком.
+  const FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif"
+  const digits = String(row.phone ?? '').replace(/[^+\d]/g, '')
+
+  // Gmail выбрасывает <body> и его стили, поэтому font-family дублируем
+  // на каждом контейнере, а не полагаемся на наследование.
+  const card = (inner: string, bg = '#ffffff', pad = '24px 28px') =>
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+            style="background:${bg};border-radius:20px;margin-bottom:12px">
+       <tr><td style="padding:${pad};font-family:${FONT}">${inner}</td></tr></table>`
+
+  const line = (label: string, value: unknown, strong = true) =>
+    value
+      ? `<tr>
+           <td style="padding:7px 16px 7px 0;font-family:${FONT};color:${MUTED};font-size:14px;white-space:nowrap">${label}</td>
+           <td style="padding:7px 0;font-family:${FONT};font-size:16px;${strong ? 'font-weight:600;' : ''}color:${INK}">${esc(value)}</td>
+         </tr>`
+      : ''
+
+  const rows = items.length
+    ? items.map((i, n) =>
+        `<tr>
+           <td style="padding:11px 0;border-top:${n ? `1px solid ${GREY}` : '0'};font-family:${FONT};font-size:15px;color:${INK}">${esc(i.name)}</td>
+           <td style="padding:11px 8px;border-top:${n ? `1px solid ${GREY}` : '0'};font-size:14px;color:${MUTED};text-align:center;white-space:nowrap">×${esc(i.qty)}</td>
+           <td style="padding:11px 0;border-top:${n ? `1px solid ${GREY}` : '0'};font-size:15px;color:${INK};text-align:right;white-space:nowrap">${money(i.sum)}</td>
+         </tr>`).join('')
+    : `<tr><td style="padding:11px 0;color:${MUTED};font-size:15px">Bez pozycji z cennika — tylko opis od klienta</td></tr>`
+
+  const btn = (href: string, label: string, bg: string, color: string) =>
+    `<a href="${href}" style="display:inline-block;background:${bg};color:${color};text-decoration:none;
+        padding:14px 26px;border-radius:999px;font-size:15px;font-weight:600;font-family:${FONT}">${label}</a>`
+
+  const html = `<!doctype html>
+<html lang="pl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only"><title>${esc(orderNo)}</title></head>
+<body style="margin:0;padding:0;background:${PAPER};font-family:${FONT};color:${INK};-webkit-font-smoothing:antialiased">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0">
+  ${esc(row.name)} · ${esc(row.phone)} · ${money(totals.total)}${row.urgent ? ' · PILNE' : ''}
+</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${PAPER}">
+<tr><td align="center" style="padding:28px 14px">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:100%;font-family:${FONT}">
+
+  <tr><td style="padding-bottom:16px;font-family:${FONT};font-size:19px;font-weight:600;letter-spacing:-.02em;color:${INK}">
+    HAWK<span style="color:${FOREST}">.</span>FIX
+  </td></tr>
+
+  <tr><td>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+           style="background:${INK};border-radius:24px;margin-bottom:12px">
+      <tr><td style="padding:30px 28px;font-family:${FONT}">
+        <div style="font-size:14px;color:#8c8c8c;padding-bottom:6px">Nowe zgłoszenie ze strony</div>
+        <div style="font-family:${FONT};font-size:42px;line-height:1.05;letter-spacing:-.035em;color:#ffffff">${esc(orderNo)}</div>
+        ${row.urgent ? `<div style="margin-top:14px"><span style="display:inline-block;background:${MINT};color:${INK};
+             border-radius:999px;padding:7px 16px;font-size:13px;font-weight:600">Pilne · dopłata +50%</span></div>` : ''}
+      </td></tr>
+    </table>
+  </td></tr>
+
+  <tr><td>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+           style="background:${MINT};border-radius:20px;margin-bottom:12px">
+      <tr>
+        <td style="padding:22px 28px;font-family:${FONT}">
+          <div style="font-size:14px;color:rgba(17,19,18,.65)">Razem z kosztorysu</div>
+          <div style="font-family:${FONT};font-size:38px;line-height:1.05;letter-spacing:-.035em;color:${INK}">${money(totals.total)}</div>
+        </td>
+        ${totals.hours ? `<td align="right" style="padding:22px 28px;font-family:${FONT};font-size:14px;color:rgba(17,19,18,.65);white-space:nowrap">
+          ok. ${esc(totals.hours)} godz.</td>` : ''}
+      </tr>
+    </table>
+  </td></tr>
+
+  <tr><td>${card(`
+    <div style="font-family:${FONT};font-size:22px;letter-spacing:-.02em;color:${INK};padding-bottom:12px">Klient</div>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+      ${line('Imię', row.name)}
+      ${line('Telefon', row.phone)}
+      ${line('E-mail', row.email)}
+      ${line('Dzielnica', row.district)}
+      ${line('Adres', row.address)}
+      ${line('Termin', row.when_date)}
+      ${line('Język', row.locale, false)}
+      ${line('Strona', row.page, false)}
+    </table>
+    ${row.comment ? `<div style="margin-top:16px;padding:16px 18px;background:${PAPER};border-radius:14px;
+         font-family:${FONT};font-size:15px;line-height:1.5;color:${INK};white-space:pre-wrap">${esc(row.comment)}</div>` : ''}
+  `)}</td></tr>
+
+  <tr><td>${card(`
+    <div style="font-family:${FONT};font-size:22px;letter-spacing:-.02em;color:${INK};padding-bottom:8px">Kosztorys</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rows}</table>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+           style="margin-top:14px;border-top:2px solid ${INK}">
+      <tr><td style="padding:12px 0 4px;color:${MUTED};font-size:14px">Robocizna</td>
+          <td style="padding:12px 0 4px;text-align:right;font-size:15px">${money(totals.labour)}</td></tr>
+      ${totals.urgentFee ? `<tr><td style="padding:4px 0;color:${MUTED};font-size:14px">Dopłata za pilne</td>
+          <td style="padding:4px 0;text-align:right;font-size:15px">${money(totals.urgentFee)}</td></tr>` : ''}
+      ${totals.minimum && totals.labour < totals.minimum ? `<tr><td style="padding:4px 0;color:${MUTED};font-size:14px">Minimalna wizyta</td>
+          <td style="padding:4px 0;text-align:right;font-size:15px">${money(totals.minimum)}</td></tr>` : ''}
+      <tr><td style="padding:10px 0 0;font-size:17px;font-weight:600">Razem</td>
+          <td style="padding:10px 0 0;text-align:right;font-size:24px;letter-spacing:-.02em;font-weight:600">${money(totals.total)}</td></tr>
+    </table>
+  `)}</td></tr>
+
+  <tr><td align="center" style="padding:8px 0 4px">
+    ${btn(`tel:${digits}`, 'Zadzwoń do klienta', MINT, INK)}
+    ${digits ? '&nbsp;&nbsp;' + btn(`https://wa.me/${digits.replace(/\D/g, '')}`, 'WhatsApp', FOREST, '#ffffff') : ''}
+  </td></tr>
+
+  <tr><td align="center" style="padding:22px 10px 0;font-family:${FONT};color:#9a9a9a;font-size:12px;line-height:1.6">
+    Wiadomość wysłana automatycznie z hawkfix.pl<br>
+    ${esc(new Date().toISOString().replace('T', ' ').slice(0, 16))} UTC
+  </td></tr>
+
+</table></td></tr></table></body></html>`
+
+  const text = [
+    `HAWK.FIX — nowe zgłoszenie ${orderNo}`,
+    row.urgent ? 'PILNE (+50%)' : '', '',
+    `Razem: ${money(totals.total)}${totals.hours ? ` (ok. ${totals.hours} godz.)` : ''}`, '',
+    `Imię: ${row.name}`,
+    `Telefon: ${row.phone}`,
+    row.email ? `E-mail: ${row.email}` : '',
+    row.district ? `Dzielnica: ${row.district}` : '',
+    row.address ? `Adres: ${row.address}` : '',
+    row.when_date ? `Termin: ${row.when_date}` : '',
+    row.comment ? `\nOpis: ${row.comment}` : '', '',
+    'Kosztorys:',
+    ...items.map((i) => `  - ${i.name} x${i.qty} = ${money(i.sum)}`),
+    '', `Robocizna: ${money(totals.labour)}`,
+    totals.urgentFee ? `Dopłata za pilne: ${money(totals.urgentFee)}` : '',
+    `Razem: ${money(totals.total)}`,
+  ].filter(Boolean).join('\n')
+
+  return { html, text }
+}
+
+/** Отправка письма владельцу. Ошибку не пробрасываем: заявка уже в базе,
+ *  терять её из-за недоступного почтового сервиса нельзя. */
+async function notify(row: Record<string, unknown>, orderNo: string): Promise<string | null> {
+  const key = Deno.env.get('RESEND_API_KEY')
+  if (!key) return 'RESEND_API_KEY не задан'
+  const { html, text } = buildEmail(row, orderNo)
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: MAIL_FROM,
+        to: [MAIL_TO],
+        subject: [
+          orderNo,
+          (row.urgent ? 'PILNE' : ''),
+          String(row.name ?? ''),
+          typeof (row.totals as Record<string, number>)?.total === 'number'
+            ? `${Math.round((row.totals as Record<string, number>).total)} zł` : '',
+        ].filter(Boolean).join(' · '),
+        html, text,
+        // Ответ уйдёт клиенту, если он оставил почту
+        ...(row.email ? { reply_to: [row.email as string] } : {}),
+      }),
+    })
+    if (!res.ok) return `resend ${res.status}: ${(await res.text()).slice(0, 300)}`
+    return null
+  } catch (e) {
+    return `resend fetch: ${String(e).slice(0, 300)}`
+  }
+}
+
 function cors(origin: string | null) {
   const allow = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
   return {
@@ -124,5 +315,19 @@ Deno.serve(async (req) => {
   }
 
   const [saved] = await res.json()
-  return json({ ok: true, id: saved?.id }, 200, origin)
+  const orderNo = saved?.order_no ?? ''
+
+  // Письмо шлём после сохранения: если почта отвалится, заявка не потеряется —
+  // причина осядет в notify_error, и её будет видно в админке.
+  const mailError = await notify({ ...row, ...saved }, orderNo)
+  if (saved?.id) {
+    await fetch(`${url}/rest/v1/leads?id=eq.${saved.id}`, {
+      method: 'PATCH',
+      headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify(mailError ? { notify_error: mailError } : { notified_at: new Date().toISOString() }),
+    }).catch(() => {})
+  }
+  if (mailError) console.error('mail failed', mailError)
+
+  return json({ ok: true, id: saved?.id, orderNo }, 200, origin)
 })

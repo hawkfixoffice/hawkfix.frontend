@@ -2,6 +2,10 @@ import { CONTACT } from '../lib/ui'
 import { HREFLANG, SITE, type Locale } from '../lib/types'
 import { items, settings } from '../data/content'
 
+const CATALOG_ID = `${SITE}/#catalog`
+/** Дата сборки: честный dateModified — страницы пересобираются при деплое. */
+const BUILT = new Date().toISOString().slice(0, 10)
+
 const BUSINESS_ID = `${SITE}/#business`
 const WEBSITE_ID = `${SITE}/#website`
 
@@ -24,14 +28,24 @@ export function businessNode(locale: Locale, description: string) {
     url: `${SITE}/`,
     telephone: CONTACT.phone,
     email: CONTACT.email,
-    image: `${SITE}/img/out/hero-1200.jpg`,
-    logo: `${SITE}/favicon.svg`,
+    image: `${SITE}/img/out/hero-1200.webp`,
     priceRange: `${minPrice}–${maxPrice} PLN`,
     currenciesAccepted: 'PLN',
     paymentAccepted: 'Cash, Invoice, Bank transfer',
     knowsLanguage: Object.keys(HREFLANG),
     inLanguage: HREFLANG[locale],
     sameAs: [CONTACT.facebook],
+    logo: { '@type': 'ImageObject', url: `${SITE}/favicon.svg`, caption: 'HAWK.FIX' },
+    // Связываем компанию с прайсом: у Google появляется понимание ассортимента
+    hasOfferCatalog: { '@id': CATALOG_ID },
+    contactPoint: [{
+      '@type': 'ContactPoint',
+      telephone: CONTACT.phone,
+      email: CONTACT.email,
+      contactType: 'customer service',
+      areaServed: 'PL',
+      availableLanguage: ['pl', 'uk', 'ru', 'en'],
+    }],
     address: { '@type': 'PostalAddress', addressLocality: 'Warszawa', addressCountry: 'PL' },
     geo: { '@type': 'GeoCoordinates', latitude: 52.2297, longitude: 21.0122 },
     areaServed: [
@@ -62,7 +76,10 @@ export function websiteNode(locale: Locale, name: string) {
   }
 }
 
-export function webPageNode(url: string, title: string, description: string, locale: Locale, type = 'WebPage') {
+export function webPageNode(
+  url: string, title: string, description: string, locale: Locale,
+  type = 'WebPage', extra: { keywords?: string[]; image?: string } = {},
+) {
   return {
     '@type': type,
     '@id': `${url}#webpage`,
@@ -72,6 +89,9 @@ export function webPageNode(url: string, title: string, description: string, loc
     inLanguage: HREFLANG[locale],
     isPartOf: { '@id': WEBSITE_ID },
     about: { '@id': BUSINESS_ID },
+    dateModified: BUILT,
+    ...(extra.keywords?.length ? { keywords: extra.keywords.join(', ') } : {}),
+    ...(extra.image ? { primaryImageOfPage: { '@type': 'ImageObject', url: extra.image } } : {}),
   }
 }
 
@@ -87,7 +107,7 @@ export function breadcrumbNode(trail: { name: string; url: string }[]) {
 /** Услуга с офертой. priceSpecification даёт шанс на расширенный сниппет с ценой. */
 export function serviceNode(opts: {
   url: string; name: string; description: string; locale: Locale
-  priceFrom: number; image?: string
+  priceFrom: number; image?: string; group?: string
 }) {
   return {
     '@type': 'Service',
@@ -111,13 +131,71 @@ export function serviceNode(opts: {
       },
       availability: 'https://schema.org/InStock',
     },
+    // Позиции прайса этой группы с ценами за единицу — материал для
+    // расширенного сниппета с ценой
+    ...(opts.group ? { hasOfferCatalog: groupCatalogNode(opts.group, opts.locale, opts.name) } : {}),
+  }
+}
+
+/** Каталог позиций одной группы прайса — реальные цены за единицу. */
+export function groupCatalogNode(group: string, locale: Locale, name: string) {
+  const list = items.filter((i) => i.group === group)
+  return {
+    '@type': 'OfferCatalog',
+    name,
+    inLanguage: HREFLANG[locale],
+    itemListElement: list.map((it) => ({
+      '@type': 'Offer',
+      name: it.name[locale],
+      priceCurrency: 'PLN',
+      price: it.price,
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: it.price,
+        priceCurrency: 'PLN',
+        unitText: settings.units[locale]?.[it.unit] ?? it.unit,
+        valueAddedTaxIncluded: true,
+      },
+    })),
+  }
+}
+
+/** Список услуг для страницы-хаба: помогает получить блок ссылок в выдаче. */
+export function serviceListNode(
+  entries: { name: string; url: string; description?: string }[], name: string,
+) {
+  return {
+    '@type': 'ItemList',
+    name,
+    numberOfItems: entries.length,
+    itemListElement: entries.map((e, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: e.name,
+      url: e.url,
+    })),
+  }
+}
+
+/** Диапазон цен по всему прайсу — для страницы цен. */
+export function aggregateOfferNode(locale: Locale) {
+  const prices = items.map((i) => i.price)
+  return {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'PLN',
+    lowPrice: Math.min(...prices),
+    highPrice: Math.max(...prices),
+    offerCount: prices.length,
+    availability: 'https://schema.org/InStock',
+    inLanguage: HREFLANG[locale],
+    offeredBy: { '@id': BUSINESS_ID },
   }
 }
 
 export function offerCatalogNode(locale: Locale, name: string) {
   return {
     '@type': 'OfferCatalog',
-    '@id': `${SITE}/#catalog`,
+    '@id': CATALOG_ID,
     name,
     inLanguage: HREFLANG[locale],
     itemListElement: items.map((it) => ({

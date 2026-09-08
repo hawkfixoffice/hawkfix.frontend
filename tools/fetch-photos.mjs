@@ -1,14 +1,14 @@
 /**
  * Подбирает и качает фотографии с Unsplash под каждую услугу.
  * Платные (plus.unsplash.com) отсеиваются — они не под свободной лицензией.
- * Пишет public/img/<key>.jpg и content/photos.json с атрибуцией.
+ * Пишет assets/photos/<key>.jpg и content/photos.json с атрибуцией.
  */
 import { mkdir, writeFile } from 'node:fs/promises'
 import { createWriteStream } from 'node:fs'
 import { Readable } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
 
-const OUT = 'public/img'
+const OUT = 'assets/photos'
 const QUERIES = {
   hero:                 ['craftsman hands tools workshop warm light', 'landscape'],
   'hero-alt':           ['modern bright apartment interior sunlight', 'landscape'],

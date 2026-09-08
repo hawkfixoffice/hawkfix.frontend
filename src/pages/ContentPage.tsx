@@ -2,6 +2,7 @@ import { Link, useLoaderData } from 'react-router-dom'
 import { KEY_PAGES, pathOf } from '../data/content'
 import type { PageBody } from '../lib/types'
 import { usePage } from '../components/PageContext'
+import Rule from '../components/Rule'
 import Blocks from '../components/Blocks'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Icon from '../components/Icon'
@@ -24,6 +25,7 @@ export default function ContentPage({ narrow = false }: { narrow?: boolean }) {
           ]} />
           <h1>{tr.h1}</h1>
           <p className="pagehead__lead prose">{tr.description}</p>
+          <Rule className="pagehead__rule" />
         </div>
       </section>
 

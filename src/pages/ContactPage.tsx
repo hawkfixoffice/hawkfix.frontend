@@ -3,6 +3,7 @@ import { KEY_PAGES, pathOf, settings } from '../data/content'
 import type { PageBody } from '../lib/types'
 import { toSections } from '../lib/sections'
 import { usePage } from '../components/PageContext'
+import Rule from '../components/Rule'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Picture from '../components/Picture'
 import Icon from '../components/Icon'
@@ -30,6 +31,7 @@ export default function ContactPage() {
           ]} />
           <h1>{tr.h1}</h1>
           <p className="pagehead__lead">{tr.description}</p>
+          <Rule className="pagehead__rule" />
         </div>
       </section>
 
@@ -38,20 +40,20 @@ export default function ContactPage() {
         <div className="wrap">
           <Reveal>
             <div className="blocks blocks--3 contact-cards">
-                <a className="blk blk--forest contact-card" href={CONTACT.phoneHref}>
+                <a className="blk blk--tall blk--forest contact-card" href={CONTACT.phoneHref}>
                   <Icon name="phone" size={22} />
                   <p className="blk__t">{t.cta.call}</p>
                   <p className="contact-card__v num">{CONTACT.phone}</p>
                 </a>
                 <a
-                  className="blk blk--accent contact-card"
+                  className="blk blk--tall blk--accent contact-card"
                   href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener"
                 >
                   <Icon name="whatsapp" size={22} />
                   <p className="blk__t">{t.cta.whatsapp}</p>
                   <p className="contact-card__v num">+{CONTACT.whatsapp}</p>
                 </a>
-                <a className="blk contact-card" href={`mailto:${CONTACT.email}`}>
+                <a className="blk blk--tall contact-card" href={`mailto:${CONTACT.email}`}>
                   <Icon name="mail" size={22} />
                   <p className="blk__t">E-mail</p>
                   <p className="contact-card__v">{CONTACT.email}</p>
@@ -62,8 +64,8 @@ export default function ContactPage() {
           <div className="blocks blocks--wide-left contact-below">
             <Reveal delay={60}>
               <div className="blocks blocks--2 contact-notes">
-                {(intro?.paras ?? []).map((x, i) => (
-                  <div className={`blk${i === 0 ? ' blk--mute' : ''}`} key={x}>
+                {(intro?.paras ?? []).map((x) => (
+                  <div className="blk" key={x}>
                     <p className="blk__s blk__s--lead">{x}</p>
                   </div>
                 ))}
@@ -78,15 +80,13 @@ export default function ContactPage() {
             </Reveal>
 
             <Reveal delay={120}>
-              <div className="panel panel--fill contact-photo">
-                <Picture name="moveout" alt="" ratio="4x3" widths={[800, 1200]} sizes="(max-width:900px) 100vw, 34vw" />
-                <span className="badge badge--tl">
-                  <Icon name="pin" size={14} /> {CONTACT.city} · {CONTACT.radiusKm} km
+              <div className="panel panel--card panel--mono panel--fill contact-photo">
+                <Picture name="moveout" alt={t.alt.keys} ratio="4x3" widths={[800, 1200, 1600]} sizes="(max-width:900px) 100vw, 34vw" />
+                <span className="sticker" style={{ left: -26, top: '38%' }}>{CONTACT.city}<br />{CONTACT.radiusKm} km</span>
+                <span className="badge badge--accent badge--bl">
+                  <span className="badge__text">{t.home.minVisitTitle} — {settings.minVisit} {settings.currency}</span>
+                  <span className="badge__dot"><Icon name="check" size={18} /></span>
                 </span>
-                <div className="float-card">
-                  <p className="float-card__t">{t.home.minVisitTitle}</p>
-                  <p className="float-card__v num">{settings.minVisit} {settings.currency}</p>
-                </div>
               </div>
             </Reveal>
           </div>

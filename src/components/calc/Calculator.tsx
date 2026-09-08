@@ -8,6 +8,7 @@ import ItemRow from './ItemRow'
 import { usePicker } from './usePicker'
 import { useCountUp } from './useCountUp'
 import LeadForm from './LeadForm'
+import Collapse from '../Collapse'
 
 /** Часто выбираемые работы — чтобы не листать 105 позиций ради лампочки. */
 const POPULAR = [
@@ -129,14 +130,17 @@ export default function Calculator() {
                 const chosen = list.filter((i) => p.qtyOf(i.key) > 0).length
                 const from = Math.min(...list.map((i) => i.price))
                 const photo = GROUP_PHOTO[g.key]
+                const isOpen = open === g.key
                 return (
-                  <details
-                    key={g.key} className="grp" open={open === g.key}
-                    onToggle={(e) => setOpen((e.currentTarget as HTMLDetailsElement).open ? g.key : null)}
-                  >
-                    <summary>
+                  <div key={g.key} className="grp" data-open={isOpen}>
+                    <button
+                      type="button" className="grp__head" aria-expanded={isOpen} aria-controls={`grp-${g.key}`}
+                      onClick={() => setOpen(isOpen ? null : g.key)}
+                    >
                       {photo && (
                         <span className="grp__thumb">
+                          {/* Миниатюра рядом с названием группы — декоративная: пустой alt,
+                              чтобы скринридер не читал текст дважды. */}
                           <Picture name={photo} alt="" ratio="3x2" widths={[800]} sizes="64px" />
                         </span>
                       )}
@@ -148,7 +152,8 @@ export default function Calculator() {
                       </span>
                       {chosen > 0 && <span className="grp__badge num">{chosen}</span>}
                       <Icon name="chevron" size={18} className="grp__chev" />
-                    </summary>
+                    </button>
+                    <Collapse open={isOpen} id={`grp-${g.key}`}>
                     <ul className="ilist">
                       {list.map((i) => (
                         <ItemRow
@@ -158,7 +163,8 @@ export default function Calculator() {
                         />
                       ))}
                     </ul>
-                  </details>
+                    </Collapse>
+                  </div>
                 )
               })}
             </div>

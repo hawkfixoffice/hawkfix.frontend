@@ -1,0 +1,880 @@
+{
+ "home": {
+  "pl": [
+   "złota rączka Warszawa",
+   "mąż na godzinę Warszawa",
+   "fachowiec Warszawa",
+   "naprawy domowe Warszawa",
+   "usterki w mieszkaniu",
+   "drobne naprawy Warszawa",
+   "hydraulik i elektryk Warszawa",
+   "usługi remontowe Warszawa"
+  ],
+  "uk": [
+   "майстер на годину Варшава",
+   "чоловік на годину Варшава",
+   "дрібний ремонт Варшава",
+   "ремонт квартири Варшава",
+   "майстер Варшава"
+  ],
+  "ru": [
+   "мастер на час Варшава",
+   "муж на час Варшава",
+   "мелкий ремонт Варшава",
+   "ремонт квартиры Варшава",
+   "мастер Варшава"
+  ],
+  "en": [
+   "handyman Warsaw",
+   "home repairs Warsaw",
+   "odd jobs Warsaw",
+   "handyman services Warsaw"
+  ]
+ },
+ "uslugi": {
+  "pl": [
+   "usługi złotej rączki",
+   "naprawy w mieszkaniu Warszawa",
+   "montaż i naprawy Warszawa"
+  ],
+  "uk": [
+   "майстер на годину Варшава",
+   "чоловік на годину Варшава",
+   "дрібний ремонт Варшава",
+   "ремонт квартири Варшава",
+   "майстер Варшава"
+  ],
+  "ru": [
+   "мастер на час Варшава",
+   "муж на час Варшава",
+   "мелкий ремонт Варшава",
+   "ремонт квартиры Варшава",
+   "мастер Варшава"
+  ],
+  "en": [
+   "handyman Warsaw",
+   "home repairs Warsaw",
+   "odd jobs Warsaw",
+   "handyman services Warsaw"
+  ]
+ },
+ "cennik": {
+  "pl": [
+   "cennik złotej rączki",
+   "ile kosztuje hydraulik Warszawa",
+   "ceny drobnych napraw"
+  ],
+  "uk": [
+   "ціни на дрібний ремонт Варшава",
+   "скільки коштує сантехнік"
+  ],
+  "ru": [
+   "цены на мелкий ремонт Варшава",
+   "сколько стоит сантехник"
+  ],
+  "en": [
+   "handyman prices Warsaw",
+   "repair cost Warsaw"
+  ]
+ },
+ "o-nas": {
+  "pl": [
+   "złota rączka Warszawa opinie",
+   "ekipa remontowa Warszawa",
+   "firma od napraw Warszawa"
+  ],
+  "uk": [
+   "майстер на годину Варшава відгуки",
+   "бригада ремонту Варшава",
+   "власна бригада"
+  ],
+  "ru": [
+   "мастер на час Варшава отзывы",
+   "бригада ремонта Варшава",
+   "своя бригада"
+  ],
+  "en": [
+   "handyman Warsaw about",
+   "own crew not call centre"
+  ]
+ },
+ "kontakt": {
+  "pl": [
+   "złota rączka kontakt",
+   "hydraulik Warszawa telefon",
+   "wezwać fachowca Warszawa"
+  ],
+  "uk": [
+   "майстер Варшава телефон",
+   "викликати майстра"
+  ],
+  "ru": [
+   "мастер Варшава телефон",
+   "вызвать мастера"
+  ],
+  "en": [
+   "handyman Warsaw contact",
+   "book a handyman"
+  ]
+ },
+ "polityka-prywatnosci": {
+  "pl": [],
+  "uk": [],
+  "ru": [],
+  "en": []
+ },
+ "polityka-cookies": {
+  "pl": [],
+  "uk": [],
+  "ru": [],
+  "en": []
+ },
+ "regulamin": {
+  "pl": [],
+  "uk": [],
+  "ru": [],
+  "en": []
+ },
+ "uslugi-hydraulik": {
+  "pl": [
+   "hydraulik Warszawa",
+   "naprawa kranu",
+   "wymiana baterii",
+   "usterka hydrauliczna",
+   "hydraulik na dziś",
+   "Hydraulika cena"
+  ],
+  "uk": [
+   "сантехнік Варшава",
+   "заміна змішувача",
+   "ремонт бачка",
+   "підключення пральної машини",
+   "Сантехніка Варшава",
+   "Сантехніка",
+   "Сантехніка ціна"
+  ],
+  "ru": [
+   "сантехник Варшава",
+   "замена смесителя",
+   "ремонт бачка",
+   "подключение стиральной машины",
+   "Сантехника Варшава",
+   "Сантехника",
+   "Сантехника цена"
+  ],
+  "en": [
+   "plumber Warsaw",
+   "tap replacement",
+   "washing machine connection",
+   "Plumbing Warsaw",
+   "Plumbing",
+   "Plumbing price"
+  ]
+ },
+ "uslugi-udraznianie-rur": {
+  "pl": [
+   "udrażnianie rur Warszawa",
+   "zapchany odpływ",
+   "przepychanie rur",
+   "zapchana zlewozmywak",
+   "udrażnianie kanalizacji",
+   "Udrażnianie rur i odpływów cena"
+  ],
+  "uk": [
+   "прочищення труб Варшава",
+   "засмітився злив",
+   "прочищення каналізації",
+   "Прочищення труб і зливів Варшава",
+   "Прочищення труб і зливів",
+   "Прочищення труб і зливів ціна"
+  ],
+  "ru": [
+   "прочистка труб Варшава",
+   "засорился слив",
+   "прочистка канализации",
+   "Прочистка труб и слива Варшава",
+   "Прочистка труб и слива",
+   "Прочистка труб и слива цена"
+  ],
+  "en": [
+   "drain unblocking Warsaw",
+   "blocked drain",
+   "clogged sink",
+   "Drain unblocking",
+   "Drain unblocking price"
+  ]
+ },
+ "uslugi-elektryk": {
+  "pl": [
+   "elektryk Warszawa",
+   "wymiana gniazdka",
+   "montaż żyrandola",
+   "drobne prace elektryczne",
+   "usterka elektryczna",
+   "Elektryka cena"
+  ],
+  "uk": [
+   "електрик Варшава",
+   "заміна розетки",
+   "монтаж люстри",
+   "Електрика Варшава",
+   "Електрика",
+   "Електрика ціна"
+  ],
+  "ru": [
+   "электрик Варшава",
+   "замена розетки",
+   "монтаж люстры",
+   "Электрика Варшава",
+   "Электрика",
+   "Электрика цена"
+  ],
+  "en": [
+   "electrician Warsaw",
+   "socket replacement",
+   "light fitting installation",
+   "Electrics Warsaw",
+   "Electrics",
+   "Electrics price"
+  ]
+ },
+ "uslugi-montaz-mebli": {
+  "pl": [
+   "montaż mebli Warszawa",
+   "składanie mebli IKEA",
+   "monter mebli",
+   "montaż szafy",
+   "skręcanie mebli",
+   "Montaż mebli cena"
+  ],
+  "uk": [
+   "збірка меблів Варшава",
+   "збірка меблів IKEA",
+   "складання шафи",
+   "Збірка меблів",
+   "Збірка меблів ціна"
+  ],
+  "ru": [
+   "сборка мебели Варшава",
+   "сборка мебели IKEA",
+   "сборка шкафа",
+   "Сборка мебели",
+   "Сборка мебели цена"
+  ],
+  "en": [
+   "furniture assembly Warsaw",
+   "IKEA furniture assembly",
+   "flat pack assembly",
+   "Furniture assembly",
+   "Furniture assembly price"
+  ]
+ },
+ "uslugi-naprawa-mebli": {
+  "pl": [
+   "naprawa mebli Warszawa",
+   "wymiana zawiasów",
+   "naprawa szuflady",
+   "naprawa szafy przesuwnej",
+   "Naprawa mebli cena"
+  ],
+  "uk": [
+   "ремонт меблів Варшава",
+   "заміна завіс",
+   "ремонт шухляди",
+   "Ремонт меблів",
+   "Ремонт меблів ціна"
+  ],
+  "ru": [
+   "ремонт мебели Варшава",
+   "замена петель",
+   "ремонт ящика",
+   "Ремонт мебели",
+   "Ремонт мебели цена"
+  ],
+  "en": [
+   "furniture repair Warsaw",
+   "hinge replacement",
+   "drawer repair",
+   "Furniture repair",
+   "Furniture repair price"
+  ]
+ },
+ "uslugi-demontaz-i-montaz-mebli": {
+  "pl": [
+   "demontaż mebli",
+   "rozkręcanie mebli",
+   "montaż mebli przy przeprowadzce",
+   "Demontaż i montaż mebli przy przeprowadzce cena"
+  ],
+  "uk": [
+   "Розбір і збірка меблів при переїзді Варшава",
+   "Розбір і збірка меблів при переїзді",
+   "Розбір і збірка меблів при переїзді ціна"
+  ],
+  "ru": [
+   "Разбор и сборка мебели при переезде Варшава",
+   "Разбор и сборка мебели при переезде",
+   "Разбор и сборка мебели при переезде цена"
+  ],
+  "en": [
+   "Furniture dismantling and reassembly for a move Warsaw",
+   "Furniture dismantling and reassembly for a move",
+   "Furniture dismantling and reassembly for a move price"
+  ]
+ },
+ "uslugi-wywoz-starych-mebli": {
+  "pl": [
+   "wywóz mebli Warszawa",
+   "wywóz gabarytów",
+   "utylizacja mebli",
+   "opróżnianie mieszkań",
+   "Wywóz starych mebli i gabarytów cena"
+  ],
+  "uk": [
+   "вивезення меблів Варшава",
+   "утилізація меблів",
+   "Вивезення старих меблів і габаритів Варшава",
+   "Вивезення старих меблів і габаритів",
+   "Вивезення старих меблів і габаритів ціна"
+  ],
+  "ru": [
+   "вывоз мебели Варшава",
+   "утилизация мебели",
+   "Вывоз старой мебели и крупногабарита Варшава",
+   "Вывоз старой мебели и крупногабарита",
+   "Вывоз старой мебели и крупногабарита цена"
+  ],
+  "en": [
+   "furniture removal Warsaw",
+   "bulky waste disposal",
+   "Old furniture and bulky waste removal Warsaw",
+   "Old furniture and bulky waste removal",
+   "Old furniture and bulky waste removal price"
+  ]
+ },
+ "uslugi-wiercenie-i-wieszanie": {
+  "pl": [
+   "wiercenie w ścianie",
+   "powieszenie obrazu",
+   "montaż półki",
+   "powieszenie lustra",
+   "Wiercenie i wieszanie cena"
+  ],
+  "uk": [
+   "свердління стіни",
+   "повісити картину",
+   "монтаж полиці",
+   "Свердління й монтаж на стіну Варшава",
+   "Свердління й монтаж на стіну",
+   "Свердління й монтаж на стіну ціна"
+  ],
+  "ru": [
+   "сверление стены",
+   "повесить картину",
+   "монтаж полки",
+   "Сверление и навеска Варшава",
+   "Сверление и навеска",
+   "Сверление и навеска цена"
+  ],
+  "en": [
+   "wall drilling Warsaw",
+   "hang a picture",
+   "shelf mounting",
+   "Drilling and wall mounting Warsaw",
+   "Drilling and wall mounting",
+   "Drilling and wall mounting price"
+  ]
+ },
+ "uslugi-montaz-telewizora": {
+  "pl": [
+   "montaż telewizora na ścianie",
+   "zawieszenie telewizora",
+   "montaż uchwytu TV",
+   "Montaż telewizora na ścianie cena"
+  ],
+  "uk": [
+   "монтаж телевізора на стіну",
+   "повісити телевізор",
+   "Монтаж телевізора на стіну Варшава",
+   "Монтаж телевізора на стіну ціна"
+  ],
+  "ru": [
+   "монтаж телевизора на стену",
+   "повесить телевизор",
+   "Монтаж телевизора на стену Варшава",
+   "Монтаж телевизора на стену цена"
+  ],
+  "en": [
+   "TV wall mounting Warsaw",
+   "TV bracket installation",
+   "TV wall mounting",
+   "TV wall mounting price"
+  ]
+ },
+ "uslugi-drzwi-okna-zamki": {
+  "pl": [
+   "wymiana zamka Warszawa",
+   "regulacja drzwi",
+   "wymiana klamki",
+   "regulacja okien",
+   "Drzwi, okna, zamki cena"
+  ],
+  "uk": [
+   "заміна замка Варшава",
+   "регулювання дверей",
+   "заміна ручки",
+   "Двері, вікна, замки Варшава",
+   "Двері, вікна, замки",
+   "Двері, вікна, замки ціна"
+  ],
+  "ru": [
+   "замена замка Варшава",
+   "регулировка дверей",
+   "замена ручки",
+   "Двери, окна, замки Варшава",
+   "Двери, окна, замки",
+   "Двери, окна, замки цена"
+  ],
+  "en": [
+   "lock replacement Warsaw",
+   "door adjustment",
+   "Doors, windows, locks Warsaw",
+   "Doors, windows, locks",
+   "Doors, windows, locks price"
+  ]
+ },
+ "uslugi-montaz-agd": {
+  "pl": [
+   "montaż AGD Warszawa",
+   "podłączenie zmywarki",
+   "zabudowa piekarnika",
+   "montaż okapu",
+   "Montaż AGD cena"
+  ],
+  "uk": [
+   "підключення посудомийки",
+   "встановлення духовки",
+   "монтаж витяжки",
+   "Монтаж техніки Варшава",
+   "Монтаж техніки",
+   "Монтаж техніки ціна"
+  ],
+  "ru": [
+   "подключение посудомойки",
+   "установка духовки",
+   "монтаж вытяжки",
+   "Монтаж бытовой техники Варшава",
+   "Монтаж бытовой техники",
+   "Монтаж бытовой техники цена"
+  ],
+  "en": [
+   "appliance installation Warsaw",
+   "dishwasher connection",
+   "oven fitting",
+   "Appliance installation",
+   "Appliance installation price"
+  ]
+ },
+ "uslugi-lazienka-silikon": {
+  "pl": [
+   "wymiana silikonu",
+   "silikon w łazience",
+   "uszczelnienie wanny",
+   "Łazienka i silikon cena"
+  ],
+  "uk": [
+   "Ванна й силікон Варшава",
+   "Ванна й силікон",
+   "Ванна й силікон ціна"
+  ],
+  "ru": [
+   "Ванная и герметик Варшава",
+   "Ванная и герметик",
+   "Ванная и герметик цена"
+  ],
+  "en": [
+   "Bathroom and silicone Warsaw",
+   "Bathroom and silicone",
+   "Bathroom and silicone price"
+  ]
+ },
+ "uslugi-wentylacja-lazienka": {
+  "pl": [
+   "montaż wentylatora łazienkowego",
+   "wentylacja w łazience",
+   "Wentylacja: wentylator, kanał wentylacyjny cena"
+  ],
+  "uk": [
+   "Вентиляція: витяжний вентилятор, вентканал Варшава",
+   "Вентиляція: витяжний вентилятор, вентканал",
+   "Вентиляція: витяжний вентилятор, вентканал ціна"
+  ],
+  "ru": [
+   "Вентиляция: вытяжной вентилятор, вентканал Варшава",
+   "Вентиляция: вытяжной вентилятор, вентканал",
+   "Вентиляция: вытяжной вентилятор, вентканал цена"
+  ],
+  "en": [
+   "Ventilation: extractor fan and duct Warsaw",
+   "Ventilation: extractor fan and duct",
+   "Ventilation: extractor fan and duct price"
+  ]
+ },
+ "uslugi-drobne-naprawy": {
+  "pl": [
+   "drobne naprawy w domu",
+   "mąż na godzinę",
+   "złota rączka",
+   "usterki w mieszkaniu",
+   "Drobne naprawy w domu cena"
+  ],
+  "uk": [
+   "Дрібний ремонт у домі Варшава",
+   "Дрібний ремонт у домі",
+   "Дрібний ремонт у домі ціна"
+  ],
+  "ru": [
+   "Мелкий ремонт по дому Варшава",
+   "Мелкий ремонт по дому",
+   "Мелкий ремонт по дому цена"
+  ],
+  "en": [
+   "Small repairs around the home Warsaw",
+   "Small repairs around the home",
+   "Small repairs around the home price"
+  ]
+ },
+ "uslugi-panele-podlogowe-listwy": {
+  "pl": [
+   "układanie paneli podłogowych",
+   "montaż listew przypodłogowych",
+   "montaż progów",
+   "Podłogi: panele, listwy, progi cena"
+  ],
+  "uk": [
+   "Підлога: ламінат, плінтуси, пороги Варшава",
+   "Підлога: ламінат, плінтуси, пороги",
+   "Підлога: ламінат, плінтуси, пороги ціна"
+  ],
+  "ru": [
+   "Полы: ламинат, плинтусы, пороги Варшава",
+   "Полы: ламинат, плинтусы, пороги",
+   "Полы: ламинат, плинтусы, пороги цена"
+  ],
+  "en": [
+   "Floors: laminate, skirting, thresholds Warsaw",
+   "Floors: laminate, skirting, thresholds",
+   "Floors: laminate, skirting, thresholds price"
+  ]
+ },
+ "uslugi-sciany-malowanie": {
+  "pl": [
+   "malowanie mieszkania Warszawa",
+   "malowanie ścian cena",
+   "szpachlowanie ścian",
+   "naprawa ściany",
+   "Ściany: naprawa, wyrównanie, malowanie cena"
+  ],
+  "uk": [
+   "фарбування квартири Варшава",
+   "шпаклювання стін",
+   "ремонт стіни",
+   "Стіни: ремонт, вирівнювання, фарбування Варшава",
+   "Стіни: ремонт, вирівнювання, фарбування",
+   "Стіни: ремонт, вирівнювання, фарбування ціна"
+  ],
+  "ru": [
+   "покраска квартиры Варшава",
+   "шпаклевка стен",
+   "ремонт стены",
+   "Стены: ремонт, выравнивание, покраска Варшава",
+   "Стены: ремонт, выравнивание, покраска",
+   "Стены: ремонт, выравнивание, покраска цена"
+  ],
+  "en": [
+   "wall painting Warsaw",
+   "wall repair",
+   "plastering",
+   "Walls: repair, levelling, painting Warsaw",
+   "Walls: repair, levelling, painting",
+   "Walls: repair, levelling, painting price"
+  ]
+ },
+ "uslugi-karnisze-rolety-zaluzje": {
+  "pl": [
+   "montaż karnisza",
+   "montaż rolet",
+   "montaż żaluzji",
+   "Karnisze, rolety, żaluzje cena"
+  ],
+  "uk": [
+   "Карнизи, ролети, жалюзі Варшава",
+   "Карнизи, ролети, жалюзі",
+   "Карнизи, ролети, жалюзі ціна"
+  ],
+  "ru": [
+   "Карнизы, рулонные шторы, жалюзи Варшава",
+   "Карнизы, рулонные шторы, жалюзи",
+   "Карнизы, рулонные шторы, жалюзи цена"
+  ],
+  "en": [
+   "Curtain rails, roller blinds, shutters Warsaw",
+   "Curtain rails, roller blinds, shutters",
+   "Curtain rails, roller blinds, shutters price"
+  ]
+ },
+ "uslugi-awaria-tego-samego-dnia": {
+  "pl": [
+   "awaria dziś Warszawa",
+   "pilna naprawa",
+   "usterka na już",
+   "ekipa na dziś",
+   "Awaria cena"
+  ],
+  "uk": [
+   "аварія сьогодні Варшава",
+   "терміновий ремонт",
+   "Аварія Варшава",
+   "Аварія",
+   "Аварія ціна"
+  ],
+  "ru": [
+   "авария сегодня Варшава",
+   "срочный ремонт",
+   "Авария Варшава",
+   "Авария",
+   "Авария цена"
+  ],
+  "en": [
+   "same day emergency Warsaw",
+   "urgent repair",
+   "Emergency Warsaw",
+   "Emergency",
+   "Emergency price"
+  ]
+ },
+ "uslugi-sprzatanie-mieszkan": {
+  "pl": [
+   "sprzątanie mieszkań Warszawa",
+   "sprzątanie domów",
+   "sprzątanie generalne",
+   "Sprzątanie mieszkań i domów cena"
+  ],
+  "uk": [
+   "прибирання квартир Варшава",
+   "генеральне прибирання",
+   "Прибирання квартир і будинків Варшава",
+   "Прибирання квартир і будинків",
+   "Прибирання квартир і будинків ціна"
+  ],
+  "ru": [
+   "уборка квартир Варшава",
+   "генеральная уборка",
+   "Уборка квартир и домов Варшава",
+   "Уборка квартир и домов",
+   "Уборка квартир и домов цена"
+  ],
+  "en": [
+   "flat cleaning Warsaw",
+   "deep cleaning",
+   "Home and flat cleaning Warsaw",
+   "Home and flat cleaning",
+   "Home and flat cleaning price"
+  ]
+ },
+ "uslugi-sprzatanie-pod-zwrot-kaucji": {
+  "pl": [
+   "sprzątanie pod zwrot kaucji",
+   "sprzątanie przed zdaniem mieszkania",
+   "Sprzątanie pod zwrot kaucji cena"
+  ],
+  "uk": [
+   "Прибирання під повернення застави Варшава",
+   "Прибирання під повернення застави",
+   "Прибирання під повернення застави ціна"
+  ],
+  "ru": [
+   "Уборка под возврат залога Варшава",
+   "Уборка под возврат залога",
+   "Уборка под возврат залога цена"
+  ],
+  "en": [
+   "End-of-tenancy cleaning Warsaw",
+   "End-of-tenancy cleaning",
+   "End-of-tenancy cleaning price"
+  ]
+ },
+ "uslugi-sprzatanie-po-remoncie": {
+  "pl": [
+   "sprzątanie po remoncie Warszawa",
+   "usuwanie pyłu budowlanego",
+   "Sprzątanie po remoncie cena"
+  ],
+  "uk": [
+   "прибирання після ремонту Варшава",
+   "Прибирання після ремонту",
+   "Прибирання після ремонту ціна"
+  ],
+  "ru": [
+   "уборка после ремонта Варшава",
+   "Уборка после ремонта",
+   "Уборка после ремонта цена"
+  ],
+  "en": [
+   "after renovation cleaning Warsaw",
+   "Cleaning after renovation Warsaw",
+   "Cleaning after renovation",
+   "Cleaning after renovation price"
+  ]
+ },
+ "uslugi-mycie-okien": {
+  "pl": [
+   "mycie okien Warszawa",
+   "mycie okien cena"
+  ],
+  "uk": [
+   "Миття вікон Варшава",
+   "Миття вікон",
+   "Миття вікон ціна"
+  ],
+  "ru": [
+   "Мытьё окон Варшава",
+   "Мытьё окон",
+   "Мытьё окон цена"
+  ],
+  "en": [
+   "Window cleaning Warsaw",
+   "Window cleaning",
+   "Window cleaning price"
+  ]
+ },
+ "uslugi-przesadzanie-roslin": {
+  "pl": [
+   "przesadzanie roślin",
+   "opieka nad roślinami",
+   "podlewanie pod nieobecność",
+   "Rośliny doniczkowe: przesadzanie i opieka cena"
+  ],
+  "uk": [
+   "Кімнатні рослини: пересадка й догляд Варшава",
+   "Кімнатні рослини: пересадка й догляд",
+   "Кімнатні рослини: пересадка й догляд ціна"
+  ],
+  "ru": [
+   "Комнатные растения: пересадка и уход Варшава",
+   "Комнатные растения: пересадка и уход",
+   "Комнатные растения: пересадка и уход цена"
+  ],
+  "en": [
+   "House plants: repotting and care Warsaw",
+   "House plants: repotting and care",
+   "House plants: repotting and care price"
+  ]
+ },
+ "uslugi-przeprowadzki-warszawa": {
+  "pl": [
+   "przeprowadzki Warszawa",
+   "transport mebli",
+   "bus z kierowcą",
+   "Przeprowadzki po Warszawie cena"
+  ],
+  "uk": [
+   "переїзд Варшава",
+   "перевезення меблів",
+   "бус з водієм",
+   "Переїзди по Варшаві Варшава",
+   "Переїзди по Варшаві",
+   "Переїзди по Варшаві ціна"
+  ],
+  "ru": [
+   "переезд Варшава",
+   "перевозка мебели",
+   "бус с водителем",
+   "Переезды по Варшаве Варшава",
+   "Переезды по Варшаве",
+   "Переезды по Варшаве цена"
+  ],
+  "en": [
+   "moving Warsaw",
+   "furniture transport",
+   "man with a van",
+   "Moving within Warsaw Warsaw",
+   "Moving within Warsaw",
+   "Moving within Warsaw price"
+  ]
+ },
+ "uslugi-przeprowadzki-po-polsce": {
+  "pl": [
+   "przeprowadzki po Polsce",
+   "przeprowadzka międzymiastowa",
+   "transport mebli na trasie",
+   "Przeprowadzki po Polsce cena"
+  ],
+  "uk": [
+   "Переїзди по Польщі Варшава",
+   "Переїзди по Польщі",
+   "Переїзди по Польщі ціна"
+  ],
+  "ru": [
+   "Переезды по Польше Варшава",
+   "Переезды по Польше",
+   "Переезды по Польше цена"
+  ],
+  "en": [
+   "Moving across Poland Warsaw",
+   "Moving across Poland",
+   "Moving across Poland price"
+  ]
+ },
+ "uslugi-ogrod-i-dzialka": {
+  "pl": [
+   "prace w ogrodzie",
+   "koszenie trawnika",
+   "przycinanie żywopłotu",
+   "wycinka drzewa",
+   "Prace w ogrodzie i na działce cena"
+  ],
+  "uk": [
+   "Роботи в саду і на ділянці Варшава",
+   "Роботи в саду і на ділянці",
+   "Роботи в саду і на ділянці ціна"
+  ],
+  "ru": [
+   "Работы в саду и на участке Варшава",
+   "Работы в саду и на участке",
+   "Работы в саду и на участке цена"
+  ],
+  "en": [
+   "Garden and grounds work Warsaw",
+   "Garden and grounds work",
+   "Garden and grounds work price"
+  ]
+ },
+ "uslugi-remont-kosmetyczny": {
+  "pl": [
+   "remont kosmetyczny Warszawa",
+   "odświeżenie mieszkania",
+   "remont mieszkania cena"
+  ],
+  "uk": [
+   "косметичний ремонт Варшава",
+   "освіження квартири",
+   "Ремонт квартири Варшава",
+   "Ремонт квартири",
+   "Ремонт квартири ціна"
+  ],
+  "ru": [
+   "косметический ремонт Варшава",
+   "освежение квартиры",
+   "Ремонт квартиры Варшава",
+   "Ремонт квартиры",
+   "Ремонт квартиры цена"
+  ],
+  "en": [
+   "flat refurbishment Warsaw",
+   "cosmetic renovation",
+   "Flat refurbishment",
+   "Flat refurbishment price"
+  ]
+ }
+}

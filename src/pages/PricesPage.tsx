@@ -3,6 +3,7 @@ import { KEY_PAGES, groups, items, pathOf, services, settings } from '../data/co
 import type { PageBody } from '../lib/types'
 import { toSections } from '../lib/sections'
 import { usePage } from '../components/PageContext'
+import Rule from '../components/Rule'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Picture from '../components/Picture'
 import Icon from '../components/Icon'
@@ -60,6 +61,7 @@ export default function PricesPage() {
               </div>
             </div>
           </div>
+          <Rule className="pagehead__rule" />
         </div>
       </section>
 
@@ -70,7 +72,7 @@ export default function PricesPage() {
             <div className="blocks blocks--2">
               {shortLists.slice(0, 2).map((sec, i) => (
                 <Reveal key={sec.heading} delay={i * 80}>
-                  <div className={`blk ${i === 0 ? 'blk--accent' : 'blk--forest'}`}>
+                  <div className={`blk blk--tall ${i === 0 ? 'blk--accent' : 'blk--forest'}`}>
                     <h2 className="blk__t">{sec.heading}</h2>
                     <ul className="blk__list">
                       {(sec.lists[0] ?? []).map((x) => (
@@ -123,6 +125,7 @@ export default function PricesPage() {
                   <div className="pricegroup__head">
                     {GROUP_PHOTO[g.key] && (
                       <span className="pricegroup__thumb">
+                        {/* Декоративная миниатюра: название группы стоит рядом текстом */}
                         <Picture name={GROUP_PHOTO[g.key]} alt="" ratio="3x2" widths={[800]} sizes="96px" />
                       </span>
                     )}

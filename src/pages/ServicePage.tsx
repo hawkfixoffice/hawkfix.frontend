@@ -2,11 +2,13 @@ import { Link, useLoaderData } from 'react-router-dom'
 import { KEY_PAGES, items, pathOf, services, settings } from '../data/content'
 import type { PageBody } from '../lib/types'
 import { usePage } from '../components/PageContext'
+import Rule from '../components/Rule'
+import SparkDot from '../components/SparkDot'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Picture from '../components/Picture'
 import Icon from '../components/Icon'
 import Reveal from '../components/Reveal'
-import { CONTACT } from '../lib/ui'
+import { CONTACT, serviceAlt } from '../lib/ui'
 
 export default function ServicePage() {
   const { page, locale, t } = usePage()
@@ -47,6 +49,7 @@ export default function ServicePage() {
               )}
             </div>
           </div>
+          <Rule className="pagehead__rule" />
         </div>
       </section>
 
@@ -55,12 +58,12 @@ export default function ServicePage() {
         <div className="wrap">
           <div className="blocks blocks--wide-right">
             <Reveal>
-              <div className="panel panel--fill svc-photo">
+              <div className="panel panel--card panel--mono panel--fill svc-photo">
                 <Picture
-                  name={page.image!} alt={tr.h1} ratio="4x3"
-                  widths={[800, 1200]} sizes="(max-width: 900px) 100vw, 40vw" priority
+                  name={page.image!} alt={serviceAlt(tr.h1)} ratio="4x3"
+                  widths={[800, 1200, 1600]} sizes="(max-width: 900px) 100vw, 40vw" priority
                 />
-                <span className="badge badge--tl">{tr.h1}</span>
+                <span className="badge badge--accent badge--plain badge--tl">{tr.h1.split(' — ')[0]}</span>
               </div>
             </Reveal>
 
@@ -72,7 +75,7 @@ export default function ServicePage() {
                   </div>
                 ))}
                 {body.checklist?.map((c: string, i: number) => (
-                  <div className={`blk${i === 0 ? ' blk--forest' : ''}`} key={c}>
+                  <div className={`blk blk--xs blk--line${i === 0 ? ' blk--forest' : i === 1 ? ' blk--accent' : ''}`} key={c}>
                     <p className="blk__n">{String(i + 1).padStart(2, '0')}</p>
                     <p className="blk__t blk__t--sm">{c}</p>
                   </div>
@@ -140,20 +143,18 @@ export default function ServicePage() {
               {t.service.backToServices} <Icon name="arrow" size={16} />
             </Link>
           </div>
-          <div className="svc-grid">
-            {others.map((s, i) => (
-              <Reveal key={s.key} delay={i * 70}>
-                <Link className="panel svc-tile" to={s.paths[locale]}>
-                  <Picture
-                    name={s.image!} alt={s.tr[locale].h1} ratio="3x2"
-                    widths={[800, 1200]} sizes="(max-width: 900px) 100vw, 32vw"
-                  />
-                  <div className="svc-tile__body">
-                    <h3>{s.tr[locale].h1}</h3>
-                    <p>{s.tr[locale].blurb}</p>
-                  </div>
-                </Link>
-              </Reveal>
+          <div className="team">
+            <Link className="ring-btn team__go" to={pathOf(KEY_PAGES.services, locale)} aria-label={t.service.backToServices}>
+              <Icon name="arrow" size={26} />
+            </Link>
+            {others.map((s) => (
+              <Link className="panel panel--mono team__card" key={s.key} to={s.paths[locale]}>
+                <Picture name={s.image!} alt={serviceAlt(s.tr[locale].h1)} ratio="3x2" widths={[800, 1200, 1600]} sizes="(max-width: 900px) 100vw, 30vw" />
+                <span className="badge badge--accent badge--bl team__badge">
+                  <span className="badge__dot"><SparkDot tone="accent" /></span>
+                  <span className="badge__text"><b>{s.tr[locale].h1.split(' — ')[0]}</b><small>{s.tr[locale].blurb}</small></span>
+                </span>
+              </Link>
             ))}
           </div>
         </div>

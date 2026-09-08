@@ -3,10 +3,12 @@ import { KEY_PAGES, items, pathOf, services, settings } from '../data/content'
 import type { PageBody } from '../lib/types'
 import { isQaList, toSections } from '../lib/sections'
 import { usePage } from '../components/PageContext'
+import Rule from '../components/Rule'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Picture from '../components/Picture'
 import Icon from '../components/Icon'
 import Reveal from '../components/Reveal'
+import Accordion from '../components/Accordion'
 import { CONTACT } from '../lib/ui'
 
 export default function AboutPage() {
@@ -53,6 +55,7 @@ export default function AboutPage() {
               </div>
             </div>
           </div>
+          <Rule className="pagehead__rule" />
         </div>
       </section>
 
@@ -61,15 +64,15 @@ export default function AboutPage() {
         <div className="wrap">
           <div className="blocks blocks--wide-right">
             <Reveal>
-              <div className="panel panel--fill about-hero">
-                <Picture name="about" alt="" ratio="4x3" widths={[800, 1200]} sizes="(max-width:900px) 100vw, 40vw" />
-                <span className="badge badge--tl">{CONTACT.city}</span>
+              <div className="panel panel--card panel--mono panel--fill about-hero">
+                <Picture name="about" alt={t.alt.about} ratio="4x3" widths={[800, 1200, 1600]} sizes="(max-width:900px) 100vw, 40vw" />
+                <span className="badge badge--accent badge--plain badge--tl">{CONTACT.city} · {CONTACT.radiusKm} km</span>
               </div>
             </Reveal>
             <Reveal delay={80}>
               <div className="blocks blocks--2">
                 {(intro?.paras ?? []).slice(0, 4).map((x, i) => (
-                  <div className={`blk${i === 0 ? ' blk--mute' : ''}`} key={x}>
+                  <div className={`blk blk--tall${i === 0 ? ' blk--forest' : i === 3 ? ' blk--accent' : ''}`} key={x}>
                     <p className="blk__n">0{i + 1}</p>
                     <p className="blk__s blk__s--lead">{x}</p>
                   </div>
@@ -81,7 +84,7 @@ export default function AboutPage() {
       </section>
 
       {/* секции со списками: снаряжение, правила */}
-      {rest.map((sec, si) => (
+      {rest.map((sec) => (
         <section className="band band--tight" key={sec.heading}>
           <div className="wrap">
             <Reveal>
@@ -91,7 +94,7 @@ export default function AboutPage() {
             <div className="blocks blocks--3">
               {(sec.lists[0] ?? []).map((x, i) => (
                 <Reveal key={x} delay={(i % 3) * 70}>
-                  <div className={`blk blk--line${si % 2 && i === 0 ? ' blk--forest' : ''}`}>
+                  <div className={`blk blk--xs blk--line${i === 0 ? ' blk--forest' : i === 1 ? ' blk--accent' : ''}`}>
                     <p className="blk__n">{String(i + 1).padStart(2, '0')}</p>
                     <p className="blk__t blk__t--sm">{x}</p>
                   </div>
@@ -106,29 +109,20 @@ export default function AboutPage() {
       {qaPairs.length > 0 && (
         <section className="band band--tight">
           <div className="wrap">
-            <div className="blocks blocks--wide-left">
+            <div className="blocks blocks--wide-left blocks--top">
               <Reveal>
                 <div>
                   <h2 className="sec-h2">{qa?.heading}</h2>
-                  <div className="acc" style={{ marginTop: 'var(--sp-5)' }}>
-                    {qaPairs.map((x) => (
-                      <details key={x.q}>
-                        <summary>{x.q}<span className="acc__sign"><Icon name="plus" size={18} /></span></summary>
-                        <p className="acc__body">{x.a}</p>
-                      </details>
-                    ))}
-                  </div>
+                  <Accordion items={qaPairs} className="acc--gap" />
                 </div>
               </Reveal>
               <Reveal delay={90}>
-                <div className="panel panel--fill about-hero">
-                  <Picture name="hero-alt" alt="" ratio="4x3" widths={[900, 1400]} sizes="(max-width:900px) 100vw, 34vw" />
-                  <div className="float-card">
-                    <p className="float-card__t">{t.home.ctaHead}</p>
-                    <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
-                      {t.cta.quote} <Icon name="arrow" size={16} />
-                    </Link>
-                  </div>
+                <div className="panel panel--card panel--mono panel--fill about-hero">
+                  <Picture name="hero-alt" alt={t.alt.interior} ratio="4x3" widths={[900, 1400, 2000]} sizes="(max-width:900px) 100vw, 34vw" />
+                  <Link className="badge badge--accent badge--bl" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
+                    <span className="badge__text">{t.cta.quote}</span>
+                    <span className="badge__dot"><Icon name="arrow" size={18} /></span>
+                  </Link>
                 </div>
               </Reveal>
             </div>

@@ -25,6 +25,7 @@ export interface UiStrings {
     name: string; phone: string; email: string; address: string; district: string
     comment: string; when: string; urgent: string; submit: string; sending: string
     ok: string; okNote: string; error: string; required: string; agree: string
+    emailHint: string; emailBad: string; orderNo: string
   }
   cookie: {
     title: string; text: string; accept: string; reject: string; settings: string
@@ -33,6 +34,8 @@ export interface UiStrings {
   }
   footer: { services: string; company: string; legal: string; rights: string; photos: string }
   a11y: { skip: string; menu: string; close: string; lang: string; remove: string; add: string; minus: string; plus: string }
+  /** Подписи к фотографиям, у которых нет своей услуги. */
+  alt: { about: string; interior: string; keys: string; workshop: string }
 }
 
 export const UI: Record<Locale, UiStrings> = {
@@ -42,7 +45,7 @@ export const UI: Record<Locale, UiStrings> = {
     hero: {
       eyebrow: 'Serwis domowy · Warszawa',
       kicker: 'Warszawa i 25 km wokół',
-      tagline: 'Złota rączka,\nktórej cenę znasz z góry.',
+      tagline: 'Naprawy domowe zamówisz w minutę — cenę znasz z góry.',
       sub: 'Zaznaczasz, co jest do zrobienia — cena i czas liczą się na bieżąco. Bez telefonu, bez „wycenimy na miejscu”.',
       scroll: 'Zobacz, jak to działa',
     },
@@ -73,6 +76,9 @@ export const UI: Record<Locale, UiStrings> = {
       ok: 'Mamy Twoje zgłoszenie.', okNote: 'Odzywamy się w godzinach pracy, zwykle w ciągu godziny.',
       error: 'Nie udało się wysłać. Zadzwoń albo napisz na WhatsApp.',
       required: 'To pole jest wymagane.', agree: 'Wysyłając zgłoszenie akceptujesz',
+      emailHint: 'Opcjonalnie — potrzebny tylko do faktury',
+      emailBad: 'Sprawdź adres e-mail.',
+      orderNo: 'Numer zgłoszenia',
     },
     cookie: {
       title: 'Ciasteczka', text: 'Używamy plików cookie. Niezbędne — żeby strona działała. Analityczne włączamy tylko za Twoją zgodą.',
@@ -83,6 +89,12 @@ export const UI: Record<Locale, UiStrings> = {
     },
     footer: { services: 'Usługi', company: 'Firma', legal: 'Dokumenty', rights: 'Wszelkie prawa zastrzeżone', photos: 'Zdjęcia' },
     a11y: { skip: 'Przejdź do treści', menu: 'Menu', close: 'Zamknij', lang: 'Język', remove: 'Usuń', add: 'Dodaj', minus: 'Mniej', plus: 'Więcej' },
+    alt: {
+      about: 'Narzędzia ekipy HAWK.FIX gotowe do wyjazdu w Warszawie',
+      interior: 'Jasne mieszkanie w Warszawie po drobnych naprawach',
+      keys: 'Przekazanie kluczy po sprzątaniu pod zwrot kaucji w Warszawie',
+      workshop: 'Warsztat złotej rączki — narzędzia do napraw domowych',
+    },
   },
 
   uk: {
@@ -91,7 +103,7 @@ export const UI: Record<Locale, UiStrings> = {
     hero: {
       eyebrow: 'Домашній сервіс · Варшава',
       kicker: 'Варшава і 25 км навколо',
-      tagline: 'Майстер,\nчию ціну ви знаєте наперед.',
+      tagline: 'Домашній ремонт замовите за хвилину — ціну знаєте наперед.',
       sub: 'Позначаєте, що треба зробити — ціна й час рахуються одразу. Без дзвінків і без «оцінимо на місці».',
       scroll: 'Подивитись, як це працює',
     },
@@ -122,6 +134,9 @@ export const UI: Record<Locale, UiStrings> = {
       ok: 'Заявку отримали.', okNote: 'Відповідаємо в робочі години, зазвичай протягом години.',
       error: 'Не вдалося надіслати. Зателефонуйте або напишіть у WhatsApp.',
       required: 'Це поле обов’язкове.', agree: 'Надсилаючи заявку, ви приймаєте',
+      emailHint: 'Необов’язково — потрібна лише для рахунка',
+      emailBad: 'Перевірте адресу e-mail.',
+      orderNo: 'Номер заявки',
     },
     cookie: {
       title: 'Файли cookie', text: 'Ми використовуємо cookie. Необхідні — щоб сайт працював. Аналітичні вмикаємо лише за вашою згодою.',
@@ -132,6 +147,12 @@ export const UI: Record<Locale, UiStrings> = {
     },
     footer: { services: 'Послуги', company: 'Компанія', legal: 'Документи', rights: 'Усі права захищені', photos: 'Фото' },
     a11y: { skip: 'Перейти до змісту', menu: 'Меню', close: 'Закрити', lang: 'Мова', remove: 'Видалити', add: 'Додати', minus: 'Менше', plus: 'Більше' },
+    alt: {
+      about: 'Інструменти бригади HAWK.FIX, готові до виїзду у Варшаві',
+      interior: 'Світла квартира у Варшаві після дрібного ремонту',
+      keys: 'Передача ключів після прибирання під повернення застави у Варшаві',
+      workshop: 'Майстерня — інструменти для домашнього ремонту',
+    },
   },
 
   ru: {
@@ -140,7 +161,7 @@ export const UI: Record<Locale, UiStrings> = {
     hero: {
       eyebrow: 'Домашний сервис · Варшава',
       kicker: 'Варшава и 25 км вокруг',
-      tagline: 'Мастер,\nцену которого вы знаете заранее.',
+      tagline: 'Домашний ремонт закажете за минуту — цену знаете заранее.',
       sub: 'Отмечаете, что нужно сделать — цена и время считаются сразу. Без звонков и без «оценим на месте».',
       scroll: 'Посмотреть, как это работает',
     },
@@ -171,6 +192,9 @@ export const UI: Record<Locale, UiStrings> = {
       ok: 'Заявку получили.', okNote: 'Отвечаем в рабочие часы, обычно в течение часа.',
       error: 'Не удалось отправить. Позвоните или напишите в WhatsApp.',
       required: 'Это поле обязательно.', agree: 'Отправляя заявку, вы принимаете',
+      emailHint: 'Необязательно — нужна только для счёта',
+      emailBad: 'Проверьте адрес e-mail.',
+      orderNo: 'Номер заявки',
     },
     cookie: {
       title: 'Файлы cookie', text: 'Мы используем cookie. Необходимые — чтобы сайт работал. Аналитические включаем только с вашего согласия.',
@@ -181,6 +205,12 @@ export const UI: Record<Locale, UiStrings> = {
     },
     footer: { services: 'Услуги', company: 'Компания', legal: 'Документы', rights: 'Все права защищены', photos: 'Фото' },
     a11y: { skip: 'Перейти к содержимому', menu: 'Меню', close: 'Закрыть', lang: 'Язык', remove: 'Удалить', add: 'Добавить', minus: 'Меньше', plus: 'Больше' },
+    alt: {
+      about: 'Инструменты бригады HAWK.FIX, готовые к выезду в Варшаве',
+      interior: 'Светлая квартира в Варшаве после мелкого ремонта',
+      keys: 'Передача ключей после уборки под возврат залога в Варшаве',
+      workshop: 'Мастерская — инструменты для домашнего ремонта',
+    },
   },
 
   en: {
@@ -189,7 +219,7 @@ export const UI: Record<Locale, UiStrings> = {
     hero: {
       eyebrow: 'Home services · Warsaw',
       kicker: 'Warsaw and 25 km around',
-      tagline: 'A handyman whose\nprice you know upfront.',
+      tagline: 'Home repairs booked in a minute — price known upfront.',
       sub: 'Tick what needs doing — price and time add up as you go. No phone tag, no “we’ll quote on site”.',
       scroll: 'See how it works',
     },
@@ -220,6 +250,9 @@ export const UI: Record<Locale, UiStrings> = {
       ok: 'We’ve got your request.', okNote: 'We reply during working hours, usually within the hour.',
       error: 'Sending failed. Call us or write on WhatsApp.',
       required: 'This field is required.', agree: 'By sending the request you accept the',
+      emailHint: 'Optional — only needed for an invoice',
+      emailBad: 'Check the e-mail address.',
+      orderNo: 'Request number',
     },
     cookie: {
       title: 'Cookies', text: 'We use cookies. The necessary ones keep the site working. Analytics load only with your consent.',
@@ -230,14 +263,26 @@ export const UI: Record<Locale, UiStrings> = {
     },
     footer: { services: 'Services', company: 'Company', legal: 'Legal', rights: 'All rights reserved', photos: 'Photos' },
     a11y: { skip: 'Skip to content', menu: 'Menu', close: 'Close', lang: 'Language', remove: 'Remove', add: 'Add', minus: 'Less', plus: 'More' },
+    alt: {
+      about: 'HAWK.FIX crew tools ready for a call-out in Warsaw',
+      interior: 'A bright Warsaw flat after small repairs',
+      keys: 'Handing over keys after end-of-tenancy cleaning in Warsaw',
+      workshop: 'Handyman workshop — tools for home repairs',
+    },
   },
+}
+
+/** Alt для фото услуги: название + город. Так снимок участвует
+ *  в поиске по картинкам по локальному запросу. */
+export function serviceAlt(h1: string, city = 'Warszawa'): string {
+  return h1.includes(city) ? h1 : `${h1} — ${city}`
 }
 
 export const CONTACT = {
   phone: '+48 532 481 505',
   phoneHref: 'tel:+48532481505',
   whatsapp: '48735369350',
-  email: 'info@hawkfix.pl',
+  email: 'hawk.fix.office@gmail.com',
   facebook: 'https://www.facebook.com/profile.php?id=61593152744112',
   city: 'Warszawa',
   radiusKm: 25,

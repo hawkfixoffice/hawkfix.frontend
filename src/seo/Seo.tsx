@@ -1,6 +1,7 @@
 import { Head } from 'vite-react-ssg'
 import { HREFLANG, OG_LOCALE, SITE, type Locale, LOCALES } from '../lib/types'
 import type { PageRec } from '../lib/types'
+import { keywords } from '../data/keywords'
 
 interface Props {
   page: PageRec
@@ -24,6 +25,7 @@ export default function Seo({ page, locale, schema, title, description, ogImage 
   const t = title ?? tr.title
   const d = description ?? tr.description
   const img = SITE + (ogImage ?? `/og/og-${locale}.png`)
+  const kw = keywords[page.key]?.[locale] ?? []
 
   return (
     <Head>
@@ -37,7 +39,11 @@ export default function Seo({ page, locale, schema, title, description, ogImage 
       ))}
       <link rel="alternate" hrefLang="x-default" href={SITE + page.paths.pl} />
 
-      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      {/* Google этот тег игнорирует с 2009-го; держим для Яндекса и внутренней
+          навигации по семантике. Настоящая работа с запросами — в title,
+          description, заголовках, alt и schema.org keywords. */}
+      {kw.length > 0 && <meta name="keywords" content={kw.join(', ')} />}
       <meta name="author" content="HAWK.FIX" />
       <meta name="theme-color" content="#111312" />
 
@@ -57,6 +63,9 @@ export default function Seo({ page, locale, schema, title, description, ogImage 
       <meta name="twitter:title" content={t} />
       <meta name="twitter:description" content={d} />
       <meta name="twitter:image" content={img} />
+      <meta name="twitter:image:alt" content={t} />
+
+      <link rel="manifest" href="/manifest.webmanifest" />
 
       {schema ? (
         <script type="application/ld+json">{JSON.stringify(schema)}</script>

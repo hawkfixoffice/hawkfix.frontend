@@ -12,7 +12,11 @@
     "assets:photos": "node tools/fetch-photos.mjs",
     "content:split": "node tools/split-content.mjs",
     "shot": "node tools/shot.mjs",
-    "check:css": "node tools/check-css.mjs"
+    "check:css": "node tools/check-css.mjs",
+    "seo:keywords": "python3 tools/build-keywords.py",
+    "seo:audit": "python3 tools/audit-seo-full.py",
+    "assets:images": "sh tools/build-images.sh",
+    "assets:lottie": "python3 tools/build-lottie.py"
   },
   "dependencies": {
     "lottie-web": "^5.13.0",
