@@ -1,18 +1,31 @@
 import { Link, useLoaderData } from 'react-router-dom'
-import { KEY_PAGES, groups, items, pathOf, settings } from '../data/content'
+import { KEY_PAGES, groups, items, pathOf, services, settings } from '../data/content'
 import type { PageBody } from '../lib/types'
+import { toSections } from '../lib/sections'
 import { usePage } from '../components/PageContext'
-import Blocks from '../components/Blocks'
 import Breadcrumbs from '../components/Breadcrumbs'
+import Picture from '../components/Picture'
 import Icon from '../components/Icon'
+import Reveal from '../components/Reveal'
+
+const GROUP_PHOTO: Record<string, string> = Object.fromEntries(
+  services.filter((s) => s.group && s.image).map((s) => [s.group as string, s.image as string]),
+)
 
 export default function PricesPage() {
   const { page, locale, t } = usePage()
   const tr = page.tr[locale]
   const body = (useLoaderData() as PageBody | undefined) ?? { blocks: [] }
+  const sections = toSections(body.blocks)
+  const cur = settings.currency
+
   const rows = groups
     .map((g) => ({ g, list: items.filter((i) => i.group === g.key) }))
     .filter((x) => x.list.length)
+
+  // «W cenie» / «Poza ceną» — два коротких списка со старой страницы
+  const shortLists = sections.filter((s) => s.lists.length && (s.lists[0]?.length ?? 0) <= 8 && s.heading)
+  const notes = sections.filter((s) => !s.lists.length && s.paras.length)
 
   return (
     <>
@@ -22,20 +35,59 @@ export default function PricesPage() {
             { name: t.breadcrumbs.home, to: pathOf(KEY_PAGES.home, locale) },
             { name: tr.h1, to: page.paths[locale] },
           ]} />
-          <h1>{tr.h1}</h1>
-          <p className="pagehead__lead prose">{tr.description}</p>
-          <div className="pagehead__actions">
-            <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
-              {t.cta.quote} <Icon name="arrow" size={17} />
-            </Link>
+          <div className="pagehead__split">
+            <div>
+              <h1>{tr.h1}</h1>
+              <p className="pagehead__lead">{tr.description}</p>
+              <div className="pagehead__actions">
+                <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
+                  {t.cta.quote} <Icon name="arrow" size={17} />
+                </Link>
+              </div>
+            </div>
+            <div className="blocks blocks--stat pagehead__stats">
+              <div className="blk blk--accent">
+                <p className="blk__n">{t.home.minVisitTitle}</p>
+                <p className="blk__v">{settings.minVisit} {cur}</p>
+              </div>
+              <div className="blk blk--mute">
+                <p className="blk__n">{t.nav.prices}</p>
+                <p className="blk__v">{items.length}</p>
+              </div>
+              <div className="blk blk--dark">
+                <p className="blk__n">{t.form.urgent}</p>
+                <p className="blk__v">+{settings.urgentPct}%</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Оглавление по группам — чтобы 105 позиций не превращались в стену */}
+      {/* что входит и что нет — двумя контрастными блоками */}
+      {shortLists.length > 0 && (
+        <section className="band band--tight">
+          <div className="wrap">
+            <div className="blocks blocks--2">
+              {shortLists.slice(0, 2).map((sec, i) => (
+                <Reveal key={sec.heading} delay={i * 80}>
+                  <div className={`blk ${i === 0 ? 'blk--accent' : 'blk--dark'}`}>
+                    <h2 className="blk__t">{sec.heading}</h2>
+                    <ul className="blk__list">
+                      {(sec.lists[0] ?? []).map((x) => (
+                        <li key={x}><Icon name={i === 0 ? 'check' : 'minus'} size={15} /><span>{x}</span></li>
+                      ))}
+                    </ul>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="band band--tight">
         <div className="wrap">
-          <nav className="toc" aria-label={t.prices.group}>
+          <nav className="chipwall" aria-label={t.prices.group}>
             {rows.map(({ g, list }) => (
               <a className="chip" key={g.key} href={`#${g.key}`}>
                 {g.name[locale] ?? g.key}
@@ -45,32 +97,46 @@ export default function PricesPage() {
           </nav>
 
           <div className="pricegroups">
-            {rows.map(({ g, list }) => (
-              <section className="pricegroup" id={g.key} key={g.key}>
-                <div className="pricegroup__head">
-                  <h2>{g.name[locale] ?? g.key}</h2>
-                  <p className="num">
-                    {t.prices.from} {Math.min(...list.map((i) => i.price))} {settings.currency}
-                  </p>
-                </div>
-                <ul className="pricelist">
-                  {list.map((i) => (
-                    <li key={i.key}>
-                      <span>{i.name[locale]}</span>
-                      <span className="num">
-                        {i.price} {settings.currency}
-                        <small> / {settings.units[locale]?.[i.unit] ?? i.unit}</small>
+            {rows.map(({ g, list }, gi) => (
+              <Reveal as="section" key={g.key} delay={Math.min(gi, 4) * 50}>
+                <section className="pricegroup" id={g.key}>
+                  <div className="pricegroup__head">
+                    {GROUP_PHOTO[g.key] && (
+                      <span className="pricegroup__thumb">
+                        <Picture name={GROUP_PHOTO[g.key]} alt="" ratio="3x2" widths={[800]} sizes="96px" />
                       </span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
+                    )}
+                    <h2>{g.name[locale] ?? g.key}</h2>
+                    <p className="num">
+                      {t.prices.from} {Math.min(...list.map((i) => i.price))} {cur}
+                    </p>
+                  </div>
+                  <ul className="pricelist">
+                    {list.map((i) => (
+                      <li key={i.key}>
+                        <span>{i.name[locale]}</span>
+                        <span className="num">
+                          {i.price} {cur}
+                          <small> / {settings.units[locale]?.[i.unit] ?? i.unit}</small>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </Reveal>
             ))}
           </div>
 
-          <div className="doc doc--wide pricenotes">
-            <Blocks blocks={body.blocks} />
-          </div>
+          {notes.length > 0 && (
+            <div className="pricenotes">
+              {notes.map((sec) => (
+                <div key={sec.heading || sec.paras[0]}>
+                  {sec.heading && <h2 className="sec-h2">{sec.heading}</h2>}
+                  {sec.paras.map((x) => <p key={x}>{x}</p>)}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

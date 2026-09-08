@@ -9,12 +9,15 @@ import ServicesHub from './pages/ServicesHub'
 import ServicePage from './pages/ServicePage'
 import PricesPage from './pages/PricesPage'
 import ContentPage from './pages/ContentPage'
+import AboutPage from './pages/AboutPage'
+import ContactPage from './pages/ContactPage'
 import NotFound from './pages/NotFound'
 import { buildSchema } from './seo/buildSchema'
 
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/components.css'
+import './styles/blocks.css'
 import './styles/sections.css'
 import './styles/content.css'
 
@@ -24,6 +27,8 @@ function view(type: string) {
     case 'services': return <ServicesHub />
     case 'service': return <ServicePage />
     case 'prices': return <PricesPage />
+    case 'about': return <AboutPage />
+    case 'contact': return <ContactPage />
     case 'legal': return <ContentPage narrow />
     default: return <ContentPage />
   }

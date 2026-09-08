@@ -17,22 +17,28 @@
   padding-block: clamp(72px, 13vw, 168px) clamp(96px, 15vw, 190px);
   max-width: min(var(--maxw), 100%);
 }
-.hero__kicker {
-  display: inline-flex; align-items: center; gap: var(--sp-2);
-  font-family: var(--font-mono); font-size: var(--fs-label);
-  letter-spacing: var(--ls-label); text-transform: uppercase;
-  color: var(--on-dark); background: rgb(255 255 255 / 12%);
-  border: 1px solid rgb(255 255 255 / 16%); border-radius: var(--r-pill);
-  padding: 7px var(--sp-4); margin: 0 0 var(--sp-5);
+/* Категория над заголовком — мелко и плотно, как в референсе */
+.hero__eyebrow {
+  font-size: var(--fs-label); font-weight: 600; letter-spacing: var(--ls-label);
+  text-transform: uppercase; color: rgb(255 255 255 / 72%);
+  margin: 0 0 var(--sp-4);
+}
+/* Заголовок героя средний: доминировать должен вордмарк, а не он */
+.hero__tagline {
+  font-size: clamp(1.9rem, 3.9vw, 3.1rem); font-weight: 700;
+  letter-spacing: -0.035em; line-height: 1.06; margin: 0 0 var(--sp-4);
+  max-width: 20ch;
+}
+/* Плашка набрана предложением: разогнанный капс выдаёт шаблон */
+.hero__pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.875rem; color: var(--on-dark);
+  background: rgb(255 255 255 / 13%); border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: var(--r-pill); padding: 8px 16px; margin: 0 0 var(--sp-4);
   backdrop-filter: blur(6px);
 }
-.hero__tagline {
-  font-size: clamp(2.2rem, 6.2vw, 5rem); font-weight: 700;
-  letter-spacing: -0.04em; line-height: 1.02; margin: 0 0 var(--sp-5);
-  max-width: 18ch;
-}
 .hero__tagline span { display: block; }
-.hero__sub { max-width: 46ch; color: rgb(255 255 255 / 88%); font-size: var(--fs-lead); margin-bottom: var(--sp-6); }
+.hero__sub { max-width: 44ch; color: rgb(255 255 255 / 86%); font-size: 1rem; margin-bottom: var(--sp-5); }
 .hero__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
 /* Гигантский вордмарк, выходящий за нижний край — как в референсе */
 .hero__mark {
@@ -48,11 +54,35 @@
 }
 .secthead h2 { max-width: 20ch; }
 
-.benefit { margin-block: var(--sp-4) clamp(28px, 4vw, 56px); }
-.benefit__head { max-width: 22ch; }
-.benefit__lead { margin-top: var(--sp-4); font-size: var(--fs-lead); }
-.benefit__cards { margin-top: var(--sp-5); }
-.minvisit__note { font-size: var(--fs-sm); margin-top: var(--sp-3); color: color-mix(in srgb, var(--ink) 78%, transparent); }
+.benefit__head { max-width: 20ch; margin-block: var(--sp-3) clamp(24px, 3.5vw, 44px); }
+.benefit__grid { align-items: stretch; }
+.benefit__right { align-items: stretch; }
+.benefit__photo { min-height: 340px; }
+
+/* Шаги: средний блок тёмный — ритм из референса */
+.step-blk { min-height: 190px; justify-content: space-between; }
+.step-blk .blk__t { font-size: clamp(1.05rem, 1.6vw, 1.35rem); }
+
+.secthead__aside { max-width: 34ch; color: var(--on-dark-2); font-size: var(--fs-sm); margin: 0; }
+
+/* Плитки услуг: фото во всю карточку, цена бейджем, текст снизу поверх */
+.svc-grid {
+  display: grid; gap: clamp(10px, 1.2vw, 16px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.svc-tile { display: block; text-decoration: none; color: var(--on-dark); aspect-ratio: 4 / 5; }
+.svc-tile img { transition: transform 700ms var(--ease); }
+.svc-tile:hover img { transform: scale(1.05); }
+.svc-tile::after {
+  content: ''; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top, rgb(12 14 17 / 88%) 0%, rgb(12 14 17 / 30%) 38%, transparent 62%);
+}
+.svc-tile__body { position: absolute; z-index: 2; inset: auto 0 0 0; padding: var(--sp-5); display: grid; gap: 6px; }
+.svc-tile__body h3 { font-size: 1.15rem; color: var(--on-dark); }
+.svc-tile__body p { font-size: 0.875rem; color: rgb(255 255 255 / 80%); margin: 0; }
+
+.faq-blocks { align-content: start; }
+.about-panel { min-height: 420px; }
 
 /* Карточка услуги */
 .svc { position: relative; display: flex; flex-direction: column; color: inherit; }
@@ -78,16 +108,6 @@
   letter-spacing: -0.04em; line-height: 1; color: var(--accent);
 }
 
-/* Блок «что беспокоит» */
-.faqband__head { margin-block: var(--sp-3) var(--sp-5); max-width: 16ch; }
-.faq { display: grid; gap: var(--sp-3); }
-.faq__item h3 { font-size: 1.05rem; margin-bottom: var(--sp-2); }
-.faq__item p { color: var(--ink-3); font-size: var(--fs-sm); margin: 0; }
-.faqband__media { position: sticky; top: 96px; }
-.faqband__media .media { border-radius: var(--r-card) var(--r-card) 0 0; }
-.faqband__mediaBody { padding: var(--sp-5); display: grid; gap: var(--sp-3); justify-items: start; }
-.faqband__mediaBody p { color: var(--ink-3); font-size: var(--fs-sm); margin: 0; }
-
 /* ============================ КАЛЬКУЛЯТОР ============================ */
 .calcband { background: var(--paper-2); }
 .calcband__head { display: flex; flex-wrap: wrap; gap: var(--sp-5); justify-content: space-between; align-items: flex-end; margin-bottom: var(--sp-6); }
@@ -110,12 +130,17 @@
 .calc__search button { border: 0; background: none; color: var(--ink-3); width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; }
 .calc__search button:hover { background: var(--paper-2); color: var(--ink); }
 
+/* Подсказка о черновике — тонкая строка, а не широкая розовая плашка */
 .calc__restored {
-  display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap;
-  background: var(--accent-soft); color: var(--accent-text);
-  border-radius: var(--r-sm); padding: var(--sp-3) var(--sp-4); font-size: var(--fs-sm); margin: 0;
+  display: inline-flex; align-items: center; gap: 8px; align-self: start;
+  color: var(--ink-3); font-size: 0.8125rem; margin: 0;
 }
-.calc__restored button { border: 0; background: none; text-decoration: underline; color: inherit; padding: 0; min-height: var(--tap); }
+.calc__restored svg { color: var(--ok); flex: none; }
+.calc__restored button {
+  border: 0; background: none; text-decoration: underline; color: var(--ink-2);
+  padding: 0 4px; min-height: 32px; font-size: inherit;
+}
+.calc__restored button:hover { color: var(--ink); }
 
 .calc__popular { display: grid; gap: var(--sp-3); }
 .calc__chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
@@ -128,21 +153,31 @@
 .calc__groups { display: grid; gap: var(--sp-2); }
 .grp { background: var(--card); border: 1px solid var(--line-card); border-radius: var(--r-card); overflow: hidden; }
 .grp > summary {
-  display: flex; align-items: center; gap: var(--sp-3);
-  padding: var(--sp-4) var(--sp-5); min-height: 60px; cursor: pointer; list-style: none;
+  display: flex; align-items: center; gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4); min-height: 76px; cursor: pointer; list-style: none;
 }
+.grp__thumb {
+  flex: none; width: 64px; aspect-ratio: 3 / 2; border-radius: 12px;
+  overflow: hidden; background: var(--paper-2);
+}
+.grp__thumb picture, .grp__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.grp__text { display: grid; gap: 2px; min-width: 0; }
 .grp > summary::-webkit-details-marker { display: none; }
 .grp > summary:hover { background: var(--paper); }
-.grp__name { font-weight: 600; }
+.grp__name { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.015em; }
 .grp__badge {
   display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 6px;
   border-radius: var(--r-pill); background: var(--accent); color: var(--ink); font-size: 0.75rem;
 }
-.grp__meta { margin-inline-start: auto; font-size: 0.8125rem; color: var(--ink-3); white-space: nowrap; }
-.grp__chev { color: var(--ink-3); transition: transform var(--dur) var(--ease); flex: none; }
+.grp__meta { font-size: 0.8125rem; color: var(--ink-3); white-space: nowrap; }
+/* Шеврон всегда у правого края, значок счётчика — рядом с ним */
+.grp__chev { margin-inline-start: auto; color: var(--ink-3); transition: transform var(--dur) var(--ease); flex: none; }
+.grp__badge + .grp__chev { margin-inline-start: 0; }
+.grp__text + .grp__badge { margin-inline-start: auto; }
 .grp[open] > summary .grp__chev { transform: rotate(180deg); }
 
 .ilist { display: grid; }
+.ilist--card { background: var(--card); border: 1px solid var(--line-card); border-radius: var(--r-card); overflow: hidden; }
 .grp .ilist { border-top: 1px solid var(--line-card); }
 .irow {
   display: flex; align-items: center; gap: var(--sp-4);
@@ -191,7 +226,15 @@
 .sum__clear:hover { color: var(--ink); }
 .sum__empty { color: var(--ink-3); font-size: var(--fs-sm); margin: 0; }
 .sum__lines { display: grid; gap: var(--sp-2); max-height: 300px; overflow-y: auto; }
-.sum__lines li { display: grid; grid-template-columns: 1fr auto auto auto; gap: var(--sp-2); align-items: center; font-size: 0.875rem; }
+.sum__lines li[data-flash='yes'] {
+  animation: sum-in 900ms var(--ease);
+}
+@keyframes sum-in {
+  0%   { background: color-mix(in srgb, var(--accent) 26%, transparent); transform: translateX(-6px); }
+  100% { background: transparent; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .sum__lines li[data-flash='yes'] { animation: none; } }
+.sum__lines li { border-radius: 8px; padding: 2px 4px; margin-inline: -4px; display: grid; grid-template-columns: 1fr auto auto auto; gap: var(--sp-2); align-items: center; font-size: 0.875rem; }
 .sum__ln { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sum__lq { color: var(--ink-3); }
 .sum__lp { font-weight: 500; }
@@ -205,6 +248,10 @@
 .sum__note { display: flex; gap: var(--sp-2); font-size: 0.8125rem; color: var(--ink-3); margin: 0; }
 .sum__note svg { flex: none; margin-top: 2px; }
 
+.sum__totalLabel {
+  font-size: 0.75rem; font-weight: 600; letter-spacing: var(--ls-label);
+  text-transform: uppercase; color: var(--ink-3); margin: 0 0 4px;
+}
 .sum__total { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-4); padding-top: var(--sp-4); border-top: 1px solid var(--line-card); }
 .sum__big { font-family: var(--font-display); font-size: clamp(1.9rem, 3.4vw, 2.6rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; margin: 0; }
 .sum__time { display: flex; align-items: center; gap: var(--sp-2); color: var(--ink-3); font-size: var(--fs-sm); }
@@ -277,9 +324,17 @@
   .calc__sum { position: static; }
   .faqband__media { position: static; }
 }
+@media (max-width: 1080px) {
+  .svc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 900px) {
   .secthead { flex-direction: column; align-items: flex-start; }
   .hero__mark { margin-bottom: -0.06em; }
+  .benefit__photo, .about-panel { min-height: 300px; }
+}
+@media (max-width: 640px) {
+  .svc-grid { grid-template-columns: minmax(0, 1fr); }
+  .svc-tile { aspect-ratio: 4 / 3; }
 }
 @media (max-width: 640px) {
   .lead__grid { grid-template-columns: 1fr; }

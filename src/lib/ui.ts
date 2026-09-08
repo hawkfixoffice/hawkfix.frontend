@@ -5,7 +5,7 @@ import type { Locale } from './types'
 export interface UiStrings {
   nav: { services: string; prices: string; about: string; contact: string }
   cta: { quote: string; call: string; whatsapp: string; more: string; allServices: string; toQuote: string }
-  hero: { kicker: string; tagline: string; sub: string; scroll: string }
+  hero: { eyebrow: string; kicker: string; tagline: string; sub: string; scroll: string }
   home: {
     benefitLabel: string; benefitHead: string; benefitHeadTail: string; benefitLead: string
     minVisitTitle: string; minVisitNote: string
@@ -40,6 +40,7 @@ export const UI: Record<Locale, UiStrings> = {
     nav: { services: 'Usługi', prices: 'Cennik', about: 'O nas', contact: 'Kontakt' },
     cta: { quote: 'Policz cenę', call: 'Zadzwoń', whatsapp: 'WhatsApp', more: 'Więcej', allServices: 'Wszystkie usługi', toQuote: 'Do wyceny' },
     hero: {
+      eyebrow: 'Serwis domowy · Warszawa',
       kicker: 'Warszawa i 25 km wokół',
       tagline: 'Złota rączka,\nktórej cenę znasz z góry.',
       sub: 'Zaznaczasz, co jest do zrobienia — cena i czas liczą się na bieżąco. Bez telefonu, bez „wycenimy na miejscu”.',
@@ -88,6 +89,7 @@ export const UI: Record<Locale, UiStrings> = {
     nav: { services: 'Послуги', prices: 'Ціни', about: 'Про нас', contact: 'Контакти' },
     cta: { quote: 'Порахувати ціну', call: 'Подзвонити', whatsapp: 'WhatsApp', more: 'Докладніше', allServices: 'Усі послуги', toQuote: 'До кошторису' },
     hero: {
+      eyebrow: 'Домашній сервіс · Варшава',
       kicker: 'Варшава і 25 км навколо',
       tagline: 'Майстер,\nчию ціну ви знаєте наперед.',
       sub: 'Позначаєте, що треба зробити — ціна й час рахуються одразу. Без дзвінків і без «оцінимо на місці».',
@@ -136,6 +138,7 @@ export const UI: Record<Locale, UiStrings> = {
     nav: { services: 'Услуги', prices: 'Цены', about: 'О нас', contact: 'Контакты' },
     cta: { quote: 'Посчитать цену', call: 'Позвонить', whatsapp: 'WhatsApp', more: 'Подробнее', allServices: 'Все услуги', toQuote: 'К смете' },
     hero: {
+      eyebrow: 'Домашний сервис · Варшава',
       kicker: 'Варшава и 25 км вокруг',
       tagline: 'Мастер,\nцену которого вы знаете заранее.',
       sub: 'Отмечаете, что нужно сделать — цена и время считаются сразу. Без звонков и без «оценим на месте».',
@@ -184,6 +187,7 @@ export const UI: Record<Locale, UiStrings> = {
     nav: { services: 'Services', prices: 'Prices', about: 'About', contact: 'Contact' },
     cta: { quote: 'Get a price', call: 'Call', whatsapp: 'WhatsApp', more: 'Learn more', allServices: 'All services', toQuote: 'To the quote' },
     hero: {
+      eyebrow: 'Home services · Warsaw',
       kicker: 'Warsaw and 25 km around',
       tagline: 'A handyman whose\nprice you know upfront.',
       sub: 'Tick what needs doing — price and time add up as you go. No phone tag, no “we’ll quote on site”.',

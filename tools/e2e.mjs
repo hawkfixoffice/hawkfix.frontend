@@ -28,10 +28,21 @@ check(consent && JSON.parse(consent).analytics === false, 'выбор запис
 // --- калькулятор: добавление позиции пересчитывает сумму ---
 await page.evaluate(() => document.querySelector('#wycena')?.scrollIntoView())
 await new Promise((r) => setTimeout(r, 400))
-const totalBefore = await page.$eval('.sum__big', (e) => e.textContent.trim())
+/** Сумма набегает анимацией — ждём, пока значение перестанет меняться. */
+async function settledTotal() {
+  let prev = null
+  for (let i = 0; i < 25; i++) {
+    const now = await page.$eval('.sum__big', (e) => e.textContent.trim())
+    if (now === prev) return now
+    prev = now
+    await new Promise((r) => setTimeout(r, 120))
+  }
+  return prev
+}
+
+const totalBefore = await settledTotal()
 await page.click('.calc__chips .chip--pick')
-await new Promise((r) => setTimeout(r, 350))
-const totalAfter = await page.$eval('.sum__big', (e) => e.textContent.trim())
+const totalAfter = await settledTotal()
 check(totalBefore !== totalAfter, `сумма пересчиталась: «${totalBefore}» → «${totalAfter}»`)
 
 // минимум выезда: одна дешёвая позиция должна подтянуться до минимума

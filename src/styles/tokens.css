@@ -27,8 +27,8 @@
   --warn: #9a5b00;
 
   /* --- типографика --- */
-  --font-display: 'Inter Tight', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-body: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* Дисплейная шкала: fluid, но с потолком — на 4K заголовок не разъезжается */
@@ -39,13 +39,14 @@
   --fs-lead: clamp(1.0625rem, 1.5vw, 1.3rem);
   --fs-body: 1.0625rem;      /* 17px — на мобиле не мельче 16 */
   --fs-sm: 0.9375rem;
-  --fs-label: 0.6875rem;     /* моно-лейблы секций */
+  --fs-label: 0.75rem;       /* лейблы секций — обычный гротеск, не моно */
 
   --lh-tight: 0.95;
   --lh-head: 1.05;
   --lh-body: 1.6;
   --ls-display: -0.035em;
-  --ls-label: 0.14em;
+  /* Узкий трекинг: широко разогнанный капс — первое, что выдаёт шаблон */
+  --ls-label: 0.04em;
 
   /* --- геометрия --- */
   --r-card: 24px;

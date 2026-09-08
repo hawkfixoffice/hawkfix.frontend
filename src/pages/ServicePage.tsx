@@ -5,6 +5,7 @@ import { usePage } from '../components/PageContext'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Picture from '../components/Picture'
 import Icon from '../components/Icon'
+import Reveal from '../components/Reveal'
 import { CONTACT } from '../lib/ui'
 
 export default function ServicePage() {
@@ -113,8 +114,9 @@ export default function ServicePage() {
             </Link>
           </div>
           <div className="grid grid--3">
-            {others.map((s) => (
-              <Link className="card card--flush svc" key={s.key} to={s.paths[locale]}>
+            {others.map((s, i) => (
+              <Reveal key={s.key} delay={i * 70}>
+              <Link className="card card--flush svc" to={s.paths[locale]}>
                 <div className="media media--3x2">
                   <Picture name={s.image!} alt={s.tr[locale].h1} sizes="(max-width: 900px) 100vw, 32vw" />
                 </div>
@@ -123,6 +125,7 @@ export default function ServicePage() {
                   <p>{s.tr[locale].blurb}</p>
                 </div>
               </Link>
+              </Reveal>
             ))}
           </div>
         </div>

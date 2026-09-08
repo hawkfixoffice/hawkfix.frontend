@@ -4,6 +4,7 @@ import { usePage } from '../components/PageContext'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Picture from '../components/Picture'
 import Icon from '../components/Icon'
+import Reveal from '../components/Reveal'
 
 export default function ServicesHub() {
   const { page, locale, t } = usePage()
@@ -25,8 +26,9 @@ export default function ServicesHub() {
       <section className="band band--tight">
         <div className="wrap">
           <div className="grid grid--3">
-            {services.map((s) => (
-              <Link className="card card--flush svc" key={s.key} to={s.paths[locale]}>
+            {services.map((s, i) => (
+              <Reveal key={s.key} delay={(i % 3) * 60}>
+              <Link className="card card--flush svc" to={s.paths[locale]}>
                 <div className="media media--3x2">
                   <Picture name={s.image!} alt={s.tr[locale].h1} sizes="(max-width: 900px) 100vw, 32vw" />
                 </div>
@@ -36,6 +38,7 @@ export default function ServicesHub() {
                 </div>
                 <span className="svc__go" aria-hidden="true"><Icon name="arrowUpRight" size={18} /></span>
               </Link>
+              </Reveal>
             ))}
           </div>
         </div>

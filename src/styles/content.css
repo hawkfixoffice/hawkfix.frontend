@@ -76,3 +76,61 @@
 .detail__intro { color: var(--ink-2); margin: 0; }
 .detail__note { font-size: 0.8125rem; color: var(--ink-3); line-height: 1.55; }
 .detail__note p { margin: 0; }
+
+/* ================= страницы: шапка со статистикой ================= */
+.pagehead__split {
+  display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 48px); align-items: end;
+}
+.pagehead__stats { align-self: stretch; }
+.pagehead__stats .blk { justify-content: space-between; min-height: 132px; }
+
+.sec-h2 { font-size: clamp(1.4rem, 2.6vw, 2.1rem); margin-bottom: var(--sp-5); max-width: 22ch; }
+.sec-p { margin-bottom: var(--sp-4); }
+
+/* Блок-строка списка: номер + короткая подпись */
+.blk--line { min-height: 116px; justify-content: space-between; }
+.blk__t--sm { font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; }
+.blk__s--lead { font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.55; }
+
+/* Список внутри блока */
+.blk__list { display: grid; gap: var(--sp-2); }
+.blk__list li { display: flex; gap: 10px; align-items: flex-start; font-size: var(--fs-sm); }
+.blk__list svg { flex: none; margin-top: 3px; }
+.blk--accent .blk__list li { color: color-mix(in srgb, var(--ink) 82%, transparent); }
+.blk--dark .blk__list li { color: var(--on-dark-2); }
+
+/* Стена чипов: районы, оглавление прайса */
+.chipwall { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.chipwall .chip { text-decoration: none; transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease); }
+.chipwall a.chip:hover { border-color: var(--ink); background: var(--card); }
+.chipwall .num { color: var(--ink-3); font-size: 0.75rem; }
+
+/* Фото-панели страниц */
+.about-hero, .contact-photo { min-height: 380px; }
+
+/* Карточки контактов */
+.contact-cards { align-items: stretch; }
+.contact-card { text-decoration: none; min-height: 176px; justify-content: space-between; transition: transform var(--dur) var(--ease); }
+.contact-card:hover { transform: translateY(-3px); }
+.contact-card__v { font-size: 1.0625rem; font-weight: 600; margin: 0; word-break: break-word; }
+
+/* Заголовок группы прайса с миниатюрой */
+.pricegroup__thumb {
+  flex: none; width: 84px; aspect-ratio: 3 / 2; border-radius: 12px; overflow: hidden; background: var(--paper-2);
+}
+.pricegroup__thumb picture, .pricegroup__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pricegroup__head { align-items: center; }
+.pricegroup__head h2 { flex: 1; }
+
+.pricenotes { display: grid; gap: var(--sp-5); }
+.pricenotes p { color: var(--ink-2); font-size: var(--fs-sm); max-width: var(--maxw-text); }
+
+@media (max-width: 900px) {
+  .pagehead__split { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .about-hero, .contact-photo { min-height: 300px; }
+  .pricegroup__thumb { width: 64px; }
+}
+
+.contact-below { margin-top: clamp(10px, 1.2vw, 16px); align-items: stretch; }
+.contact-notes { align-content: start; }
