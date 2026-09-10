@@ -73,18 +73,69 @@ const found = await page.$$eval('.ilist .irow__name', (n) => n.map((x) => x.text
 check(found.length > 0, `поиск «kran» нашёл ${found.length} позиц.`)
 await page.click('.calc__search button')
 
-// --- отправка заявки ---
+// --- отправка заявки: форма идёт по шагам ---
+// Шаг 1 — контакты
 await page.type('#lf-name', 'TEST E2E')
 await page.type('#lf-phone', '+48 500 111 333')
+await page.click('.lead__nav .lead__submit')
+await page.waitForSelector('.addr__box input', { timeout: 8000 })
+check(true, 'шаг 1 → 2: контакты приняты, показан адрес')
+
+// Имя запомнилось на устройстве — приветствие над поиском
+const remembered = await page.evaluate(() => localStorage.getItem('hawkfix.client'))
+check(remembered && JSON.parse(remembered).name === 'TEST E2E', 'имя записано в localStorage')
+
+// Шаг 2 — адрес с подсказками из OSM
+await page.type('.addr__box input', 'Marszalkowska 10')
+const suggested = await page.waitForSelector('.addr__list button', { timeout: 12000 }).catch(() => null)
+check(Boolean(suggested), 'геокодер отдал подсказки адреса')
+if (suggested) {
+  await suggested.click()
+  const picked = await page.$eval('.addr__box input', (e) => e.value)
+  check(picked.length > 6, `адрес подтверждён выбором: «${picked}»`)
+}
+await page.click('.lead__nav .lead__submit')
+
+// Шаг 3 — дата, следом окна приезда
+await page.waitForSelector('#lf-when', { timeout: 8000 })
+const day = new Date(Date.now() + 3 * 864e5).toISOString().slice(0, 10)
+await page.evaluate((d) => {
+  const el = document.querySelector('#lf-when')
+  const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set
+  setter.call(el, d)
+  el.dispatchEvent(new Event('input', { bubbles: true }))
+}, day)
+const slot = await page.waitForSelector('.slot', { timeout: 8000 }).catch(() => null)
+check(Boolean(slot), 'после выбора даты появились окна приезда')
+if (slot) await slot.click()
+check(await page.$eval('.slot[data-on]', (e) => e.textContent.trim()).catch(() => null),
+      'окно приезда выбрано')
+await page.click('.lead__nav .lead__submit')
+
+// Шаг 4 — детали и отправка
+await page.waitForSelector('#lf-comment', { timeout: 8000 })
 await page.type('#lf-comment', 'автотест, удалить')
+check((await page.$$('.lead__recap li')).length >= 3, 'на последнем шаге показана сводка заявки')
 await page.screenshot({ path: `${SHOTS}/e2e-form.png`, clip: await page.$eval('.calc__sum', (e) => {
   const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: Math.min(r.height, 900) }
 }) })
-await page.click('.lead__submit')
+await page.click('.lead__nav .lead__submit')
+
+// Чек печатается поверх страницы, потом улетает
+const receipt = await page.waitForSelector('.rcp', { timeout: 8000 }).catch(() => null)
+check(Boolean(receipt), 'показана печать чека на весь экран')
+await page.waitForSelector('.rcp__amount', { timeout: 8000 })
+await new Promise((r) => setTimeout(r, 900))
+await page.screenshot({ path: `${SHOTS}/e2e-receipt.png` })
+check(await page.$eval('.rcp__rows .num', (e) => e.textContent.trim()) === 'HF-E2E-0001',
+      'на чеке напечатан номер заявки из ответа')
+
 await page.waitForSelector('.lead--ok', { timeout: 20000 })
 check(true, 'заявка отправлена, показан экран успеха')
 check(submitted?.contact?.name === 'TEST E2E' && Array.isArray(submitted?.items),
       `в запросе ушли контакт и ${submitted?.items?.length ?? 0} позиц.`)
+check(Boolean(submitted?.place?.address) && submitted?.whenTime,
+      `адрес и окно приезда ушли в заявку (${submitted?.whenTime})`)
 check(await page.$eval('.lead__order b', (e) => e.textContent.trim()) === 'HF-E2E-0001',
       'номер заказа из ответа показан клиенту')
 

@@ -231,12 +231,12 @@
 
 /* --- панель сметы --- */
 .calc__sum { position: sticky; top: 88px; }
-.sum { background: var(--paper-2); border-radius: var(--r-media); padding: clamp(20px, 2.4vw, 32px); display: grid; gap: var(--sp-4); }
+.sum { background: var(--paper-2); border-radius: var(--r-media); padding: clamp(16px, 1.7vw, 24px); display: grid; gap: var(--sp-3); }
 .sum__head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
 .sum__clear { border: 0; background: none; color: var(--ink-3); font-size: 0.8125rem; text-decoration: underline; padding: 0; min-height: 32px; }
 .sum__clear:hover { color: var(--ink); }
 .sum__empty { color: var(--ink-3); font-size: var(--fs-sm); margin: 0; }
-.sum__lines { display: grid; gap: var(--sp-2); max-height: 300px; overflow-y: auto; }
+.sum__lines { display: grid; gap: 5px; max-height: 210px; overflow-y: auto; }
 .sum__lines li[data-flash='yes'] {
   animation: sum-in 900ms var(--ease);
 }
@@ -252,30 +252,26 @@
 .sum__lines button { border: 0; background: none; color: var(--ink-3); width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; }
 .sum__lines button:hover { background: var(--paper-2); color: var(--ink); }
 
-.sum__urgent { display: flex; align-items: center; gap: var(--sp-3); font-size: var(--fs-sm); cursor: pointer; padding: var(--sp-3) var(--sp-4); background: var(--card); border-radius: var(--r-sm); min-height: var(--tap); }
-.sum__urgent input { width: 20px; height: 20px; accent-color: var(--accent); flex: none; }
-.sum__urgent .num { margin-inline-start: auto; color: var(--accent-text); font-weight: 500; }
-
 .sum__note { display: flex; gap: var(--sp-2); font-size: 0.8125rem; color: var(--ink-3); margin: 0; }
 .sum__note svg { flex: none; margin-top: 2px; }
 
-.sum__totalLabel { font-size: var(--fs-sm); color: var(--ink-3); margin: 0 0 4px; }
-.sum__total { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-4); padding-top: var(--sp-4); border-top: 1px solid var(--line-card); }
-.sum__big { font-family: var(--font-display); font-size: clamp(2.2rem, 3.8vw, 3rem); font-weight: var(--fw-head); letter-spacing: -0.035em; line-height: 1; margin: 0; }
+.sum__totalLabel { font-size: 0.8125rem; color: var(--ink-3); margin: 0 0 2px; }
+.sum__total { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-4); padding-top: var(--sp-3); border-top: 1px solid var(--line-card); }
+.sum__big { font-family: var(--font-display); font-size: clamp(1.9rem, 2.9vw, 2.4rem); font-weight: var(--fw-head); letter-spacing: -0.035em; line-height: 1; margin: 0; }
 .sum__time { display: flex; align-items: center; gap: var(--sp-2); color: var(--ink-3); font-size: var(--fs-sm); }
 
 /* --- форма заявки --- */
-.lead { display: grid; gap: var(--sp-4); }
+.lead { display: grid; gap: var(--sp-3); }
 .lead__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
 .field { display: grid; gap: 6px; min-width: 0; }
 .field--wide { grid-column: 1 / -1; }
 .field label { font-size: 0.8125rem; color: var(--ink-2); }
 .field input, .field select, .field textarea {
-  min-height: var(--tap); padding: var(--sp-3); border: 1px solid transparent;
+  min-height: 46px; padding: 10px var(--sp-3); border: 1px solid transparent;
   border-radius: var(--r-sm); background: var(--card); font-size: var(--fs-sm); width: 100%;
   transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
 }
-.field textarea { min-height: 88px; resize: vertical; }
+.field textarea { min-height: 76px; resize: vertical; }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--ink); outline: none; }
 .field input[aria-invalid='true'] { border-color: #c0392b; }
 .field__err { color: #c0392b; font-size: 0.75rem; margin: 0; }
@@ -339,6 +335,7 @@
 
 /* Подзаголовки внутри калькулятора — обычным текстом, без капса */
 .calc__subhead { font-size: var(--fs-h3); font-weight: var(--fw-head); letter-spacing: -0.02em; color: var(--ink); margin: 0; }
+.sum .calc__subhead { font-size: 1.25rem; }
 .cookie__title { font-size: var(--fs-h3); font-weight: var(--fw-head); letter-spacing: -0.02em; margin: 0; }
 
 /* ==================== МОБИЛЬНОЕ МЕНЮ НА ВЕСЬ ЭКРАН ==================== */

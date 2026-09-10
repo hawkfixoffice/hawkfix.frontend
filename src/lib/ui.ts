@@ -70,7 +70,7 @@ export const UI: Record<Locale, UiStrings> = {
     prices: { from: 'od', perUnit: 'za', group: 'Grupa', positions: 'pozycji' },
     breadcrumbs: { home: 'Strona główna' },
     form: {
-      name: 'Imię', phone: 'Telefon', email: 'E-mail', address: 'Ulica i numer', district: 'Dzielnica',
+      name: 'Imię', phone: 'Telefon', email: 'E-mail', address: 'Adres', district: 'Dzielnica',
       comment: 'Opisz, co jest do zrobienia', when: 'Kiedy', urgent: 'Dziś lub jutro (+50%)',
       submit: 'Wyślij zlecenie', sending: 'Wysyłamy…',
       ok: 'Mamy Twoje zgłoszenie.', okNote: 'Odzywamy się w godzinach pracy, zwykle w ciągu godziny.',
@@ -128,7 +128,7 @@ export const UI: Record<Locale, UiStrings> = {
     prices: { from: 'від', perUnit: 'за', group: 'Група', positions: 'позицій' },
     breadcrumbs: { home: 'Головна' },
     form: {
-      name: 'Ім’я', phone: 'Телефон', email: 'E-mail', address: 'Вулиця і номер', district: 'Район',
+      name: 'Ім’я', phone: 'Телефон', email: 'E-mail', address: 'Адреса', district: 'Район',
       comment: 'Опишіть, що треба зробити', when: 'Коли', urgent: 'Сьогодні або завтра (+50%)',
       submit: 'Надіслати заявку', sending: 'Надсилаємо…',
       ok: 'Заявку отримали.', okNote: 'Відповідаємо в робочі години, зазвичай протягом години.',
@@ -186,7 +186,7 @@ export const UI: Record<Locale, UiStrings> = {
     prices: { from: 'от', perUnit: 'за', group: 'Группа', positions: 'позиций' },
     breadcrumbs: { home: 'Главная' },
     form: {
-      name: 'Имя', phone: 'Телефон', email: 'E-mail', address: 'Улица и номер', district: 'Район',
+      name: 'Имя', phone: 'Телефон', email: 'E-mail', address: 'Адрес', district: 'Район',
       comment: 'Опишите, что нужно сделать', when: 'Когда', urgent: 'Сегодня или завтра (+50%)',
       submit: 'Отправить заявку', sending: 'Отправляем…',
       ok: 'Заявку получили.', okNote: 'Отвечаем в рабочие часы, обычно в течение часа.',
@@ -244,7 +244,7 @@ export const UI: Record<Locale, UiStrings> = {
     prices: { from: 'from', perUnit: 'per', group: 'Group', positions: 'items' },
     breadcrumbs: { home: 'Home' },
     form: {
-      name: 'Name', phone: 'Phone', email: 'Email', address: 'Street and number', district: 'District',
+      name: 'Name', phone: 'Phone', email: 'Email', address: 'Address', district: 'District',
       comment: 'Describe what needs doing', when: 'When', urgent: 'Today or tomorrow (+50%)',
       submit: 'Send the request', sending: 'Sending…',
       ok: 'We’ve got your request.', okNote: 'We reply during working hours, usually within the hour.',

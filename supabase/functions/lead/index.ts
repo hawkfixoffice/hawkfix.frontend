@@ -115,7 +115,7 @@ function buildEmail(row: Record<string, unknown>, orderNo: string) {
       ${line('E-mail', row.email)}
       ${line('Dzielnica', row.district)}
       ${line('Adres', row.address)}
-      ${line('Termin', row.when_date)}
+      ${line('Termin', [row.when_date, row.when_time].filter(Boolean).join(', '))}
       ${line('Język', row.locale, false)}
       ${line('Strona', row.page, false)}
     </table>
@@ -160,7 +160,7 @@ function buildEmail(row: Record<string, unknown>, orderNo: string) {
     row.email ? `E-mail: ${row.email}` : '',
     row.district ? `Dzielnica: ${row.district}` : '',
     row.address ? `Adres: ${row.address}` : '',
-    row.when_date ? `Termin: ${row.when_date}` : '',
+    row.when_date ? `Termin: ${row.when_date}${row.when_time ? ', ' + row.when_time : ''}` : '',
     row.comment ? `\nOpis: ${row.comment}` : '', '',
     'Kosztorys:',
     ...items.map((i) => `  - ${i.name} x${i.qty} = ${money(i.sum)}`),
@@ -188,6 +188,7 @@ const CLIENT_TEXT = {
     keep: 'Zachowaj ten e-mail — numer zgłoszenia przyda się przy kontakcie.',
     auto: 'Wiadomość wysłana automatycznie z hawkfix.pl',
     noItems: 'Bez pozycji z cennika — wycenimy na podstawie opisu.',
+    visit: 'Termin i adres', vDate: 'Kiedy', vTime: 'Okno przyjazdu', vAddr: 'Adres',
   },
   uk: {
     subject: (no: string) => `Заявка ${no} прийнята — HAWK.FIX`,
@@ -203,6 +204,7 @@ const CLIENT_TEXT = {
     keep: 'Збережіть цей лист — номер заявки знадобиться при зверненні.',
     auto: 'Лист надіслано автоматично з hawkfix.pl',
     noItems: 'Без позицій із прайсу — порахуємо за описом.',
+    visit: 'Час і адреса', vDate: 'Коли', vTime: 'Вікно приїзду', vAddr: 'Адреса',
   },
   ru: {
     subject: (no: string) => `Заявка ${no} принята — HAWK.FIX`,
@@ -218,6 +220,7 @@ const CLIENT_TEXT = {
     keep: 'Сохраните это письмо — номер заявки пригодится при обращении.',
     auto: 'Письмо отправлено автоматически с hawkfix.pl',
     noItems: 'Без позиций из прайса — посчитаем по описанию.',
+    visit: 'Время и адрес', vDate: 'Когда', vTime: 'Окно приезда', vAddr: 'Адрес',
   },
   en: {
     subject: (no: string) => `Request ${no} received — HAWK.FIX`,
@@ -233,6 +236,7 @@ const CLIENT_TEXT = {
     keep: 'Keep this e-mail — the request number helps when you get in touch.',
     auto: 'Sent automatically from hawkfix.pl',
     noItems: 'No priced items — we will quote from your description.',
+    visit: 'Time and address', vDate: 'When', vTime: 'Arrival window', vAddr: 'Address',
   },
 } as const
 
@@ -315,6 +319,23 @@ function buildClientEmail(row: Record<string, unknown>, orderNo: string) {
     </table>
   </td></tr>
 
+  ${(row.when_date || row.address) ? `<tr><td>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+           style="background:#ffffff;border-radius:20px;margin-bottom:12px">
+      <tr><td style="padding:24px 28px;font-family:${FONT}">
+        <div style="font-family:${FONT};font-size:22px;letter-spacing:-.02em;color:${INK};padding-bottom:8px">${L.visit}</div>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+          ${row.when_date ? `<tr><td style="padding:7px 16px 7px 0;font-family:${FONT};color:${MUTED};font-size:14px;white-space:nowrap">${L.vDate}</td>
+            <td style="padding:7px 0;font-family:${FONT};font-size:16px;font-weight:600;color:${INK}">${esc(row.when_date)}</td></tr>` : ''}
+          ${row.when_time ? `<tr><td style="padding:7px 16px 7px 0;font-family:${FONT};color:${MUTED};font-size:14px;white-space:nowrap">${L.vTime}</td>
+            <td style="padding:7px 0;font-family:${FONT};font-size:16px;font-weight:600;color:${INK}">${esc(row.when_time)}</td></tr>` : ''}
+          ${row.address ? `<tr><td style="padding:7px 16px 7px 0;font-family:${FONT};color:${MUTED};font-size:14px;white-space:nowrap">${L.vAddr}</td>
+            <td style="padding:7px 0;font-family:${FONT};font-size:16px;color:${INK}">${esc(row.address)}</td></tr>` : ''}
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>` : ''}
+
   <tr><td align="center" style="padding:8px 0 4px">
     <a href="tel:+48532481505" style="display:inline-block;background:${MINT};color:${INK};text-decoration:none;
        padding:14px 26px;border-radius:999px;font-size:15px;font-weight:600;font-family:${FONT}">${L.call} · +48 532 481 505</a>
@@ -331,6 +352,8 @@ function buildClientEmail(row: Record<string, unknown>, orderNo: string) {
     L.lead, '',
     `${L.total}: ${money(totals.total)}`,
     ...items.map((i) => `  - ${i.name} x${i.qty} = ${money(i.sum)}`),
+    row.when_date ? `\n${L.vDate}: ${row.when_date}${row.when_time ? `, ${row.when_time}` : ''}` : '',
+    row.address ? `${L.vAddr}: ${row.address}` : '',
     '', L.note, '', '+48 532 481 505 · hawkfix.pl',
   ].filter(Boolean).join('\n')
 
@@ -465,6 +488,9 @@ Deno.serve(async (req) => {
   const locale = LOCALES.includes(String(body.locale)) ? String(body.locale) : 'pl'
   const whenRaw = str(body.when, 20)
   const when = whenRaw && /^\d{4}-\d{2}-\d{2}$/.test(whenRaw) ? whenRaw : null
+  // Окно приезда приходит строкой «10:00-12:00»; без даты оно бессмысленно
+  const timeRaw = str(body.whenTime, 20)
+  const whenTime = when && timeRaw && /^\d{2}:\d{2}\s?[-–]\s?\d{2}:\d{2}$/.test(timeRaw) ? timeRaw : null
 
   const row = {
     locale,
@@ -474,6 +500,7 @@ Deno.serve(async (req) => {
     district: str(place.district, 120),
     address: str(place.address, 300),
     when_date: when,
+    when_time: whenTime,
     comment,
     urgent: Boolean(body.urgent),
     items,

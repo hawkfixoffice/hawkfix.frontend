@@ -19,6 +19,7 @@ import './styles/base.css'
 import './styles/components.css'
 import './styles/blocks.css'
 import './styles/sections.css'
+import './styles/lead.css'
 import './styles/content.css'
 
 function view(type: string) {

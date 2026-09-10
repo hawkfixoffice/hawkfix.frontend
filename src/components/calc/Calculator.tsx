@@ -8,6 +8,9 @@ import ItemRow from './ItemRow'
 import { usePicker } from './usePicker'
 import { useCountUp } from './useCountUp'
 import LeadForm from './LeadForm'
+import SparkDot from '../SparkDot'
+import { firstName, readProfile } from '../../lib/profile'
+import { useMorphHeight } from './useMorphHeight'
 import Collapse from '../Collapse'
 
 /** Часто выбираемые работы — чтобы не листать 105 позиций ради лампочки. */
@@ -32,10 +35,27 @@ export default function Calculator() {
   const [sheet, setSheet] = useState(false)
   const [near, setNear] = useState(false)
   const root = useRef<HTMLDivElement>(null)
+  // Имя из прошлой заявки. Читаем в эффекте, а не при рендере: страницы
+  // статические, и localStorage на сервере нет — иначе разъедется гидрация.
+  const [hello, setHello] = useState('')
+  // После отправки из карточки уходят строки сметы, срочность и итог —
+  // без морфа высоты карточка схлопывалась рывком под улетевшим чеком
+  const card = useMorphHeight<HTMLDivElement>(sentKey(sent))
+  // Дату выбирают в форме, а надбавка за срочность — её следствие:
+  // отдельная галочка «сегодня или завтра» спрашивала то же самое второй раз
+  const [when, setWhen] = useState('')
 
   const quote = useMemo(() => calcQuote(p.selection, items, settings, p.urgent), [p.selection, p.urgent])
   const suggestions = useMemo(() => suggestedChains(p.selection, chains), [p.selection])
   const shownTotal = useCountUp(quote.total)
+
+  useEffect(() => {
+    const p = readProfile()
+    if (p) setHello(firstName(p.name))
+  }, [sent])
+
+  const rush = isRush(when)
+  useEffect(() => { p.setUrgent(rush) }, [rush])
 
   // Подсветка только что добавленной строки в смете
   const prevKeys = useRef<Set<string>>(new Set())
@@ -90,6 +110,13 @@ export default function Calculator() {
     <div className="calc" id="wycena" ref={root}>
       {/* ------------------------- выбор работ ------------------------- */}
       <div className="calc__pick">
+        {hello && (
+          <p className="calc__hello">
+            <span className="calc__helloDot"><SparkDot size={22} /></span>
+            {greeting(locale, hello)}
+          </p>
+        )}
+
         <div className="calc__search">
           <Icon name="search" size={19} />
           <input
@@ -231,7 +258,7 @@ export default function Calculator() {
         role={sheet ? 'dialog' : undefined}
         aria-modal={sheet ? true : undefined}
       >
-        <div className="sum">
+        <div className="sum" ref={card.ref} data-done={sent || undefined}>
           <div className="sum__head">
             <p className="calc__subhead">{t.home.calcLabel}</p>
             {quote.count > 0 && !sent && (
@@ -265,11 +292,28 @@ export default function Calculator() {
           )}
 
           {!sent && (
-            <label className="sum__urgent">
-              <input type="checkbox" checked={p.urgent} onChange={(e) => p.setUrgent(e.target.checked)} />
-              <span>{t.form.urgent}</span>
-              {quote.urgentFee > 0 && <span className="num">+{formatMoney(quote.urgentFee, settings, locale)}</span>}
-            </label>
+            <div className="rush" data-on={rush || undefined}>
+              {rush ? (
+                <>
+                  <span className="rush__ico"><Icon name="clock" size={16} /></span>
+                  <span className="rush__text">
+                    <b>{RUSH[locale].title}</b>
+                    <small>
+                      {RUSH[locale].note
+                        .replace('{pct}', String(settings.urgentPct))
+                        .replace('{max}', formatMoney(settings.urgentMax, settings, locale))}
+                    </small>
+                  </span>
+                  {quote.urgentFee > 0 && (
+                    <span className="rush__fee num">+{formatMoney(quote.urgentFee, settings, locale)}</span>
+                  )}
+                </>
+              ) : (
+                <span className="rush__text rush__text--off">
+                  <small>{RUSH[locale].hint.replace('{pct}', String(settings.urgentPct))}</small>
+                </span>
+              )}
+            </div>
           )}
 
           {!sent && quote.minimumApplied && (
@@ -292,7 +336,10 @@ export default function Calculator() {
             </div>
           )}
 
-          <LeadForm quote={quote} urgent={p.urgent} onSent={() => { p.clear(); setSent(true) }} />
+          <LeadForm
+            quote={quote} urgent={p.urgent} onWhen={setWhen}
+            onSent={() => { card.capture(); p.clear(); setSent(true) }}
+          />
         </div>
       </aside>
 
@@ -327,3 +374,50 @@ const clearLabel = (l: string) =>
 
 const totalLabel = (l: string) =>
   l === 'pl' ? 'Razem' : l === 'uk' ? 'Разом' : l === 'ru' ? 'Итого' : 'Total'
+
+/** Срочно — это «сегодня или завтра» по календарю устройства.
+ *  Считаем по датам, а не по разнице в часах: заявка в 23:50 на завтра
+ *  иначе оказалась бы «не срочной». */
+function isRush(iso: string): boolean {
+  if (!iso) return false
+  const day = new Date(`${iso}T00:00:00`)
+  if (Number.isNaN(day.getTime())) return false
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const diff = Math.round((day.getTime() - today.getTime()) / 86400000)
+  return diff === 0 || diff === 1
+}
+
+/** Плашка надбавки за срочность: объясняет, откуда взялись деньги. */
+const RUSH: Record<string, { title: string; note: string; hint: string }> = {
+  pl: {
+    title: 'Pilny przyjazd — dziś lub jutro',
+    note: 'Doliczamy +{pct}% do robocizny, nie więcej niż {max}.',
+    hint: 'Termin wybierasz w formularzu. Za dziś lub jutro doliczamy +{pct}%.',
+  },
+  uk: {
+    title: 'Терміновий виїзд — сьогодні або завтра',
+    note: 'Додаємо +{pct}% до роботи, але не більше ніж {max}.',
+    hint: 'Дату обираєте у формі. За сьогодні або завтра додаємо +{pct}%.',
+  },
+  ru: {
+    title: 'Срочный выезд — сегодня или завтра',
+    note: 'Добавляем +{pct}% к работам, но не больше {max}.',
+    hint: 'Дату выбираете в форме. За сегодня или завтра добавляем +{pct}%.',
+  },
+  en: {
+    title: 'Rush visit — today or tomorrow',
+    note: 'We add +{pct}% to the labour, capped at {max}.',
+    hint: 'You pick the date in the form. Today or tomorrow adds +{pct}%.',
+  },
+}
+
+/** Ключ морфа: играем переход ровно один раз — когда заявка ушла. */
+const sentKey = (sent: boolean) => (sent ? 'sent' : 'form')
+
+/** Приветствие по имени из прошлой заявки — на языке страницы. */
+const greeting = (l: string, name: string) =>
+  l === 'pl' ? `Cześć, ${name}! Miło znów Cię widzieć.`
+  : l === 'uk' ? `Привіт, ${name}! Раді бачити знову.`
+  : l === 'ru' ? `Привет, ${name}! Рады видеть снова.`
+  : `Hi, ${name}! Good to see you again.`

@@ -274,6 +274,17 @@
   .blk { border-radius: var(--r-media); }
   .float-card { position: static; margin: -28px 10px 10px; }
   .vbar { flex-wrap: wrap; }
+
+  /* На телефоне карточки шагов идут в одну колонку, и «высокая» карточка
+     превращалась в пустой экран: 280px минимума плюс поля. Ужимаем до
+     содержимого — номер и текст остаются, воздух вокруг них сокращается. */
+  .blk--tall { min-height: 0; gap: 10px; }
+  .blk { --blk-pad: 20px; }
+  .blk--tall .blk__n { font-size: 0.9375rem; color: inherit; opacity: 0.7; }
+  .blk__t { font-size: 1.25rem; }
+  .blk__s { font-size: 0.9375rem; }
+  .groupbox { padding: 10px; gap: 10px; border-radius: var(--r-card); }
+  .groupbox .panel { max-height: 220px; }
 }
 
 .badge__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
