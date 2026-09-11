@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { searchAddress, outOfZone, type AddressHit } from '../../lib/address'
 import { usePage } from '../PageContext'
 import Icon from '../Icon'
@@ -23,6 +24,10 @@ export default function AddressField({
   const [failed, setFailed] = useState(false)
   const [cursor, setCursor] = useState(-1)
   const box = useRef<HTMLDivElement>(null)
+  const pop = useRef<HTMLUListElement>(null)
+  // Список висит в портале у body: карточка сметы прокручивается сама
+  // и обрезала бы подсказки, а липкая кнопка «Далее» перехватывала клик
+  const [anchor, setAnchor] = useState<{ left: number; top: number; width: number; up: boolean; max: number } | null>(null)
   // Пока человек не трогал поле после выбора, повторный запрос не нужен
   const picked = useRef(false)
 
@@ -47,7 +52,9 @@ export default function AddressField({
   useEffect(() => {
     if (!open) return
     const away = (e: MouseEvent) => {
-      if (box.current && !box.current.contains(e.target as Node)) setOpen(false)
+      const t = e.target as Node
+      if (box.current?.contains(t) || pop.current?.contains(t)) return
+      setOpen(false)
     }
     document.addEventListener('mousedown', away)
     return () => document.removeEventListener('mousedown', away)
@@ -71,6 +78,56 @@ export default function AddressField({
 
   const notFound = !busy && !failed && value.trim().length >= 3 && !hit && list.length === 0
 
+  const listOpen = open && list.length > 0
+
+  // Позиция подсказок пересчитывается на каждую прокрутку и смену размера:
+  // поле может уехать вместе с карточкой, список должен ехать за ним
+  useLayoutEffect(() => {
+    if (!listOpen) { setAnchor(null); return }
+    const place = () => {
+      const el = box.current?.querySelector('.addr__box')
+      if (!el) return
+      const r = el.getBoundingClientRect()
+      const below = window.innerHeight - r.bottom - 12
+      const above = r.top - 12
+      const up = below < 180 && above > below
+      setAnchor({
+        left: Math.round(r.left), top: Math.round(up ? r.top - 6 : r.bottom + 6),
+        width: Math.round(r.width), up, max: Math.round(Math.min(264, Math.max(120, up ? above : below))),
+      })
+    }
+    place()
+    window.addEventListener('scroll', place, true)
+    window.addEventListener('resize', place)
+    return () => { window.removeEventListener('scroll', place, true); window.removeEventListener('resize', place) }
+  }, [listOpen, list])
+
+  const suggestions = listOpen && anchor && createPortal(
+    <ul
+      className="addr__list" id={`${id}-list`} role="listbox" ref={pop}
+      style={{
+        left: anchor.left, width: anchor.width, maxHeight: anchor.max,
+        ...(anchor.up ? { bottom: window.innerHeight - anchor.top } : { top: anchor.top }),
+      }}
+    >
+      {list.map((h, i) => (
+        <li key={h.label} role="option" aria-selected={i === cursor}>
+          <button
+            type="button" data-on={i === cursor || undefined}
+            onMouseEnter={() => setCursor(i)}
+            onClick={() => pick(h)}
+          >
+            <span className="addr__street">{[h.street, h.house].filter(Boolean).join(' ')}</span>
+            <span className="addr__meta">
+              {[h.postcode, h.city, h.district].filter(Boolean).join(' · ')}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>,
+    document.body,
+  )
+
   return (
     <div className="field field--wide addr" ref={box}>
       <label htmlFor={`${id}-a`}>{T.label}</label>
@@ -87,24 +144,7 @@ export default function AddressField({
           {busy ? <span className="addr__spin" /> : hit ? <Icon name="check" size={17} /> : null}
         </span>
 
-        {open && list.length > 0 && (
-          <ul className="addr__list" id={`${id}-list`} role="listbox">
-            {list.map((h, i) => (
-              <li key={h.label} role="option" aria-selected={i === cursor}>
-                <button
-                  type="button" data-on={i === cursor || undefined}
-                  onMouseEnter={() => setCursor(i)}
-                  onClick={() => pick(h)}
-                >
-                  <span className="addr__street">{[h.street, h.house].filter(Boolean).join(' ')}</span>
-                  <span className="addr__meta">
-                    {[h.postcode, h.city, h.district].filter(Boolean).join(' · ')}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+        {suggestions}
       </div>
 
       {hit && outOfZone(hit) && (

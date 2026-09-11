@@ -230,7 +230,12 @@
 .chainbox .chip { cursor: pointer; }
 
 /* --- панель сметы --- */
-.calc__sum { position: sticky; top: 88px; }
+/* Липкая колонка не должна вылезать за экран: на последнем шаге в ней
+   и смета, и поля, и сводка. Ограничиваем высотой окна и включаем
+   собственную прокрутку — иначе кнопка отправки уезжает под сгиб. */
+.calc__sum { position: sticky; top: 88px; max-height: calc(100dvh - 104px); overflow-y: auto; overscroll-behavior: contain; }
+.calc__sum::-webkit-scrollbar { width: 6px; }
+.calc__sum::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
 .sum { background: var(--paper-2); border-radius: var(--r-media); padding: clamp(16px, 1.7vw, 24px); display: grid; gap: var(--sp-3); }
 .sum__head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
 .sum__clear { border: 0; background: none; color: var(--ink-3); font-size: 0.8125rem; text-decoration: underline; padding: 0; min-height: 32px; }

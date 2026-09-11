@@ -2,15 +2,6 @@
 // Единственный путь записи в таблицу leads: у неё нет ни одной RLS-политики,
 // поэтому anon-ключом туда не попасть, а функция ходит service-ключом.
 
-const ALLOWED_ORIGINS = [
-  'https://hawkfix.pl',
-  'https://www.hawkfix.pl',
-  // витрина для проверки — без неё браузер режет ответ по CORS и форма молчит
-  'https://hawnfix.barabashflow.pl',
-  'http://localhost:4173',
-  'http://localhost:5173',
-]
-
 const LOCALES = ['pl', 'uk', 'ru', 'en']
 
 /** Куда падают заявки и от кого шлём. Домен hawkfix.pl подтверждён в Resend. */
@@ -413,10 +404,15 @@ async function notify(row: Record<string, unknown>, orderNo: string): Promise<st
   }
 }
 
+// Origin отвечаем тот, что пришёл. Белый список адресов здесь ничего не
+// защищал (функция публичная, из curl она доступна всё равно), зато форма,
+// открытая с непредусмотренного адреса — github.io, www-вариант, другой порт
+// разработки, — получала чужой Allow-Origin, браузер резал ответ, и человек
+// видел «Не удалось отправить» при живом сервере. Защита от мусора —
+// honeypot, ограничение по телефону и Turnstile, а не CORS.
 function cors(origin: string | null) {
-  const allow = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
   return {
-    'Access-Control-Allow-Origin': allow,
+    'Access-Control-Allow-Origin': origin ?? '*',
     'Access-Control-Allow-Headers': 'content-type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Max-Age': '86400',
@@ -446,10 +442,44 @@ async function turnstileOk(token: string | undefined, ip: string | null): Promis
   return Boolean(out.success)
 }
 
+/** Координата из формы: число в разумных пределах или ничего. */
+const coord = (v: unknown, limit: number): number | null =>
+  typeof v === 'number' && Number.isFinite(v) && Math.abs(v) <= limit ? v : null
+
 const str = (v: unknown, max: number): string | null => {
   if (typeof v !== 'string') return null
   const s = v.trim()
   return s ? s.slice(0, max) : null
+}
+
+/** Почта по уже сохранённой заявке.
+ *
+ *  Зовёт база (триггер `lead_mail_hook`) для заявок, которые пришли
+ *  запасным путём — через RPC `submit_lead`, когда браузер человека не
+ *  смог достучаться до этой функции. Вёрстка письма одна на оба пути,
+ *  поэтому шлём отсюда же. Запрос подписан секретом: снаружи не подделать. */
+async function mailForLead(id: string, origin: string | null): Promise<Response> {
+  const url = Deno.env.get('SUPABASE_URL')
+  const key = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+  if (!url || !key) return json({ error: 'not_configured' }, 500, origin)
+
+  const head = { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }
+  const res = await fetch(`${url}/rest/v1/leads?id=eq.${encodeURIComponent(id)}&select=*`, { headers: head })
+  if (!res.ok) return json({ error: 'not_found' }, 404, origin)
+  const [row] = await res.json()
+  if (!row) return json({ error: 'not_found' }, 404, origin)
+  if (row.notified_at) return json({ ok: true, skipped: true }, 200, origin)
+
+  const orderNo = row.order_no ?? ''
+  const [ownerError, clientError] = await Promise.all([notify(row, orderNo), notifyClient(row, orderNo)])
+  const mailError = [ownerError, clientError].filter(Boolean).join(' | ') || null
+  await fetch(`${url}/rest/v1/leads?id=eq.${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { ...head, Prefer: 'return=minimal' },
+    body: JSON.stringify(mailError ? { notify_error: mailError } : { notified_at: new Date().toISOString() }),
+  }).catch(() => {})
+  if (mailError) console.error('mail failed', mailError)
+  return json({ ok: !mailError, orderNo }, 200, origin)
 }
 
 Deno.serve(async (req) => {
@@ -463,6 +493,14 @@ Deno.serve(async (req) => {
     body = await req.json()
   } catch {
     return json({ error: 'bad_json' }, 400, origin)
+  }
+
+  // Просьба от базы отправить письмо по уже записанной заявке
+  const mailFor = str(body.mailFor, 60)
+  if (mailFor) {
+    const hook = Deno.env.get('MAIL_HOOK_SECRET')
+    if (!hook || req.headers.get('x-hawk-mail') !== hook) return json({ error: 'forbidden' }, 403, origin)
+    return await mailForLead(mailFor, origin)
   }
 
   // Ловушка для ботов: поле скрыто в вёрстке, человек его не заполнит
@@ -499,12 +537,16 @@ Deno.serve(async (req) => {
     email: str(contact.email, 320),
     district: str(place.district, 120),
     address: str(place.address, 300),
+    // Точка адреса из подсказок геокодера: по ней заказ ложится на карту
+    lat: coord(place.lat, 90),
+    lon: coord(place.lon, 180),
     when_date: when,
     when_time: whenTime,
     comment,
     urgent: Boolean(body.urgent),
     items,
     totals: (body.totals ?? {}) as Record<string, unknown>,
+    source: 'fn',
     page: str(body.page, 300),
     user_agent: (req.headers.get('user-agent') ?? '').slice(0, 400),
   }

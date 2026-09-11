@@ -1,0 +1,522 @@
+/* ============================================================
+   Панель HAWK.FIX. Те же токены, что у сайта: тёплая бумага,
+   белые карточки с крупным радиусом, мята как единственный акцент,
+   тёмно-зелёный для «серьёзных» плашек. Заголовки — светлый Manrope.
+   ============================================================ */
+
+:root {
+  --ink: #1c1c1c;
+  --ink-2: #3a3a3a;
+  --ink-3: #6b6b6b;
+  --paper: #f4f4f2;
+  --paper-2: #e9e9e7;
+  --card: #ffffff;
+  --line: #e4e4e1;
+  --accent: #6eefa0;
+  --accent-soft: #dcf9e8;
+  --accent-text: #146b3c;
+  --forest: #1a4a2e;
+  --on-dark: #ffffff;
+  --on-dark-2: #9aa79f;
+  --warn: #8a5a00;
+  --warn-soft: #fdf1d8;
+  --bad: #b3261e;
+  --bad-soft: #fbe6e4;
+
+  --font: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --r-sm: 12px;
+  --r: 18px;
+  --r-lg: 26px;
+  --r-pill: 999px;
+  --shadow: 0 1px 2px rgb(0 0 0 / 4%), 0 12px 28px -18px rgb(0 0 0 / 22%);
+  --tap: 44px;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--font); font-size: 15px; line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------------------------- каркас ---------------------------- */
+.shell { min-height: 100%; display: flex; flex-direction: column; }
+.top {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; gap: 18px;
+  padding: 12px clamp(14px, 2.4vw, 28px);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(14px); border-bottom: 1px solid var(--line);
+}
+.brandmark { display: inline-flex; align-items: center; flex: none; }
+.brandmark img { display: block; height: 22px; width: auto; }
+
+.tabs { display: flex; gap: 6px; margin-inline: auto; background: var(--paper-2); padding: 4px; border-radius: var(--r-pill); }
+.tabs a {
+  display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px;
+  border-radius: var(--r-pill); color: var(--ink-2); font-size: 0.9rem; white-space: nowrap;
+  transition: background 160ms ease, color 160ms ease;
+}
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current='page'] { background: var(--ink); color: var(--on-dark); }
+
+.topright { display: flex; align-items: center; gap: 10px; }
+.langpick { display: flex; gap: 2px; background: var(--paper-2); border-radius: var(--r-pill); padding: 3px; }
+.langpick button {
+  border: 0; background: none; border-radius: var(--r-pill); padding: 5px 10px;
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3);
+}
+.langpick button[data-on] { background: var(--ink); color: var(--on-dark); }
+
+.avatar {
+  width: 38px; height: 38px; border-radius: 50%; flex: none;
+  display: grid; place-items: center; font-size: 0.85rem; font-weight: 600;
+  background: var(--forest); color: var(--accent);
+}
+.avatar--sm { width: 32px; height: 32px; font-size: 0.75rem; }
+.avatar--lg { width: 64px; height: 64px; font-size: 1.3rem; }
+.avatar--xl { width: 88px; height: 88px; font-size: 1.7rem; }
+img.avatar { object-fit: cover; }
+
+.page { padding: clamp(16px, 2.4vw, 30px); display: grid; gap: 16px; max-width: 1680px; width: 100%; margin-inline: auto; }
+.page__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.h1 { font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 400; letter-spacing: -0.03em; margin: 0; line-height: 1.05; }
+.h1 b { font-weight: 700; }
+.sub { color: var(--ink-3); margin: 4px 0 0; font-size: 0.95rem; }
+.h2 { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+
+/* -------------------- бургер и меню на весь экран -------------------- */
+/* На телефоне восемь пилюль не помещаются даже прокруткой — вместо них
+   кнопка и меню во весь экран: крупные строки, попасть пальцем легко. */
+.burger {
+  display: none; position: relative; flex: none;
+  width: 42px; height: 42px; border: 0; border-radius: 50%;
+  background: var(--paper-2);
+}
+.burger span, .burger span::before, .burger span::after {
+  content: ''; position: absolute; left: 50%; width: 18px; height: 2px;
+  background: var(--ink); border-radius: 2px; transform: translateX(-50%);
+  transition: transform 220ms var(--ease), opacity 160ms ease;
+}
+.burger span { top: 50%; margin-top: -1px; }
+.burger span::before { top: -6px; left: 0; transform: none; }
+.burger span::after { top: 6px; left: 0; transform: none; }
+.burger[data-open] span { background: transparent; }
+.burger[data-open] span::before { transform: translateY(6px) rotate(45deg); }
+.burger[data-open] span::after { transform: translateY(-6px) rotate(-45deg); }
+.burger--onDark { background: rgb(255 255 255 / 12%); }
+.burger--onDark span::before, .burger--onDark span::after { background: var(--on-dark); }
+
+.mobmenu {
+  position: fixed; inset: 0; z-index: 60;
+  background: var(--ink); color: var(--on-dark);
+  display: grid; grid-template-rows: auto 1fr auto; gap: 10px;
+  padding: 14px clamp(16px, 5vw, 28px) calc(20px + env(safe-area-inset-bottom));
+  animation: menuIn 220ms var(--ease);
+}
+@keyframes menuIn { from { opacity: 0; transform: translateY(-8px) } to { opacity: 1; transform: none } }
+.mobmenu__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mobmenu__head b { font-size: 1rem; }
+.mobmenu__head .muted { color: var(--on-dark-2); }
+
+.mobmenu__nav { display: flex; flex-direction: column; justify-content: center; gap: 4px; overflow-y: auto; }
+.mobmenu__nav a {
+  font-size: clamp(1.5rem, 6.5vw, 2.1rem); font-weight: 600; letter-spacing: -0.03em;
+  padding: 10px 0; color: var(--on-dark);
+}
+/* Появление каскадом. Ключевое: базовое состояние — видимое, а прозрачность
+   живёт только внутри анимации (`backwards` держит её до старта, с учётом
+   задержки). Если анимация почему-либо не проигралась, пункты всё равно
+   на месте — раньше с `opacity: 0` в базовом правиле меню было пустым. */
+@media (prefers-reduced-motion: no-preference) {
+  .mobmenu__nav a { animation: menuItem 320ms var(--ease) backwards; }
+  @keyframes menuItem { from { opacity: 0; transform: translateY(10px) } }
+}
+.mobmenu__nav a[aria-current='page'] { color: var(--accent); }
+.mobmenu__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.langpick--onDark { background: rgb(255 255 255 / 10%); }
+.langpick--onDark button { color: var(--on-dark-2); }
+.langpick--onDark button[data-on] { background: var(--accent); color: var(--ink); }
+
+/* ---------------------------- карточки ---------------------------- */
+.card { background: var(--card); border-radius: var(--r-lg); padding: 20px 22px; box-shadow: var(--shadow); }
+.card--flush { padding: 0; overflow: hidden; }
+.card__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.card__note { color: var(--ink-3); font-size: 0.82rem; margin: 2px 0 0; }
+
+.grid { display: grid; gap: 16px; }
+.grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid--wide-left { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
+.grid--wide-right { grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr); }
+
+/* ---------------------------- показатели ---------------------------- */
+.stat { display: grid; gap: 10px; }
+.stat__label { color: var(--ink-3); font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.stat__value { font-size: clamp(1.8rem, 2.6vw, 2.5rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1; }
+.stat__foot { display: flex; align-items: center; gap: 8px; color: var(--ink-3); font-size: 0.8rem; }
+.trend { display: inline-flex; align-items: center; gap: 3px; font-weight: 600; }
+.trend[data-dir='up'] { color: var(--accent-text); }
+.trend[data-dir='down'] { color: var(--bad); }
+
+/* Компактная карточка-счётчик: операционные числа, по клику — список */
+.mini {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 18px; text-decoration: none;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+.mini:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgb(0 0 0 / 5%), 0 16px 30px -20px rgb(0 0 0 / 30%); }
+.mini__label { color: var(--ink-3); font-size: 0.85rem; }
+.mini__value { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.03em; }
+.mini[data-tone='warn'] { background: var(--warn-soft); }
+.mini[data-tone='warn'] .mini__value { color: var(--warn); }
+.mini[data-tone='bad'] { background: var(--bad-soft); }
+.mini[data-tone='bad'] .mini__value { color: var(--bad); }
+
+.person { display: flex; flex-direction: column; cursor: pointer; transition: transform 140ms ease, box-shadow 140ms ease; }
+.person > .split:last-child { margin-top: auto; }
+.person:hover { transform: translateY(-2px); box-shadow: 0 2px 6px rgb(0 0 0 / 6%), 0 20px 34px -22px rgb(0 0 0 / 32%); }
+
+.dateinput { height: 36px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--card); }
+
+/* ---------------------------- бейджи ---------------------------- */
+.badge {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px;
+  border-radius: var(--r-pill); font-size: 0.78rem; font-weight: 600; white-space: nowrap;
+  background: var(--paper-2); color: var(--ink-2);
+}
+.badge--mint { background: var(--accent-soft); color: var(--accent-text); }
+.badge--forest { background: var(--forest); color: var(--accent); }
+.badge--dark { background: var(--ink); color: var(--on-dark); }
+.badge--warn { background: var(--warn-soft); color: var(--warn); }
+.badge--bad { background: var(--bad-soft); color: var(--bad); }
+.badge--ghost { background: transparent; border: 1px solid var(--line); color: var(--ink-3); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+
+/* ---------------------------- таблицы ---------------------------- */
+.tablewrap { overflow-x: auto; }
+table.tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.tbl th {
+  text-align: start; font-weight: 500; color: var(--ink-3); font-size: 0.78rem;
+  text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 14px; white-space: nowrap;
+}
+.tbl td { padding: 12px 14px; border-top: 1px solid var(--line); vertical-align: middle; }
+.tbl tbody tr { transition: background 140ms ease; }
+.tbl tbody tr:hover { background: var(--paper); }
+.tbl tbody tr[data-click] { cursor: pointer; }
+.tbl .right { text-align: end; }
+.who { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.who b { font-weight: 600; }
+.who small { display: block; color: var(--ink-3); font-size: 0.78rem; }
+
+/* ---------------------------- формы ---------------------------- */
+.field { display: grid; gap: 6px; min-width: 0; }
+.field > label, .flabel { font-size: 0.8rem; color: var(--ink-2); }
+.field input, .field select, .field textarea {
+  width: 100%; min-height: 44px; padding: 10px 14px; border-radius: var(--r-sm);
+  border: 1px solid var(--line); background: var(--card); outline: none;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--ink); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.field textarea { min-height: 84px; resize: vertical; }
+.err { color: var(--bad); font-size: 0.8rem; margin: 0; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 0 20px; border: 1px solid transparent; border-radius: var(--r-pill);
+  font-weight: 600; font-size: 0.9rem; background: var(--paper-2); color: var(--ink);
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease, opacity 140ms ease;
+}
+.btn:hover { background: var(--line); }
+.btn--primary { background: var(--accent); color: var(--ink); }
+.btn--primary:hover { background: #5ee993; }
+.btn--dark { background: var(--ink); color: var(--on-dark); }
+.btn--dark:hover { background: var(--forest); }
+.btn--ghost { background: transparent; border-color: var(--line); }
+.btn--ghost:hover { background: var(--paper-2); }
+.btn--danger { background: var(--bad-soft); color: var(--bad); }
+.btn--sm { min-height: 36px; padding: 0 14px; font-size: 0.82rem; }
+.btn[disabled] { opacity: 0.45; pointer-events: none; }
+
+/* ---------------------------- вход ---------------------------- */
+.login { min-height: 100%; display: grid; place-items: center; padding: 24px; background: var(--ink); }
+.login__box { width: min(400px, 100%); background: var(--card); border-radius: var(--r-lg); padding: 34px; display: grid; gap: 16px; }
+.login__title { font-size: 1.5rem; font-weight: 400; letter-spacing: -0.03em; margin: 0; }
+
+/* ---------------------------- графики ---------------------------- */
+.chartbox { position: relative; width: 100%; }
+/* Поле графика отдельно от подписей осей: по нему позиционируется точка */
+.chart__plot { position: relative; height: calc(100% - 18px); }
+.chart { width: 100%; height: 100%; display: block; }
+.chart .grid-line { stroke: var(--line); stroke-width: 1; }
+.chart .area { fill: color-mix(in srgb, var(--accent) 22%, transparent); }
+.chart .line { fill: none; stroke: var(--accent-text); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.chart .line--alt { stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 4 3; }
+.chart .cursor { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 3 3; }
+/* Точка под курсором — div, а не <circle>: холст растянут по ширине,
+   и круг внутри SVG выходил овалом */
+.knob {
+  position: absolute; width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent-text); border: 2px solid var(--card);
+  transform: translate(-50%, -50%); pointer-events: none; z-index: 4;
+}
+.chart__axis { display: flex; justify-content: space-between; height: 18px; align-items: center; }
+.chart__axis span { font-size: 0.7rem; color: var(--ink-3); }
+
+/* Подсказка: своя, а не браузерный title — тот вылезал поверх заголовка */
+.tip {
+  position: absolute; bottom: 26px; transform: translateX(-50%);
+  display: grid; gap: 1px; padding: 8px 11px; border-radius: 10px;
+  background: var(--ink); color: var(--on-dark); font-size: 0.78rem;
+  white-space: nowrap; pointer-events: none; z-index: 5;
+  box-shadow: 0 10px 24px -12px rgb(0 0 0 / 55%);
+}
+.tip b { font-weight: 600; font-size: 0.8rem; }
+.tip span { color: var(--on-dark-2); }
+.tip[data-side='start'] { transform: translateX(-12px); }
+.tip[data-side='end'] { transform: translateX(calc(-100% + 12px)); }
+.tip--bar, .tip--spark { left: 50%; bottom: calc(100% + 6px); }
+
+/* Столбики */
+.bars { display: flex; align-items: flex-end; justify-content: center; gap: 10px; }
+/* Один-два месяца не должны раздуваться на всю карточку */
+.bars__col { position: relative; flex: 1; max-width: 120px; display: grid; gap: 6px; justify-items: center; min-width: 0; }
+.bars__bar {
+  width: 100%; border-radius: 6px; background: var(--accent-soft);
+  transition: background 140ms ease;
+}
+.bars__bar[data-top] { background: var(--accent); }
+.bars__bar[data-on] { background: var(--forest); }
+.bars__col span { overflow: hidden; text-overflow: ellipsis; max-width: 100%; white-space: nowrap; }
+
+/* Мини-график в карточке показателя */
+.spark { height: 46px; display: flex; align-items: flex-end; gap: 3px; }
+.spark__col { position: relative; flex: 1; height: 100%; display: flex; align-items: flex-end; }
+.spark__col i { display: block; width: 100%; background: var(--accent-soft); border-radius: 3px; transition: background 140ms ease; }
+.spark__col:last-child i { background: var(--accent); }
+.spark__col i[data-on] { background: var(--forest); }
+
+/* ---------------------------- список ---------------------------- */
+.list { display: grid; gap: 2px; }
+.list__row {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--r-sm);
+  transition: background 140ms ease;
+}
+.list__row:hover { background: var(--paper); }
+.list__row b { font-weight: 600; }
+.list__row small { color: var(--ink-3); display: block; font-size: 0.78rem; }
+.list__right { margin-inline-start: auto; text-align: end; white-space: nowrap; }
+
+/* ---------------------------- карта ---------------------------- */
+/* position: relative обязателен — метки и атрибуция MapLibre позиционируются
+   абсолютно, и без него они уезжают к краю окна, а не карточки. */
+.map { position: relative; width: 100%; height: 420px; border-radius: var(--r); overflow: hidden; background: var(--paper-2); }
+.map--tall { height: 520px; }
+.maprow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* ---------------------------- прочее ---------------------------- */
+.split { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.spacer { margin-inline-start: auto; }
+.muted { color: var(--ink-3); }
+.tiny { font-size: 0.78rem; }
+.big { font-size: clamp(1.6rem, 2.4vw, 2.2rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+.hr { height: 1px; background: var(--line); border: 0; margin: 4px 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  border: 1px solid var(--line); background: var(--card); border-radius: var(--r-pill);
+  padding: 6px 12px; font-size: 0.8rem; color: var(--ink-2);
+}
+.chip[data-on] { background: var(--accent); border-color: var(--accent); color: var(--ink); font-weight: 600; }
+/* Счётчик на вкладке: сколько заказов за ней лежит */
+.chip__n {
+  display: inline-block; margin-inline-start: 6px; padding: 0 6px; min-width: 18px;
+  border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2);
+  font-size: 0.72rem; font-weight: 600; text-align: center;
+}
+.chip[data-on] .chip__n { background: rgb(17 19 18 / 12%); color: var(--ink); }
+
+/* Полоса-пояснение над списком: новые заказы и ночная тишина */
+.notice {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px;
+  margin: 12px 0 0; padding: 12px 16px; border-radius: var(--r-sm);
+  background: var(--accent-soft); color: var(--ink);
+}
+.notice[data-kind='quiet'] { background: var(--warn-soft); }
+.notice[data-kind='quiet'] b { color: var(--warn); }
+.notice span { color: var(--ink-2); font-size: 0.86rem; }
+.notice .btn { margin-inline-start: auto; }
+
+/* Выбор мастера в окне назначения */
+.picklist { display: grid; gap: 6px; }
+.picklist__row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: var(--r-sm); background: var(--paper-2);
+}
+.picklist__who { min-width: 0; flex: 1; }
+.picklist__who b { display: block; }
+.picklist__row .btn { flex: none; }
+.split--tight { display: flex; align-items: center; gap: 8px; }
+
+/* Причина, по которой заказ ещё без мастера */
+.badge[data-reason='refused'], .badge[data-reason='no_master'] { background: var(--bad-soft, #fde8e6); color: var(--bad); }
+.badge[data-reason='quiet'] { background: var(--warn-soft); color: var(--warn); }
+.badge[data-reason='waiting'] { background: var(--paper-2); color: var(--ink-2); }
+
+.modal { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 20px; background: rgb(17 19 18 / 58%); backdrop-filter: blur(6px); }
+.modal__box { width: min(560px, 100%); max-height: 86vh; overflow-y: auto; background: var(--card); border-radius: var(--r-lg); padding: 24px; display: grid; gap: 14px; }
+
+.timeline { display: grid; gap: 12px; }
+.timeline__row { display: grid; grid-template-columns: 12px 1fr auto; gap: 12px; align-items: start; }
+.timeline__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); margin-top: 6px; }
+.timeline__row:last-child .timeline__dot { background: var(--forest); }
+
+/* span по умолчанию инлайновый — без display:block высота не применяется
+   и полоска растягивалась во всю карточку */
+.progress { display: block; width: 100%; height: 8px; border-radius: 4px; background: var(--paper-2); overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--accent); transition: width 240ms ease; }
+.progress--warn i { background: var(--warn); }
+.progress--bad i { background: var(--bad); }
+
+.spin { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--ink); animation: spin 640ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg) } }
+
+.empty { padding: 34px; text-align: center; color: var(--ink-3); }
+
+/* ---------------------------- адаптив ---------------------------- */
+@media (max-width: 1180px) {
+  .grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid--wide-left, .grid--wide-right, .grid--3 { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 860px) {
+  /* Знак слева, справа язык, человек и бургер; пилюли уезжают в меню */
+  .top { gap: 10px; }
+  .topright { margin-inline-start: auto; }
+  .tabs { display: none; }
+  .topright__out { display: none; }   /* «Выйти» живёт внутри меню */
+  .burger { display: block; }
+  .grid--2 { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .topright { gap: 8px; }
+  .langpick button { padding: 5px 8px; }
+}
+@media (max-width: 640px) {
+  .grid--4 { grid-template-columns: minmax(0, 1fr); }
+  .card { padding: 16px; border-radius: var(--r); }
+  .map { height: 320px; }
+
+  /* Действия по заказу — во всю ширину: пальцем в узкую пилюлю
+     на ходу не попасть, а это главные кнопки экрана мастера. */
+  .page__head { flex-direction: column; align-items: stretch; }
+  .page__head > .split { width: 100%; flex-direction: column; align-items: stretch; }
+  .page__head > .split .btn { width: 100%; min-height: 50px; font-size: 1rem; }
+  .nextjob__acts { flex-direction: column; align-items: stretch; }
+  .nextjob__acts .btn { width: 100%; min-height: 50px; }
+  .newjob__row { flex-direction: column; align-items: stretch; }
+  .newjob__row .split { width: 100%; }
+  .newjob__row .split .btn { flex: 1; min-height: 48px; }
+}
+
+
+/* ---------------------------- печать ---------------------------- */
+.printhead { display: none; }
+
+@media print {
+  /* На бумаге не нужны навигация, кнопки и тени — только шапка и таблица */
+  .top, .noprint, .btn, .langpick, .chips { display: none !important; }
+  body { background: #fff; font-size: 11px; }
+  .page { padding: 0; max-width: none; gap: 10px; }
+  .card { box-shadow: none; border: 1px solid #ddd; border-radius: 8px; padding: 10px 12px; break-inside: avoid; }
+  .grid--4 { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .stat__value { font-size: 1.2rem; }
+  .tbl th, .tbl td { padding: 5px 8px; }
+  .tbl tbody tr:hover { background: none; }
+  .printhead {
+    display: flex; flex-direction: column; gap: 2px; padding-bottom: 8px;
+    border-bottom: 2px solid #1c1c1c; margin-bottom: 6px;
+  }
+  .printhead b { font-size: 14px; }
+  .printhead span { color: #555; font-size: 10px; }
+  a { text-decoration: none; color: inherit; }
+}
+
+
+/* ==================== экран мастера: куда и когда ехать ==================== */
+/* Следующий заказ — самое крупное на странице: мастер смотрит в телефон
+   на ходу, и адрес со временем выезда должны читаться с расстояния. */
+.nextjob {
+  background: var(--ink); color: var(--on-dark); border-radius: var(--r-lg);
+  padding: clamp(18px, 2.4vw, 28px); display: grid; gap: 14px;
+}
+.nextjob[data-hot] { background: var(--forest); }
+.nextjob__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.nextjob__kicker {
+  font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent);
+  font-weight: 600;
+}
+.nextjob__when {
+  margin: 0; font-size: clamp(1.9rem, 4.4vw, 3rem); font-weight: 700;
+  letter-spacing: -0.035em; line-height: 1;
+}
+.nextjob__addr { margin: 6px 0 0; font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 500; }
+.nextjob__meta { margin: 6px 0 0; color: var(--on-dark-2); font-size: 0.9rem; }
+.nextjob__acts { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn--ghostDark { background: transparent; border-color: rgb(255 255 255 / 45%); color: var(--on-dark); }
+.btn--ghostDark:hover { background: rgb(255 255 255 / 12%); }
+
+/* Новое предложение — ярче всего: его легко пропустить, а время идёт */
+.newjob {
+  background: var(--accent); color: var(--ink); border-radius: var(--r-lg);
+  padding: clamp(16px, 2.2vw, 24px); display: grid; gap: 12px;
+  animation: newjobIn 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes newjobIn { from { opacity: 0; transform: translateY(-8px) } to { opacity: 1; transform: none } }
+.newjob__title {
+  margin: 0; font-size: clamp(1.6rem, 3.6vw, 2.4rem); font-weight: 800;
+  letter-spacing: -0.03em; line-height: 1;
+}
+.newjob__list { display: grid; gap: 8px; }
+.newjob__row {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  background: rgb(255 255 255 / 55%); border-radius: var(--r); padding: 12px 16px;
+}
+.newjob__sum { display: block; font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; }
+.newjob__addr { display: block; font-size: 0.95rem; }
+.newjob__row small { color: var(--ink-3); }
+/* Срок ответа — не «через сколько ехать», поэтому подписан словами */
+.newjob__timer { display: grid; gap: 1px; text-align: end; }
+.newjob__timer small { color: var(--forest); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.newjob__timer b { font-size: 1.05rem; font-weight: 700; }
+/* На мятном фоне белая обводка не читалась — берём тёмную */
+.btn--decline { background: transparent; border-color: rgb(28 28 28 / 45%); color: var(--ink); }
+.btn--decline:hover { background: rgb(28 28 28 / 10%); border-color: var(--ink); }
+
+/* Метка на карте */
+.mapin {
+  width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 0.8rem; font-weight: 700; border: 3px solid #fff;
+  box-shadow: 0 6px 16px -6px rgb(0 0 0 / 45%); cursor: pointer;
+}
+.maplibregl-ctrl-attrib { font-size: 10px; }
+/* Выбранная точка магазина: заметно крупнее и в акцентном цвете */
+.mapin--on {
+  background: var(--forest) !important; color: #fff !important;
+  transform: scale(1.25); box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* Панель выбранного магазина под картой */
+.shoppick {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-top: 10px; padding: 12px 14px; border-radius: var(--r-sm);
+  background: var(--paper);
+}
+.shoppick b { display: block; }
+.shoppick small { color: var(--ink-3); }

@@ -44,7 +44,9 @@ class P(HTMLParser):
             if l.get("rel", "").lower() == rel: return l.get("href", "").strip()
         return ""
 
-pages = sorted(p for p in DIST.rglob("index.html") if "404" not in p.parts)
+# Панель — отдельное приложение под /panel/, к SEO сайта отношения не имеет
+pages = sorted(p for p in DIST.rglob("index.html")
+               if "404" not in p.parts and "panel" not in p.parts)
 stats = {"kw": 0, "img": 0, "img_no_alt": 0, "img_empty": 0, "schema": set()}
 
 for f in pages:

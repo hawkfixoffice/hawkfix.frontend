@@ -112,7 +112,7 @@ export default function Calculator() {
       <div className="calc__pick">
         {hello && (
           <p className="calc__hello">
-            <span className="calc__helloDot"><SparkDot size={22} /></span>
+            <span className="calc__helloDot"><SparkDot size={30} /></span>
             {greeting(locale, hello)}
           </p>
         )}

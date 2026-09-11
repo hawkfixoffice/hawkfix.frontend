@@ -8,9 +8,14 @@
 .calc { scroll-margin-top: 104px; }
 
 /* ------------------------- приветствие ------------------------- */
+/* Приветствие по имени — это первое, что видит вернувшийся клиент:
+   набираем его заметно, а не служебной строкой. */
 .calc__hello {
-  display: flex; align-items: center; gap: 10px; margin: 0;
-  font-size: var(--fs-sm); color: var(--ink-2);
+  display: flex; align-items: center; gap: 12px; margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.4vw, 1.9rem);
+  font-weight: var(--fw-head); letter-spacing: -0.02em; line-height: 1.15;
+  color: var(--ink);
 }
 .calc__helloDot { display: inline-flex; flex: none; }
 
@@ -37,7 +42,14 @@
 }
 .steps__dot[aria-current='step'] .steps__t { color: var(--ink); font-weight: 500; }
 
-.lead__nav { display: flex; gap: var(--sp-2); align-items: center; }
+/* Кнопка шага всегда на виду: карточка сметы может прокручиваться сама
+   на невысоких экранах, и «Далее» не должна уезжать под сгиб. */
+.lead__nav {
+  display: flex; gap: var(--sp-2); align-items: center;
+  position: sticky; bottom: 0; z-index: 2;
+  padding-block: 8px;
+  background: linear-gradient(to bottom, transparent, var(--paper-2) 30%);
+}
 .lead__nav .lead__submit { flex: 1 1 auto; }
 .lead__back { flex: none; padding-inline: 18px; }
 .lead__backIcon { transform: rotate(180deg); }
@@ -60,12 +72,12 @@
 
 /* --------------------- переходы между шагами --------------------- */
 .lead__stage { min-width: 0; }
-/* Шаг лежит выше кнопок и подписи под ними: список подсказок адреса
-   выпадает поверх них. Одного z-index у самого списка мало — анимация
-   шага и повёрнутая стрелка «Назад» создают собственные слои, и без
-   этого правила стрелка с текстом согласия рисовались поверх списка. */
+/* Шаг лежит выше кнопок и подписи под ними: анимация шага и повёрнутая
+   стрелка «Назад» создают собственные слои, и без этого правила стрелка
+   с текстом согласия рисовались поверх содержимого шага. Сами подсказки
+   адреса лежат в портале у body и в этой стопке не участвуют. */
 .lead__step { display: grid; gap: var(--sp-3); position: relative; z-index: 2; }
-.lead__nav, .lead__consent { position: relative; z-index: 1; }
+.lead__consent { position: relative; z-index: 1; }
 .lead__step[data-dir='fwd']  { animation: stepFwd 300ms var(--ease) both; }
 .lead__step[data-dir='back'] { animation: stepBack 300ms var(--ease) both; }
 @keyframes stepFwd  { from { opacity: 0; transform: translateX(18px) } to { opacity: 1; transform: none } }
@@ -97,11 +109,14 @@
 }
 @keyframes addrSpin { to { transform: rotate(360deg) } }
 
+/* Подсказки живут в портале у body и позиционируются по полю: карточка
+   сметы прокручивается сама и обрезала бы список своим overflow. */
 .addr__list {
-  position: absolute; z-index: var(--z-overlay); inset-inline: 0; top: calc(100% + 6px);
+  position: fixed; z-index: calc(var(--z-modal) + 1);
   margin: 0; padding: 6px; list-style: none;
   background: var(--card); border-radius: var(--r-sm);
   box-shadow: var(--shadow-lift); max-height: 264px; overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .addr__list button {
   width: 100%; border: 0; background: none; text-align: start; cursor: pointer;
@@ -276,4 +291,21 @@
   .rcp__inner { padding: 20px 18px 18px; }
   .rcp__thanks { font-size: 1.7rem; }
   .rcp__rows { gap: 10px 8px; }
+}
+
+
+/* Последний шаг самый плотный: сводка и два поля. Поджимаем так, чтобы
+   вместе со сметой всё помещалось в экран без прокрутки колонки. */
+.lead--steps[data-step='send'] .field textarea { min-height: 62px; }
+.lead--steps[data-step='send'] .lead__recap { padding: 10px 14px; gap: 2px; }
+.lead--steps[data-step='send'] .lead__recap li { font-size: 0.78rem; }
+
+@media (max-height: 820px) and (min-width: 901px) {
+  /* На невысоких ноутбуках ужимаем и саму смету */
+  .sum { gap: 10px; padding: 16px 18px; }
+  .sum__lines { max-height: 130px; }
+  .sum__big { font-size: 1.8rem; }
+  .lead { gap: 10px; }
+  .field input, .field select { min-height: 42px; }
+  .lead--steps[data-step='send'] .field textarea { min-height: 52px; }
 }

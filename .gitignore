@@ -6,3 +6,4 @@ _audit/
 .env
 .env.local
 .vite/
+__pycache__/

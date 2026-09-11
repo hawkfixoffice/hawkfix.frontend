@@ -91,8 +91,15 @@ const suggested = await page.waitForSelector('.addr__list button', { timeout: 12
 check(Boolean(suggested), 'геокодер отдал подсказки адреса')
 if (suggested) {
   await suggested.click()
-  const picked = await page.$eval('.addr__box input', (e) => e.value)
-  check(picked.length > 6, `адрес подтверждён выбором: «${picked}»`)
+  await new Promise((r) => setTimeout(r, 350))
+  // Список висит в портале поверх липкой кнопки: клик по подсказке должен
+  // подставить адрес и оставить нас на этом же шаге, а не нажать «Далее»
+  const after = await page.evaluate(() => ({
+    value: document.querySelector('.addr__box input')?.value ?? '',
+    step: document.querySelector('.lead')?.dataset.step,
+  }))
+  check(after.value.length > 6, `адрес подтверждён выбором: «${after.value}»`)
+  check(after.step === 'where', 'клик по подсказке не перелистнул шаг')
 }
 await page.click('.lead__nav .lead__submit')
 

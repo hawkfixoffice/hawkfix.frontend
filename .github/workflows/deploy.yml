@@ -58,6 +58,13 @@ jobs:
       - name: Build
         env:
           VITE_LEAD_ENDPOINT: ${{ vars.VITE_LEAD_ENDPOINT }}
+          # Панель: адрес проекта и публикуемый ключ. Оба публичные
+          # по назначению и продублированы в коде — переменные нужны,
+          # только если решим их поменять. Ключей карт тут нет:
+          # тайлы OpenFreeMap и Photon работают без ключа, а ключ
+          # маршрутизатора живёт в секретах Supabase.
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
           # Переменная репозитория перебивает автоопределение — на случай,
           # когда домен Pages и нужный адрес сборки расходятся.
           VITE_SITE: ${{ vars.VITE_SITE || steps.pages.outputs.base_url }}
@@ -72,6 +79,7 @@ jobs:
           test -f dist/robots.txt
           test -f dist/404.html
           test -f dist/CNAME
+          test -f dist/panel/index.html
 
       - uses: actions/upload-pages-artifact@v3
         with:

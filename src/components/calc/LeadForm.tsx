@@ -19,6 +19,17 @@ import Receipt, { type ReceiptData } from './Receipt'
 const ENDPOINT = import.meta.env.VITE_LEAD_ENDPOINT
   || 'https://vpijumbbmwjibvlohfug.supabase.co/functions/v1/lead'
 
+/** Запасной путь — тот же приём заявки, но через PostgREST.
+ *
+ *  У части людей запросы к `functions/v1` не уходят из браузера вовсе
+ *  (VPN, корпоративный DNS, блокировщик), при том что `rest/v1` того же
+ *  проекта работает. Заявка тогда терялась, а человек видел «Не удалось
+ *  отправить». Ключ публикуемый: он умеет ровно то, что разрешают политики,
+ *  а из таблицы заявок ему доступен единственный вызов `submit_lead`. */
+const SUPA_URL = import.meta.env.VITE_SUPABASE_URL || 'https://vpijumbbmwjibvlohfug.supabase.co'
+const SUPA_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_FrahMhP9wLVvccioUMnjSQ_wSr3Qnth'
+const RPC_ENDPOINT = `${SUPA_URL}/rest/v1/rpc/submit_lead`
+
 /** Окна приезда по два часа: точное время бригада подтверждает звонком,
  *  а выбирать из 12 получасовых слотов человеку тяжело. */
 const SLOTS = ['08:00-10:00', '10:00-12:00', '12:00-14:00', '14:00-16:00', '16:00-18:00', '18:00-20:00']
@@ -42,6 +53,7 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
   const [hit, setHit] = useState<AddressHit | null>(null)
   const [receipt, setReceipt] = useState<ReceiptData | null>(null)
   const [showReceipt, setShowReceipt] = useState(false)
+  const [blocked, setBlocked] = useState(false)
   const [f, setF] = useState({ name: '', phone: '', email: '', address: '', comment: '', when: '', time: '' })
 
   // Имя, телефон и адрес помним на устройстве — второй заказ короче первого
@@ -87,6 +99,11 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
     setDir(STEPS.indexOf(to) < idx ? 'back' : 'fwd')
     stage.capture()
     setStep(to)
+    // На невысоких экранах карточка прокручивается сама: показываем
+    // начало нового шага, а не то место, где человек остановился
+    requestAnimationFrame(() => {
+      stage.ref.current?.closest('.calc__sum')?.scrollTo({ top: 0, behavior: 'smooth' })
+    })
   }
 
   function next() {
@@ -116,7 +133,9 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
     const payload = {
       locale, urgent,
       contact: { name: f.name, phone: f.phone, email: f.email },
-      place: { district: hit?.district ?? '', address: f.address },
+      // Координаты берём из выбранной подсказки: по ним панель ставит точку
+      // заказа на карту и строит маршрут мастеру
+      place: { district: hit?.district ?? '', address: f.address, lat: hit?.lat ?? null, lon: hit?.lon ?? null },
       when: f.when,
       whenTime: f.time,
       comment: f.comment,
@@ -126,13 +145,39 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
     }
 
     try {
-      const res = await fetch(ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
+      // Две попытки: мобильная сеть рвёт запросы чаще, чем кажется,
+      // и терять заполненную заявку из-за одного обрыва нельзя
+      let res: Response | null = null
+      let netError: Error | null = null
+      for (let attempt = 0; attempt < 2 && !res; attempt++) {
+        try {
+          res = await fetch(ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          })
+        } catch (e) {
+          netError = e as Error
+          await new Promise((r) => setTimeout(r, 700))
+        }
+      }
+
+      // Функция недоступна из этого браузера — идём тем же запросом
+      // через PostgREST. Письма отправит сама база.
+      if (!res || res.status >= 500) {
+        console.warn('[lead] функция недоступна, отправляем через RPC:', netError?.message ?? res?.status)
+        res = await fetch(RPC_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` },
+          body: JSON.stringify({ payload: { ...payload, userAgent: navigator.userAgent } }),
+        })
+      }
+
+      if (!res) throw netError ?? new Error('network')
       if (!res.ok) throw new Error(String(res.status))
       const data = await res.json().catch(() => ({}))
+      // RPC отвечает 200 и на отказ проверки — разбираем тело
+      if (data?.error) throw new Error(String(data.error))
       const no = data?.orderNo ?? ''
       setOrderNo(no)
       // Чек печатается только после ответа: до него печатать нечего
@@ -150,8 +195,11 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
           name: l.item.name[locale], qty: l.qty, sum: formatMoney(l.sum, settings, locale),
         })),
       })
-    } catch {
+    } catch (e) {
       setShowReceipt(false)
+      // «Failed to fetch» значит, что запрос не ушёл вовсе: обычно
+      // виноват блокировщик, расширение приватности или VPN
+      setBlocked(e instanceof TypeError)
       setState('error')
     }
   }
@@ -312,7 +360,12 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
       )}
       </div>
 
-      {state === 'error' && <p className="field__err" role="alert">{t.form.error}</p>}
+      {state === 'error' && (
+        <p className="field__err" role="alert">
+          {t.form.error}
+          {blocked && <> {blockedHint(locale)}</>}
+        </p>
+      )}
 
       <div className="lead__nav">
         {idx > 0 && (
@@ -390,6 +443,13 @@ const showDate = (iso: string, locale: string) => {
     day: '2-digit', month: '2-digit', year: 'numeric',
   })
 }
+
+/** Подсказка, когда запрос не ушёл из браузера вовсе. */
+const blockedHint = (l: string) =>
+  l === 'pl' ? 'Wygląda na to, że wysyłkę blokuje VPN albo blokada reklam — wyłącz je i spróbuj ponownie.'
+  : l === 'uk' ? 'Схоже, надсилання блокує VPN або блокувальник реклами — вимкніть їх і спробуйте ще раз.'
+  : l === 'ru' ? 'Похоже, отправку блокирует VPN или блокировщик рекламы — отключите их и попробуйте снова.'
+  : 'It looks like a VPN or ad blocker is blocking the request — turn it off and try again.'
 
 const privacyWord = (l: string) =>
   l === 'pl' ? 'politykę prywatności' : l === 'uk' ? 'політику конфіденційності'
