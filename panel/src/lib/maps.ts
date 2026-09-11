@@ -1,5 +1,17 @@
-import { Map as MlMap, Marker, NavigationControl, type StyleSpecification, type GeoJSONSource } from 'maplibre-gl'
+import { Map as MlMap, Marker, NavigationControl, setWorkerUrl, type StyleSpecification, type GeoJSONSource } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
+// Воркер собираем сами и адрес отдаём библиотеке явно.
+// Иначе MapLibre 6 ищет его рядом с собственным модулем
+// (`new URL('./maplibre-gl-worker.mjs', import.meta.url)`): в dev это
+// node_modules, где файл лежит, а в собранной панели — `/panel/assets/`,
+// куда он не попадает. Воркер не грузился, и карта оставалась пустой:
+// фон, метки и атрибуция есть, векторные тайлы разбирать некому и
+// в консоли ни одной ошибки. `?worker&url` заставляет Vite собрать воркер
+// вместе с его `maplibre-gl-shared.mjs` в отдельный файл сборки и вернуть
+// его адрес — и в dev, и в production, и при любом `base`.
+import mlWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
+
+setWorkerUrl(mlWorkerUrl)
 
 /** Карта без Google и без ключей в браузере.
  *

@@ -5,6 +5,7 @@ import { useT } from '../lib/i18n'
 import { money, dateShort, fromNow } from '../lib/fmt'
 import Status from '../ui/Status'
 import NewNotice from '../ui/NewNotice'
+import DeleteOrder from '../ui/DeleteOrder'
 
 type Tab = 'inwork' | 'overdue' | 'new' | 'done' | 'all'
 
@@ -22,6 +23,10 @@ export default function Orders({ me }: { me: Me }) {
   const [counts, setCounts] = useState<Record<Tab, number>>({ inwork: 0, overdue: 0, new: 0, done: 0, all: 0 })
   /** Кому заказ предложен прямо сейчас: order_id → предложение */
   const [offers, setOffers] = useState<Record<string, any>>({})
+  /** Заказ, который админ собирается удалить, и счётчик перезагрузок списка */
+  const [kill, setKill] = useState<any>(null)
+  const [nonce, setNonce] = useState(0)
+  const [flash, setFlash] = useState('')
 
   useEffect(() => {
     setBusy(true)
@@ -48,7 +53,7 @@ export default function Orders({ me }: { me: Me }) {
             (fs ?? []).map((f: any) => [f.order_id, f]))))
       }
     })
-  }, [tab])
+  }, [tab, nonce])
 
   // Счётчики на вкладках: без них свежая заявка молча лежит в «Новых»,
   // пока человек смотрит на пустую вкладку «В работе»
@@ -65,7 +70,7 @@ export default function Orders({ me }: { me: Me }) {
       count((r: any) => r),
     ]).then(([inwork, overdue, nw, done, all]) =>
       setCounts({ inwork, overdue, new: nw, done, all }))
-  }, [tab])
+  }, [tab, nonce])
 
   const list = useMemo(() => {
     const s = q.trim().toLowerCase()
@@ -107,6 +112,18 @@ export default function Orders({ me }: { me: Me }) {
       </div>
 
       {tab !== 'new' && <NewNotice onOpen={() => setTab('new')} />}
+
+      {flash && <p className="muted tiny">{flash}</p>}
+
+      {kill && (
+        <DeleteOrder order={kill}
+                     onClose={() => setKill(null)}
+                     onDone={(no) => {
+                       setKill(null)
+                       setFlash(t('del.done', { no }))
+                       setNonce((n) => n + 1)
+                     }} />
+      )}
 
       <div className="card card--flush">
         <div className="tablewrap">
@@ -156,7 +173,19 @@ export default function Orders({ me }: { me: Me }) {
                         ? money(o.order_reports[0].gross, lang)
                         : money(o.quoted_total, lang)}
                     </td>
-                    <td className="right"><Status value={o.status} overdue={!!late} /></td>
+                    <td className="right">
+                      <span className="split" style={{ justifyContent: 'flex-end' }}>
+                        <Status value={o.status} overdue={!!late} />
+                        {/* Клик по строке открывает заказ, поэтому крестик
+                            обязан остановить всплытие — иначе удаление
+                            и переход сработают вместе */}
+                        {me.role === 'admin' && (
+                          <button className="btn btn--ghost btn--sm" title={t('del.title')}
+                                  aria-label={`${t('del.title')} ${o.order_no}`}
+                                  onClick={(e) => { e.stopPropagation(); setKill(o) }}>✕</button>
+                        )}
+                      </span>
+                    </td>
                   </tr>
                 )
               })}

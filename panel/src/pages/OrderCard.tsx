@@ -9,6 +9,7 @@ import { createMap, marker, drawRoute, fetchRoute, geocode, shopsNear, navLink,
 import Status from '../ui/Status'
 import Avatar from '../ui/Avatar'
 import Assign from '../ui/Assign'
+import DeleteOrder from '../ui/DeleteOrder'
 
 /** Карточка заказа: путь мастера, магазин по дороге, отчёт и деньги.
  *  Мастер видит только свои 80 %, доля фирмы — для админа. */
@@ -23,6 +24,7 @@ export default function OrderCard({ me }: { me: Me }) {
   /** Вся история предложений: кому уходил заказ и чем это кончилось */
   const [offers, setOffers] = useState<any[]>([])
   const [assign, setAssign] = useState(false)
+  const [del, setDel] = useState(false)
   const [msg, setMsg] = useState('')
 
   const load = async () => {
@@ -122,6 +124,10 @@ export default function OrderCard({ me }: { me: Me }) {
             </>
           )}
           {canDrive && o.status === 'shopping' && <button className="btn btn--dark" onClick={() => step('in_progress')}>{t('ord.start')}</button>}
+          {/* Удаление — только у админа: заказ уносит с собой отчёт и деньги */}
+          {me.role === 'admin' && (
+            <button className="btn btn--danger" onClick={() => setDel(true)}>{t('del.title')}</button>
+          )}
         </div>
       </div>
 
@@ -130,6 +136,12 @@ export default function OrderCard({ me }: { me: Me }) {
       {assign && (
         <Assign orderId={o.id} orderNo={o.order_no}
                 onClose={() => setAssign(false)} onDone={load} />
+      )}
+
+      {del && (
+        <DeleteOrder order={o}
+                     onClose={() => setDel(false)}
+                     onDone={() => nav('/orders', { replace: true })} />
       )}
 
       <div className="grid grid--wide-left">
