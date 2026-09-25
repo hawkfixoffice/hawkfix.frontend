@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { chains, groupWords, groups, items, services, settings } from '../../data/content'
+import { chains, groupWords, services, settings } from '../../data/content'
+import { useCatalog } from '../../lib/catalog'
+import { bySub, fromWord, minPrice, nameOf, priceText } from '../../lib/price'
 import { calcQuote, formatHours, formatMoney, suggestedChains } from '../../lib/quote'
 import { usePage } from '../PageContext'
 import Icon from '../Icon'
@@ -26,6 +28,8 @@ const GROUP_PHOTO: Record<string, string> = Object.fromEntries(
 
 export default function Calculator() {
   const { locale, t } = usePage()
+  // Прайс живой: сначала запечённый в сборку, потом свежий из базы
+  const { items, groups, subgroups } = useCatalog()
   const p = usePicker()
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState<string | null>(null)
@@ -45,7 +49,7 @@ export default function Calculator() {
   // отдельная галочка «сегодня или завтра» спрашивала то же самое второй раз
   const [when, setWhen] = useState('')
 
-  const quote = useMemo(() => calcQuote(p.selection, items, settings, p.urgent), [p.selection, p.urgent])
+  const quote = useMemo(() => calcQuote(p.selection, items, settings, p.urgent), [p.selection, p.urgent, items])
   const suggestions = useMemo(() => suggestedChains(p.selection, chains), [p.selection])
   const shownTotal = useCountUp(quote.total)
 
@@ -93,7 +97,7 @@ export default function Calculator() {
   const q = query.trim().toLocaleLowerCase(locale)
   let found: typeof items | null = null
   if (q.length >= 2) {
-    const byName = items.filter((i) => i.name[locale].toLocaleLowerCase(locale).includes(q))
+    const byName = items.filter((i) => nameOf(i, locale).toLocaleLowerCase(locale).includes(q))
     const byGroup = items.filter(
       (i) => !byName.includes(i) &&
         ((groups.find((g) => g.key === i.group)?.name[locale] ?? '').toLocaleLowerCase(locale).includes(q) ||
@@ -102,7 +106,7 @@ export default function Calculator() {
     found = [...byName, ...byGroup]
   }
 
-  const byKey = useMemo(() => new Map(items.map((i) => [i.key, i])), [])
+  const byKey = useMemo(() => new Map(items.map((i) => [i.key, i])), [items])
   const popular = POPULAR.map((k) => byKey.get(k)).filter(Boolean) as typeof items
   const rowLabels = { add: t.a11y.add, minus: t.a11y.minus, plus: t.a11y.plus, remove: t.a11y.remove }
 
@@ -166,8 +170,8 @@ export default function Calculator() {
                       aria-pressed={on}
                     >
                       <Icon name={on ? 'check' : 'plus'} size={14} />
-                      {i.name[locale]}
-                      <span className="num">{i.price}</span>
+                      {nameOf(i, locale)}
+                      <span className="num">{i.ptype === 'scope' ? priceText(i, locale, settings).main : i.price}</span>
                     </button>
                   )
                 })}
@@ -180,7 +184,7 @@ export default function Calculator() {
                 const list = items.filter((i) => i.group === g.key)
                 if (!list.length) return null
                 const chosen = list.filter((i) => p.qtyOf(i.key) > 0).length
-                const from = Math.min(...list.map((i) => i.price))
+                const from = minPrice(list)
                 const photo = GROUP_PHOTO[g.key]
                 const isOpen = open === g.key
                 return (
@@ -206,15 +210,20 @@ export default function Calculator() {
                       <Icon name="chevron" size={18} className="grp__chev" />
                     </button>
                     <Collapse open={isOpen} id={`grp-${g.key}`}>
-                    <ul className="ilist">
-                      {list.map((i) => (
-                        <ItemRow
-                          key={i.key} item={i} qty={p.qtyOf(i.key)} locale={locale} settings={settings}
-                          onAdd={() => p.add(i.key, i.min)} onSet={(v) => p.setQty(i.key, v, i.min, i.max)}
-                          labels={rowLabels}
-                        />
-                      ))}
-                    </ul>
+                    {bySub(list, subgroups.filter((x) => x.group === g.key)).map((part) => (
+                      <div key={part.key || 'rest'}>
+                        {part.name && <p className="ilist__sub">{nameOf({ name: part.name }, locale)}</p>}
+                        <ul className="ilist">
+                          {part.list.map((i) => (
+                            <ItemRow
+                              key={i.key} item={i} qty={p.qtyOf(i.key)} locale={locale} settings={settings}
+                              onAdd={() => p.add(i.key, i.min)} onSet={(v) => p.setQty(i.key, v, i.min, i.max)}
+                              labels={rowLabels}
+                            />
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
                     </Collapse>
                   </div>
                 )
@@ -233,7 +242,7 @@ export default function Calculator() {
                 if (!i) return null
                 return (
                   <button key={k} type="button" className="chip chip--accent" onClick={() => p.add(k, i.min)}>
-                    <Icon name="plus" size={14} /> {i.name[locale]}
+                    <Icon name="plus" size={14} /> {nameOf(i, locale)}
                   </button>
                 )
               })}
@@ -277,12 +286,16 @@ export default function Calculator() {
             <ul className="sum__lines">
               {quote.lines.map((l) => (
                 <li key={l.item.key} data-flash={flash === l.item.key ? 'yes' : undefined}>
-                  <span className="sum__ln">{l.item.name[locale]}</span>
+                  <span className="sum__ln">{nameOf(l.item, locale)}</span>
                   <span className="sum__lq num">×{l.qty}</span>
-                  <span className="sum__lp num">{formatMoney(l.sum, settings, locale)}</span>
+                  <span className="sum__lp num">
+                    {l.item.ptype === 'scope'
+                      ? (l.sum > 0 ? `${fromWord(locale)} ${formatMoney(l.sum, settings, locale)}` : priceText(l.item, locale, settings).main)
+                      : formatMoney(l.sum, settings, locale)}
+                  </span>
                   <button
                     type="button" onClick={() => p.remove(l.item.key)}
-                    aria-label={`${t.a11y.remove}: ${l.item.name[locale]}`}
+                    aria-label={`${t.a11y.remove}: ${nameOf(l.item, locale)}`}
                   >
                     <Icon name="x" size={14} />
                   </button>
@@ -316,6 +329,13 @@ export default function Calculator() {
             </div>
           )}
 
+          {!sent && quote.hasScope && (
+            <p className="sum__note sum__note--scope">
+              <Icon name="sparkles" size={15} />
+              {SCOPE_NOTE[locale]}
+            </p>
+          )}
+
           {!sent && quote.minimumApplied && (
             <p className="sum__note">
               <Icon name="shield" size={15} />
@@ -327,7 +347,10 @@ export default function Calculator() {
             <div className="sum__total">
               <div>
                 <p className="sum__totalLabel">{totalLabel(locale)}</p>
-                <p className="sum__big num">{formatMoney(shownTotal, settings, locale)}</p>
+                <p className="sum__big num">
+                  {quote.hasScope && <small className="sum__from">{fromWord(locale)} </small>}
+                  {formatMoney(shownTotal, settings, locale)}
+                </p>
               </div>
               <div className="sum__time">
                 <Icon name="clock" size={15} />
@@ -350,7 +373,7 @@ export default function Calculator() {
             {totalLabel(locale)}
             {quote.count > 0 && <> · {quote.count} {t.prices.positions}</>}
           </span>
-          <span className="calcbar__sum num">{formatMoney(shownTotal, settings, locale)}</span>
+          <span className="calcbar__sum num">{quote.hasScope ? `${fromWord(locale)} ` : ''}{formatMoney(shownTotal, settings, locale)}</span>
         </div>
         <button type="button" className="btn btn--primary calcbar__go" onClick={() => setSheet(true)}>
           {settings.strings[locale].next} <Icon name="arrow" size={17} />
@@ -410,6 +433,14 @@ const RUSH: Record<string, { title: string; note: string; hint: string }> = {
     note: 'We add +{pct}% to the labour, capped at {max}.',
     hint: 'You pick the date in the form. Today or tomorrow adds +{pct}%.',
   },
+}
+
+/** Работы «за объём»: итог — ориентир, фото обязательно, цену назовёт мастер. */
+const SCOPE_NOTE: Record<string, string> = {
+  pl: 'Część prac wyceniamy po zdjęciu: w formularzu dodasz zdjęcia, a fachowiec poda dokładną cenę przed rozpoczęciem pracy.',
+  uk: 'Частину робіт оцінюємо за фото: у формі додасте фото, а майстер назве точну ціну до початку роботи.',
+  ru: 'Часть работ оцениваем по фото: в форме добавите фото, а мастер назовёт точную цену до начала работы.',
+  en: 'Some jobs are priced from a photo: add photos in the form and the specialist gives the exact price before starting.',
 }
 
 /** Ключ морфа: играем переход ровно один раз — когда заявка ушла. */

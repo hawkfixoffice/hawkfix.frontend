@@ -9,6 +9,8 @@ import Picture from '../components/Picture'
 import Icon from '../components/Icon'
 import Reveal from '../components/Reveal'
 import { CONTACT, serviceAlt } from '../lib/ui'
+import { PT, U } from '../cms/E'
+import { PTYPE_LABEL, priceText, ptypeOf } from '../lib/price'
 
 export default function ServicePage() {
   const { page, locale, t } = usePage()
@@ -33,17 +35,17 @@ export default function ServicePage() {
           ]} />
           <div className="pagehead__split">
             <div>
-              <h1>{tr.h1}</h1>
-              <p className="pagehead__lead">{tr.blurb}</p>
+              <PT as="h1" field="h1" v={tr.h1} />
+              <PT as="p" className="pagehead__lead" field="blurb" v={tr.blurb ?? ''} multiline />
             </div>
             <div className="blocks blocks--stat pagehead__stats">
               <div className="blk blk--accent">
-                <p className="blk__n">{t.service.priceFrom}</p>
+                <U as="p" className="blk__n" k="service.priceFrom" />
                 <p className="blk__v">{priceFrom} {cur}</p>
               </div>
               {groupItems.length > 0 && (
                 <div className="blk blk--forest">
-                  <p className="blk__n">{t.nav.prices}</p>
+                  <U as="p" className="blk__n" k="nav.prices" />
                   <p className="blk__v">{groupItems.length}</p>
                 </div>
               )}
@@ -71,13 +73,13 @@ export default function ServicePage() {
               <div className="blocks blocks--2 svc-blocks">
                 {body.intro?.map((x: string) => (
                   <div className="blk blk--mute svc-blocks__wide" key={x}>
-                    <p className="blk__s blk__s--lead">{x}</p>
+                    <PT as="p" className="blk__s blk__s--lead" v={x} multiline />
                   </div>
                 ))}
                 {body.checklist?.map((c: string, i: number) => (
                   <div className={`blk blk--xs blk--line${i === 0 ? ' blk--forest' : i === 1 ? ' blk--accent' : ''}`} key={c}>
                     <p className="blk__n">{String(i + 1).padStart(2, '0')}</p>
-                    <p className="blk__t blk__t--sm">{c}</p>
+                    <PT as="p" className="blk__t blk__t--sm" v={c} multiline />
                   </div>
                 ))}
               </div>
@@ -90,16 +92,19 @@ export default function ServicePage() {
       {groupItems.length > 0 && (
         <section className="band band--tight">
           <div className="wrap">
-            <h2 className="sec-h2">{t.nav.prices}</h2>
+            <U as="h2" className="sec-h2" k="nav.prices" />
             <div className="vbars">
               {groupItems.map((i, n) => (
                 <Reveal key={i.key} delay={Math.min(n, 6) * 40}>
                   <div className={`vbar${n === 0 ? ' vbar--accent' : ''}`}>
                     <span className="vbar__label">
                       <span className="vbar__name">{i.name[locale]}</span>
-                      <span className="vbar__meta">{settings.units[locale]?.[i.unit] ?? i.unit}</span>
+                      <span className="vbar__meta">
+                        {priceText(i, locale, settings).unit ?? ''}
+                        {ptypeOf(i) !== 'fixed' && <> · {PTYPE_LABEL[ptypeOf(i)][locale]}</>}
+                      </span>
                     </span>
-                    <span className="vbar__v num">{i.price} {cur}</span>
+                    <span className="vbar__v num">{priceText(i, locale, settings).main}</span>
                   </div>
                 </Reveal>
               ))}
@@ -115,15 +120,15 @@ export default function ServicePage() {
             {body.note?.length ? (
               <Reveal>
                 <div className="blk detail__note">
-                  {body.note.map((x: string) => <p key={x}>{x}</p>)}
+                  {body.note.map((x: string) => <PT as="p" key={x} v={x} multiline />)}
                 </div>
               </Reveal>
             ) : <div />}
             <Reveal delay={70}>
               <div className="blk blk--dark svc-cta">
-                <h2 className="blk__t">{t.home.ctaHead}</h2>
+                <U as="h2" className="blk__t" k="home.ctaHead" />
                 <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
-                  {t.service.askAbout} <Icon name="arrow" size={17} />
+                  <U k="service.askAbout" /> <Icon name="arrow" size={17} />
                 </Link>
                 <a className="btn btn--onDark" href={CONTACT.phoneHref}>
                   <Icon name="phone" size={16} /> {CONTACT.phone}
@@ -138,9 +143,9 @@ export default function ServicePage() {
       <section className="band band--tight">
         <div className="wrap">
           <div className="sechead">
-            <h2 className="h-big">{t.service.other}</h2>
+            <U as="h2" className="h-big" k="service.other" />
             <Link className="btn btn--ghost" to={pathOf(KEY_PAGES.services, locale)}>
-              {t.service.backToServices} <Icon name="arrow" size={16} />
+              <U k="service.backToServices" /> <Icon name="arrow" size={16} />
             </Link>
           </div>
           <div className="team">

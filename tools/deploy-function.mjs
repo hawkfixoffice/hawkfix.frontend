@@ -21,7 +21,8 @@ form.append('metadata', JSON.stringify({
   entrypoint_path: 'index.ts',
   // Функция вызывается формой сайта без авторизации: JWT здесь не при чём,
   // защита — CORS, honeypot и (когда включим) Turnstile.
-  verify_jwt: false,
+  // site-publish требует входа (проверяет администратора сам), lead — нет
+  verify_jwt: slug === 'site-publish',
 }))
 form.append('file', new File([code], 'index.ts', { type: 'application/typescript' }))
 

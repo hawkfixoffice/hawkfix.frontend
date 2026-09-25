@@ -4,6 +4,7 @@ import { KEY_PAGES, allPages, pathOf, services } from '../data/content'
 import type { Locale } from '../lib/types'
 import { usePage } from './PageContext'
 import Icon from './Icon'
+import { U } from '../cms/E'
 
 function titleOf(key: string, locale: Locale): string {
   return allPages.find((p) => p.key === key)?.tr[locale].h1 ?? key
@@ -29,20 +30,20 @@ export default function Footer() {
 
           <div className="footer__lead">
             <span className="pill pill--outline">HAWK.FIX · {CONTACT.city}</span>
-            <h2 className="footer__h">{t.home.ctaHead}</h2>
-            <p className="footer__sub">{t.home.ctaLead}</p>
+            <U as="h2" className="footer__h" k="home.ctaHead" />
+            <U as="p" className="footer__sub" k="home.ctaLead" multiline />
             <div className="footer__actions">
               <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
-                {t.cta.quote} <Icon name="arrow" size={17} />
+                <U k="cta.quote" /> <Icon name="arrow" size={17} />
               </Link>
               <a className="btn btn--outline" href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener">
-                <Icon name="whatsapp" size={17} /> {t.cta.whatsapp}
+                <Icon name="whatsapp" size={17} /> <U k="cta.whatsapp" />
               </a>
             </div>
           </div>
 
           <div className="footer__contact">
-            <h3 className="footer__contactTitle">{t.nav.contact}</h3>
+            <U as="h3" className="footer__contactTitle" k="nav.contact" />
             <div className="footer__rows">
               <p className="footer__row">
                 <small>{t.form.phone}</small>
@@ -60,13 +61,13 @@ export default function Footer() {
                 {services.slice(0, 5).map((s) => (
                   <Link key={s.key} to={s.paths[locale]}>{s.tr[locale].h1}</Link>
                 ))}
-                <Link to={pathOf(KEY_PAGES.services, locale)}>{t.cta.allServices} →</Link>
+                <Link to={pathOf(KEY_PAGES.services, locale)}><U k="cta.allServices" /> →</Link>
               </nav>
             </div>
           </div>
 
           <div className="footer__legal">
-            <span>© {year} HAWK.FIX — {t.footer.rights}</span>
+            <span>© {year} HAWK.FIX — <U k="footer.rights" /></span>
             <nav className="footer__links" aria-label={t.footer.legal} style={{ marginTop: 0 }}>
               <Link to={pathOf(KEY_PAGES.privacy, locale)}>{titleOf(KEY_PAGES.privacy, locale)}</Link>
               <Link to={pathOf(KEY_PAGES.cookies, locale)}>{titleOf(KEY_PAGES.cookies, locale)}</Link>

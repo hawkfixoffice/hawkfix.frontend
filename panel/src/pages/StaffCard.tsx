@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { sb, type Me } from '../lib/supabase'
 import { useT } from '../lib/i18n'
 import { money, dateShort, monthName, dateFull, nOrders } from '../lib/fmt'
@@ -9,6 +9,7 @@ import AvatarPicker from '../ui/AvatarPicker'
 import Status from '../ui/Status'
 import { BarChart, type Point } from '../ui/Chart'
 import Activity from '../ui/Activity'
+import DeleteStaff from '../ui/DeleteStaff'
 
 /** Карточка сотрудника: сколько заработал по месяцам, все его заказы,
  *  умения, загрузка и заметка. Деньги видит только администратор —
@@ -25,6 +26,8 @@ export default function StaffCard({ me }: { me: Me }) {
   const [capacity, setCapacity] = useState(3)
   const [pass, setPass] = useState('')
   const [msg, setMsg] = useState('')
+  const [del, setDel] = useState(false)
+  const nav = useNavigate()
 
   const canEdit = me.role === 'admin'
   /** Деньги есть только у того, кто ездит: у менеджера и админа нет ни
@@ -94,10 +97,21 @@ export default function StaffCard({ me }: { me: Me }) {
             </p>
           </div>
         </div>
-        <span className={`badge ${s.active ? 'badge--mint' : 'badge--warn'}`}>
-          {s.active ? t('team.active') : t('team.off')}
-        </span>
+        <div className="split">
+          <span className={`badge ${s.deleted_at ? 'badge--bad' : s.active ? 'badge--mint' : 'badge--warn'}`}>
+            {s.deleted_at ? t('staffDel.gone') : s.active ? t('team.active') : t('team.off')}
+          </span>
+          {/* Удалить может только админ, и не себя: база это тоже проверяет */}
+          {canEdit && me.id !== id && !s.deleted_at && (
+            <button className="btn btn--danger btn--sm" onClick={() => setDel(true)}>{t('staffDel.title')}</button>
+          )}
+        </div>
       </div>
+
+      {del && (
+        <DeleteStaff staff={s} onClose={() => setDel(false)}
+                     onDone={(r) => nav('/team', { replace: true, state: { staffDeleted: s.full_name, mode: r?.mode, moved: r?.orders_moved } })} />
+      )}
 
       {canSeeMoney && stats && (
         <div className="grid grid--4">
@@ -138,7 +152,7 @@ export default function StaffCard({ me }: { me: Me }) {
             ))}
           </div>}
 
-          {canEdit && (
+          {canEdit && !s.deleted_at && (
             <>
               {isField && <hr className="hr" />}
               <div className="grid grid--2">

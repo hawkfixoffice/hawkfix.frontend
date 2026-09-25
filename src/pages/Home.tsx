@@ -9,6 +9,7 @@ import Accordion from '../components/Accordion'
 import SparkDot from '../components/SparkDot'
 import Rule from '../components/Rule'
 import Calculator from '../components/calc/Calculator'
+import E, { U } from '../cms/E'
 import { CONTACT, serviceAlt } from '../lib/ui'
 
 /** У каждой группы прайса есть страница услуги — берём с неё фотографию и ссылку. */
@@ -46,12 +47,12 @@ export default function Home() {
         <div className="wrap">
           <div className="herox__box">
             <div className="herox__text">
-              <span className="pill pill--outline">{t.hero.kicker}</span>
-              <h1 className="herox__h1">{t.hero.tagline}</h1>
-              <p className="herox__sub">{t.hero.sub}</p>
+              <U as="span" className="pill pill--outline" k="hero.kicker" />
+              <U as="h1" className="herox__h1" k="hero.tagline" />
+              <U as="p" className="herox__sub" k="hero.sub" multiline />
               <div className="herox__actions">
                 <a className="btn btn--primary" href="#wycena">
-                  {t.cta.quote} <Icon name="arrow" size={17} />
+                  <U k="cta.quote" /> <Icon name="arrow" size={17} />
                 </a>
                 <a className="btn btn--onDark" href={CONTACT.phoneHref}>
                   <Icon name="phone" size={16} /> {CONTACT.phone}
@@ -68,7 +69,7 @@ export default function Home() {
                   />
                   {i === 1 && (
                     <Link className="badge badge--bl herox__badge" to={s.paths[locale]}>
-                      <span className="badge__text">{t.cta.more}</span>
+                      <U as="span" className="badge__text" k="cta.more" />
                       <span className="badge__dot"><SparkDot /></span>
                     </Link>
                   )}
@@ -83,17 +84,17 @@ export default function Home() {
 
           <div className="herox__bottom">
             <div className="blk blk--accent">
-              <p className="blk__t">{t.home.minVisitTitle} — {settings.minVisit} {cur}</p>
-              <p className="blk__s">{t.home.minVisitNote}</p>
+              <p className="blk__t"><U k="home.minVisitTitle" /> — {settings.minVisit} {cur}</p>
+              <U as="p" className="blk__s" k="home.minVisitNote" multiline />
             </div>
             <div className="herox__spacer" aria-hidden="true" />
             <div className="blk blk--mute blk--center">
               <p className="blk__v blk__v--md">{items.length}</p>
-              <p className="blk__s">{t.prices.positions}</p>
+              <U as="p" className="blk__s" k="prices.positions" />
             </div>
             <div className="blk blk--forest">
-              <p className="blk__t">{t.nav.services}: {services.length}</p>
-              <p className="blk__s">{t.home.benefitLead}</p>
+              <p className="blk__t"><U k="nav.services" />: {services.length}</p>
+              <U as="p" className="blk__s" k="home.benefitLead" multiline />
             </div>
           </div>
         </div>
@@ -105,9 +106,9 @@ export default function Home() {
           <Reveal>
             <div className="sechead sechead--top sechead--ruled">
               <div className="h-aside">
-                <p className="h-aside__p">{t.home.calcLead}</p>
+                <U as="p" className="h-aside__p" k="home.calcLead" multiline />
               </div>
-              <h2 className="h-big h-big--right">{t.home.stepsHead}</h2>
+              <U as="h2" className="h-big h-big--right" k="home.stepsHead" />
             </div>
             <Rule className="rule--head" />
           </Reveal>
@@ -117,15 +118,15 @@ export default function Home() {
                 <div className={`blk blk--tall ${i === 0 ? 'blk--accent' : 'blk--forest'}`} key={s.t}>
                   <p className="blk__n">0{i + 1}</p>
                   <div>
-                    <h3 className="blk__t">{s.t}</h3>
-                    <p className="blk__s">{s.d}</p>
+                    <U as="h3" className="blk__t" k={`home.steps.${i}.t`} />
+                    <U as="p" className="blk__s" k={`home.steps.${i}.d`} multiline />
                   </div>
                 </div>
               ))}
               <div className="panel panel--mono">
                 <Picture name="about" alt={t.alt.workshop} ratio="4x3" widths={[800, 1200, 1600]} sizes="(max-width: 900px) 100vw, 32vw" />
                 <span className="badge badge--accent badge--bl">
-                  <span className="badge__text">03 · {t.home.steps[2].t}</span>
+                  <span className="badge__text">03 · <U k="home.steps.2.t" /></span>
                   <span className="badge__dot"><Icon name="check" size={18} /></span>
                 </span>
               </div>
@@ -139,9 +140,9 @@ export default function Home() {
         <div className="wrap">
           <Reveal>
             <div className="sechead sechead--ruled">
-              <h2 className="h-big">{t.home.calcHead}</h2>
+              <U as="h2" className="h-big" k="home.calcHead" />
               <div className="h-aside">
-                <p className="h-aside__p">{t.home.calcLead}</p>
+                <U as="p" className="h-aside__p" k="home.calcLead" multiline />
               </div>
             </div>
             <Rule className="rule--head" />
@@ -162,7 +163,7 @@ export default function Home() {
                   <p className="blk__n--small">{t.prices.from} {from} {cur} · {n} {t.prices.positions}</p>
                   <p className="blk__t">{g.name[locale] ?? g.key}</p>
                   <span className="blk__gap" />
-                  <p className="blk__s">{svc ? svc.tr[locale].blurb : ''}</p>
+                  {svc ? <E as="p" className="blk__s" k={`page:${svc.key}:blurb`} v={svc.tr[locale].blurb ?? ''} multiline /> : <p className="blk__s" />}
                 </>
               )
               // Ряды по три, чётные сдвинуты на колонку вправо — как на слайде
@@ -182,11 +183,11 @@ export default function Home() {
           <Reveal>
             <div className="sechead sechead--ruled toc__head">
               <h2 className="h-big">
-                {t.home.benefitHead} {t.home.benefitHeadTail}
+                <U k="home.benefitHead" /> <U k="home.benefitHeadTail" />
               </h2>
               <div className="h-aside">
-                <p className="h-aside__t">{t.home.pricesHead}</p>
-                <p className="h-aside__p">{t.home.pricesLead}</p>
+                <U as="p" className="h-aside__t" k="home.pricesHead" />
+                <U as="p" className="h-aside__p" k="home.pricesLead" multiline />
               </div>
             </div>
             <Rule className="rule--head" />
@@ -200,14 +201,14 @@ export default function Home() {
           <Reveal>
             <div className="sechead sechead--top sechead--ruled">
               <h2 className="h-big">
-                {t.home.servicesHead}{' '}
+                <U k="home.servicesHead" />{' '}
                 {/* Фото-чип внутри заголовка — оформление, не контент */}
                 <Picture name="drains" alt="" ratio="3x2" widths={[800]} sizes="132px" className="inline-chip" />{' '}
-                {t.home.servicesLead}
+                <U k="home.servicesLead" />
               </h2>
               <div className="h-aside">
-                <p className="h-aside__t">{t.cta.allServices}</p>
-                <p className="h-aside__p">{t.home.benefitLead}</p>
+                <U as="p" className="h-aside__t" k="cta.allServices" />
+                <U as="p" className="h-aside__p" k="home.benefitLead" multiline />
               </div>
             </div>
             <Rule className="rule--head" />
@@ -258,8 +259,8 @@ export default function Home() {
                   <Link className={`blk blk--tall${tone}`} to={s.paths[locale]}>
                     <p className="blk__n">{String(i + 1).padStart(2, '0')}</p>
                     <div>
-                      <h3 className="blk__t">{s.tr[locale].h1}</h3>
-                      <p className="blk__s">{s.tr[locale].blurb}</p>
+                      <E as="h3" className="blk__t" k={`page:${s.key}:h1`} v={s.tr[locale].h1} />
+                      <E as="p" className="blk__s" k={`page:${s.key}:blurb`} v={s.tr[locale].blurb ?? ''} multiline />
                     </div>
                   </Link>
                 </Reveal>
@@ -275,16 +276,16 @@ export default function Home() {
           <div className="blocks blocks--wide-left blocks--top">
             <Reveal>
               <div className="sechead sechead--stack">
-                <h2 className="h-big h-big--wide">{f.heading}</h2>
+                <E as="h2" className="h-big h-big--wide" k="faq:heading" v={f.heading} />
               </div>
-              <Accordion items={f.items} />
+              <Accordion items={f.items} cmsKey="faq" />
             </Reveal>
             <Reveal delay={90}>
               <div className="panel panel--card panel--mono panel--fill about-panel">
                 <Picture name="hero-alt" alt={t.alt.interior} ratio="4x3" widths={[900, 1400, 2000]} sizes="(max-width: 900px) 100vw, 34vw" />
                 <span className="sticker about-panel__sticker">{CONTACT.city}<br />{CONTACT.radiusKm} km</span>
                 <Link className="badge badge--bl" to={pathOf(KEY_PAGES.about, locale)}>
-                  <span className="badge__text">{t.nav.about}</span>
+                  <U as="span" className="badge__text" k="nav.about" />
                   <span className="badge__dot"><Icon name="arrowUpRight" size={18} /></span>
                 </Link>
               </div>

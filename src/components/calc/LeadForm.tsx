@@ -12,6 +12,9 @@ import Lottie from '../Lottie'
 import AddressField from './AddressField'
 import { useMorphHeight } from './useMorphHeight'
 import Receipt, { type ReceiptData } from './Receipt'
+import { rid, toWebp } from '../../lib/webp'
+import { fromWord, nameOf } from '../../lib/price'
+import { SUPA_KEY, SUPA_URL, anonHeaders } from '../../lib/supa'
 
 /** Адрес edge-функции. Значение публичное по назначению, поэтому дефолт зашит:
  *  без него сборка, собранная без переменной окружения, отправляла заявку
@@ -26,8 +29,6 @@ const ENDPOINT = import.meta.env.VITE_LEAD_ENDPOINT
  *  проекта работает. Заявка тогда терялась, а человек видел «Не удалось
  *  отправить». Ключ публикуемый: он умеет ровно то, что разрешают политики,
  *  а из таблицы заявок ему доступен единственный вызов `submit_lead`. */
-const SUPA_URL = import.meta.env.VITE_SUPABASE_URL || 'https://vpijumbbmwjibvlohfug.supabase.co'
-const SUPA_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_FrahMhP9wLVvccioUMnjSQ_wSr3Qnth'
 const RPC_ENDPOINT = `${SUPA_URL}/rest/v1/rpc/submit_lead`
 
 /** Окна приезда по два часа: точное время бригада подтверждает звонком,
@@ -35,8 +36,14 @@ const RPC_ENDPOINT = `${SUPA_URL}/rest/v1/rpc/submit_lead`
 const SLOTS = ['08:00-10:00', '10:00-12:00', '12:00-14:00', '14:00-16:00', '16:00-18:00', '18:00-20:00']
 
 type State = 'idle' | 'sending' | 'ok' | 'error'
-const STEPS = ['who', 'where', 'when', 'send'] as const
-type Step = (typeof STEPS)[number]
+/** Шаг «Фото» появляется, только если в смете есть работы «за объём»:
+ *  их без фото не оценить, и мастер называет цену, глядя на снимки. */
+const BASE_STEPS = ['who', 'where', 'when', 'send'] as const
+const PHOTO_STEPS = ['who', 'photo', 'where', 'when', 'send'] as const
+type Step = 'who' | 'photo' | 'where' | 'when' | 'send'
+const MAX_PHOTOS = 6
+
+interface Shot { path: string; url: string; size: number }
 
 /** Заявка заполняется по шагам: контакты → адрес → время → детали.
  *  Раньше все восемь полей стояли одним экраном, и на телефоне форма
@@ -55,6 +62,13 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
   const [showReceipt, setShowReceipt] = useState(false)
   const [blocked, setBlocked] = useState(false)
   const [f, setF] = useState({ name: '', phone: '', email: '', address: '', comment: '', when: '', time: '' })
+  // Фото клиента: грузим сразу при выборе, в заявку уходят только пути
+  const [shots, setShots] = useState<Shot[]>([])
+  const [shooting, setShooting] = useState(0)
+  const [shotErr, setShotErr] = useState('')
+  const [sid] = useState(() => (typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID() : `${rid()}${rid()}-0000-4000-8000-${rid()}${rid()}`.slice(0, 36)))
+  const STEPS: readonly Step[] = quote.hasScope ? PHOTO_STEPS : BASE_STEPS
 
   // Имя, телефон и адрес помним на устройстве — второй заказ короче первого
   useEffect(() => {
@@ -88,7 +102,9 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
     ? SLOTS.filter((s) => Number(s.slice(0, 2)) > today.getHours())
     : SLOTS
 
-  const idx = STEPS.indexOf(step)
+  const idx = Math.max(0, STEPS.indexOf(step))
+  // Позицию «за объём» убрали из сметы, пока человек был на шаге фото
+  useEffect(() => { if (!STEPS.includes(step)) setStep('where') }, [STEPS, step])
   // Куда идём — от этого зависит, с какой стороны въезжает новый шаг
   const [dir, setDir] = useState<'fwd' | 'back'>('fwd')
   // Карточка меняет высоту вместе с шагом: без этого «Далее» дёргало
@@ -111,6 +127,12 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
       setTouched((v) => ({ ...v, name: true, phone: true }))
       if (nameBad || phoneBad) return
       saveProfile({ name: f.name, phone: f.phone, email: f.email, address: f.address })
+      // Следующий по списку: «Фото», если в смете работы «за объём», иначе «Адрес»
+      return go(STEPS[idx + 1])
+    }
+    if (step === 'photo') {
+      if (shooting) return
+      if (!shots.length) { setShotErr(T.photoNeed); return }
       return go('where')
     }
     if (step === 'where') return go('when')
@@ -124,6 +146,7 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
     if (nameBad || phoneBad) { go('who'); return }
     if (emailBad) { setTouched((v) => ({ ...v, email: true })); return }
     if (empty) return
+    if (quote.hasScope && !shots.length) { setShotErr(T.photoNeed); go('photo'); return }
 
     saveProfile({ name: f.name, phone: f.phone, email: f.email, address: f.address })
     setState('sending')
@@ -139,8 +162,15 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
       when: f.when,
       whenTime: f.time,
       comment: f.comment,
-      items: quote.lines.map((l) => ({ key: l.item.key, name: l.item.name[locale], qty: l.qty, sum: l.sum })),
-      totals: { labour: quote.labour, minimum: quote.minimum, urgentFee: quote.urgentFee, total: quote.total, hours: quote.hours },
+      items: quote.lines.map((l) => ({
+        key: l.item.key, name: nameOf(l.item, locale), qty: l.qty, sum: l.sum,
+        ...(l.item.ptype && l.item.ptype !== 'fixed' ? { ptype: l.item.ptype } : {}),
+      })),
+      totals: {
+        labour: quote.labour, minimum: quote.minimum, urgentFee: quote.urgentFee, total: quote.total, hours: quote.hours,
+        ...(quote.hasScope ? { approx: true } : {}),
+      },
+      photos: shots.map((x) => x.path),
       page: typeof window !== 'undefined' ? window.location.pathname : '',
     }
 
@@ -188,11 +218,11 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
         address: f.address,
         when: showDate(f.when, locale),
         time: f.time.replace('-', ' – '),
-        total: formatMoney(quote.total, settings, locale),
+        total: `${quote.hasScope ? `${fromWord(locale)} ` : ''}${formatMoney(quote.total, settings, locale)}`,
         hours: String(quote.hours),
         urgent,
         lines: quote.lines.map((l) => ({
-          name: l.item.name[locale], qty: l.qty, sum: formatMoney(l.sum, settings, locale),
+          name: nameOf(l.item, locale), qty: l.qty, sum: formatMoney(l.sum, settings, locale),
         })),
       })
     } catch (e) {
@@ -201,6 +231,34 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
       // виноват блокировщик, расширение приватности или VPN
       setBlocked(e instanceof TypeError)
       setState('error')
+    }
+  }
+
+  /** Фото → WebP в браузере → бакет lead-photos. Браузер клиента может
+   *  только положить файл (читать и перезаписывать — нет), видят фото
+   *  офис и мастер, которому заказ предложен. */
+  async function addShots(list: FileList | null) {
+    if (!list?.length) return
+    setShotErr('')
+    const files = [...list].filter((x) => x.type.startsWith('image/') || /\.(heic|heif)$/i.test(x.name))
+      .slice(0, MAX_PHOTOS - shots.length - shooting)
+    for (const file of files) {
+      setShooting((n) => n + 1)
+      try {
+        const webp = await toWebp(file, 1600, 0.8)
+        const path = `in/${sid}/${Date.now().toString(36)}-${rid()}.webp`
+        const res = await fetch(`${SUPA_URL}/storage/v1/object/lead-photos/${path}`, {
+          method: 'POST',
+          headers: { ...anonHeaders, 'Content-Type': 'image/webp', 'x-upsert': 'false' },
+          body: webp,
+        })
+        if (!res.ok) throw new Error(String(res.status))
+        setShots((v) => [...v, { path, url: URL.createObjectURL(webp), size: webp.size }])
+      } catch (e) {
+        setShotErr((e as Error).message === 'webp' || (e as Error).message === 'format' ? T.photoFormat : T.photoFail)
+      } finally {
+        setShooting((n) => n - 1)
+      }
     }
   }
 
@@ -281,6 +339,43 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
         </div>
       )}
 
+      {step === 'photo' && (
+        <div className="lead__grid">
+          <div className="field field--wide shots">
+            <span className="field__label">{T.photoTitle} *</span>
+            <p className="field__hint">{T.photoLead}</p>
+            <ul className="shots__for">
+              {quote.scopeLines.map((l) => <li key={l.item.key}>{nameOf(l.item, locale)}</li>)}
+            </ul>
+            <div className="shots__row">
+              {shots.map((x, n) => (
+                <span className="shots__item" key={x.path}>
+                  <img src={x.url} alt="" />
+                  <button type="button" aria-label={`${T.photoRemove} ${n + 1}`}
+                          onClick={() => setShots((v) => v.filter((y) => y.path !== x.path))}>
+                    <Icon name="x" size={14} />
+                  </button>
+                </span>
+              ))}
+              {Array.from({ length: shooting }).map((_, n) => (
+                <span className="shots__item shots__item--busy" key={`busy-${n}`}><Lottie name="dots" size={26} loop /></span>
+              ))}
+              {shots.length + shooting < MAX_PHOTOS && (
+                <label className="shots__add">
+                  <Icon name="plus" size={20} />
+                  <span>{T.photoAdd}</span>
+                  <input
+                    type="file" accept="image/*" multiple hidden
+                    onChange={(e) => { addShots(e.target.files); e.target.value = '' }}
+                  />
+                </label>
+              )}
+            </div>
+            <p className="field__err" data-empty={!shotErr || undefined} role={shotErr ? 'alert' : undefined}>{shotErr}</p>
+          </div>
+        </div>
+      )}
+
       {step === 'where' && (
         <div className="lead__grid">
           <AddressField
@@ -354,6 +449,7 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
             <li><span>{t.form.name}</span><b>{f.name || '—'}</b></li>
             <li><span>{t.form.phone}</span><b className="num">{f.phone || '—'}</b></li>
             {f.address && <li><span>{t.form.address}</span><b>{f.address}</b></li>}
+            {shots.length > 0 && <li><span>{T.photo}</span><b className="num">{shots.length}</b></li>}
             {f.when && <li><span>{t.form.when}</span><b className="num">{[showDate(f.when, locale), f.time.replace('-', ' – ')].filter(Boolean).join(' · ')}</b></li>}
           </ul>
         </div>
@@ -394,7 +490,7 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
               </>
             ) : (
               quote.total > 0
-                ? `${t.form.submit} · ${formatMoney(quote.total, settings, locale)}`
+                ? `${t.form.submit} · ${quote.hasScope ? `${fromWord(locale)} ` : ''}${formatMoney(quote.total, settings, locale)}`
                 : t.form.submit
             )}
           </button>
@@ -417,21 +513,37 @@ const STEP_TEXT: Record<string, Record<string, string>> = {
     who: 'Kontakt', where: 'Adres', when: 'Termin', send: 'Wysyłka',
     next: 'Dalej', back: 'Wstecz', stepsLabel: 'Kroki zgłoszenia',
     timeLabel: 'Okno przyjazdu', noSlots: 'Na dziś nie ma już wolnych okien — wybierz kolejny dzień.',
+    photo: 'Zdjęcia', photoTitle: 'Zdjęcia tego, co jest do zrobienia',
+    photoLead: 'Te prace wyceniamy po zdjęciu. Zrób 1–6 zdjęć z bliska i z daleka — fachowiec poda dokładną cenę przed przyjazdem albo na miejscu.',
+    photoAdd: 'Dodaj zdjęcie', photoRemove: 'Usuń zdjęcie', photoNeed: 'Dodaj przynajmniej jedno zdjęcie — bez niego nie wycenimy tej pracy.',
+    photoFail: 'Zdjęcie się nie wysłało. Spróbuj jeszcze raz.', photoFormat: 'Tego formatu przeglądarka nie otworzy. Zrób zrzut ekranu albo wybierz JPG/PNG.',
   },
   uk: {
     who: 'Контакти', where: 'Адреса', when: 'Час', send: 'Відправка',
     next: 'Далі', back: 'Назад', stepsLabel: 'Кроки заявки',
     timeLabel: 'Вікно приїзду', noSlots: 'На сьогодні вільних вікон немає — оберіть інший день.',
+    photo: 'Фото', photoTitle: 'Фото того, що треба зробити',
+    photoLead: 'Ці роботи оцінюємо за фото. Зробіть 1–6 фото зблизька і здалеку — майстер назве точну ціну до приїзду або на місці.',
+    photoAdd: 'Додати фото', photoRemove: 'Прибрати фото', photoNeed: 'Додайте хоча б одне фото — без нього ми не оцінимо цю роботу.',
+    photoFail: 'Фото не надіслалося. Спробуйте ще раз.', photoFormat: 'Цей формат браузер не відкриє. Зробіть скріншот або оберіть JPG/PNG.',
   },
   ru: {
     who: 'Контакты', where: 'Адрес', when: 'Время', send: 'Отправка',
     next: 'Далее', back: 'Назад', stepsLabel: 'Шаги заявки',
     timeLabel: 'Окно приезда', noSlots: 'На сегодня свободных окон нет — выберите другой день.',
+    photo: 'Фото', photoTitle: 'Фото того, что нужно сделать',
+    photoLead: 'Эти работы оцениваем по фото. Сделайте 1–6 фото вблизи и издалека — мастер назовёт точную цену до приезда или на месте.',
+    photoAdd: 'Добавить фото', photoRemove: 'Убрать фото', photoNeed: 'Добавьте хотя бы одно фото — без него мы не оценим эту работу.',
+    photoFail: 'Фото не отправилось. Попробуйте ещё раз.', photoFormat: 'Этот формат браузер не откроет. Сделайте скриншот или выберите JPG/PNG.',
   },
   en: {
     who: 'Contact', where: 'Address', when: 'Time', send: 'Send',
     next: 'Next', back: 'Back', stepsLabel: 'Request steps',
     timeLabel: 'Arrival window', noSlots: 'No windows left today — pick another day.',
+    photo: 'Photos', photoTitle: 'Photos of what needs doing',
+    photoLead: 'These jobs are priced from a photo. Take 1–6 photos, close up and from a distance — the specialist gives the exact price before the visit or on site.',
+    photoAdd: 'Add a photo', photoRemove: 'Remove photo', photoNeed: 'Add at least one photo — we cannot price this job without it.',
+    photoFail: 'The photo did not upload. Please try again.', photoFormat: 'Your browser cannot open this format. Take a screenshot or pick a JPG/PNG.',
   },
 }
 

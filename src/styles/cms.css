@@ -1,0 +1,90 @@
+/* ==========================================================
+   Визуальный редактор сайта (только для администратора).
+   Посетитель эти правила не видит: элементы появляются, лишь
+   когда загружен модуль src/cms/Admin.tsx.
+   ========================================================== */
+
+/* Редактируемые места */
+[data-cms-editing] [data-editable] {
+  outline: 1.5px dashed rgba(110, 239, 160, .9);
+  outline-offset: 3px;
+  border-radius: 4px;
+  cursor: text;
+  transition: outline-color .15s, background-color .15s;
+}
+[data-cms-editing] [data-editable]:hover { outline-color: var(--accent-text); background-color: rgba(110, 239, 160, .12); }
+[data-cms-editing] [data-editable]:focus { outline: 2px solid var(--accent-text); background-color: rgba(110, 239, 160, .16); }
+[data-cms-editing] [data-editable][data-edited] { outline-style: solid; outline-color: rgba(20, 107, 60, .55); }
+
+/* Фото */
+[data-cms-editing] [data-cms-img] img { cursor: pointer; outline: 2px dashed rgba(110, 239, 160, .9); outline-offset: -2px; }
+[data-cms-editing] [data-cms-img] img:hover { filter: brightness(.9); }
+.cms-imgtag {
+  position: absolute; top: 10px; right: 10px; z-index: 6; pointer-events: none;
+  padding: 7px 10px; border-radius: 999px;
+  background: var(--accent); color: #1c1c1c;
+  font: 700 11px/1 var(--font-body); letter-spacing: .06em; text-transform: uppercase;
+}
+.cms-imgst { position: absolute; left: 10px; bottom: 10px; z-index: 7; }
+
+/* Плашка загрузки: конвертация → отправка → готово */
+.upst { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
+  font: 700 12px/1.3 var(--font-body); color: #fff; background: #1c1c1c;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .25); animation: upstIn .25s ease; white-space: nowrap; }
+.upst small { font: 600 11px var(--font-body); color: rgba(255, 255, 255, .75); }
+.upst--convert { background: #f0a500; color: #1c1c1c; } .upst--convert small { color: rgba(0, 0, 0, .6); }
+.upst--upload { background: #2f7fe0; }
+.upst--done { background: var(--forest); }
+.upst--error { background: #b3261e; }
+.upst__spin { width: 12px; height: 12px; border-radius: 50%; border: 2px solid rgba(0, 0, 0, .25);
+  border-top-color: currentColor; animation: upstSpin .8s linear infinite; flex: 0 0 auto; }
+@keyframes upstSpin { to { transform: rotate(360deg); } }
+@keyframes upstIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* Нижняя панель редактора */
+.cmsbar {
+  position: fixed; z-index: 2147483000; left: 50%; bottom: 16px; transform: translateX(-50%);
+  display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
+  width: max-content; max-width: calc(100vw - 24px);
+  padding: 10px 12px; border-radius: 22px;
+  background: rgba(28, 28, 28, .96); color: #fff;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .35);
+  font-family: var(--font-body);
+}
+.cmsbar__who { font: 700 12px var(--font-body); letter-spacing: .04em; color: #b8b8b8; padding: 0 6px; }
+.cmsbar__btn {
+  font: 700 13px var(--font-body); color: #fff; text-decoration: none;
+  padding: 9px 14px; border-radius: 999px; border: 0; cursor: pointer;
+  background: rgba(255, 255, 255, .1); transition: background .15s;
+}
+.cmsbar__btn:hover { background: rgba(255, 255, 255, .2); }
+.cmsbar__btn.on { background: var(--accent); color: #1c1c1c; }
+.cmsbar__btn:disabled { opacity: .6; cursor: default; }
+.cmsbar__hint { flex-basis: 100%; text-align: center; font: 500 12px/1.4 var(--font-body); color: #b8b8b8; max-width: 640px; margin: 0 auto; }
+.cmsbar__note { color: var(--accent); }
+
+/* Плавающая панель стилей над выделением */
+.cms-tb {
+  position: fixed; z-index: 2147483001; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 3px; padding: 6px 8px; border-radius: 14px;
+  background: #1c1c1c; box-shadow: 0 12px 34px rgba(0, 0, 0, .35);
+}
+.cms-tb button {
+  min-width: 30px; height: 30px; padding: 0 7px; border: 0; border-radius: 8px;
+  display: grid; place-items: center; cursor: pointer;
+  color: #fff; font: 700 13px var(--font-body); background: rgba(255, 255, 255, .07);
+  transition: background .15s;
+}
+.cms-tb button:hover { background: var(--forest); }
+.cms-tb__sz { font-size: 11px !important; }
+.cms-tb__c { min-width: 18px !important; width: 18px; height: 18px !important; padding: 0 !important;
+  border-radius: 50% !important; border: 1px solid rgba(255, 255, 255, .35) !important; }
+.cms-tb__pick { width: 22px; height: 22px; border-radius: 50%; border: 1px dashed rgba(255, 255, 255, .45);
+  display: grid; place-items: center; cursor: pointer; overflow: hidden; }
+.cms-tb__pick input { width: 32px; height: 32px; border: 0; padding: 0; background: none; cursor: pointer; }
+.cms-tb__sep { width: 1px; height: 20px; background: rgba(255, 255, 255, .18); margin: 0 4px; }
+
+@media (max-width: 640px) {
+  .cms-tb { flex-wrap: wrap; max-width: calc(100vw - 16px); justify-content: center; }
+  .cmsbar { bottom: 8px; border-radius: 16px; }
+}

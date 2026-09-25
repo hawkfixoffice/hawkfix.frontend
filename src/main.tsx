@@ -21,6 +21,7 @@ import './styles/blocks.css'
 import './styles/sections.css'
 import './styles/lead.css'
 import './styles/content.css'
+import './styles/cms.css'
 
 function view(type: string) {
   switch (type) {

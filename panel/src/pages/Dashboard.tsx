@@ -11,6 +11,7 @@ import { AreaChart, BarChart, type Point } from '../ui/Chart'
 import Status from '../ui/Status'
 import Range, { useRange } from '../ui/Range'
 import NextJob, { NewJobBanner } from '../ui/NextJob'
+import { AcceptQuote } from '../ui/Scope'
 
 export default function Dashboard({ me }: { me: Me }) {
   if (me.role === 'master') return <MasterView me={me} />
@@ -287,13 +288,17 @@ function MasterView({ me }: { me: Me }) {
       .order('deadline_at').limit(10)
       .then(({ data }) => setMine(data ?? []))
     sb.from('order_offers')
-      .select('id, expires_at, orders(id, order_no, address, quoted_total, scheduled_date, scheduled_slot)')
+      .select('id, expires_at, orders(id, order_no, address, quoted_total, scheduled_date, scheduled_slot, quote_state, photos, items, comment, scope_est)')
       .eq('status', 'pending').gt('expires_at', new Date().toISOString())
       .then(({ data }) => setOffers(data ?? []))
   }
   useEffect(load, [me.id])
 
+  const [quoteFor, setQuoteFor] = useState<any>(null)
   async function answer(id: string, yes: boolean) {
+    // Заказ с работами «за объём»: сначала фото и цена, потом «беру»
+    const f = offers.find((x) => x.id === id)
+    if (yes && f?.orders?.quote_state === 'pending') { setQuoteFor(f); return }
     if (yes) await sb.rpc('accept_offer', { f_id: id })
     else await sb.rpc('decline_offer', { f_id: id, why: null })
     load()
@@ -309,6 +314,11 @@ function MasterView({ me }: { me: Me }) {
   return (
     <>
       <NewJobBanner offers={offers} onAnswer={answer} />
+      {quoteFor && (
+        <AcceptQuote offerId={quoteFor.id} order={quoteFor.orders}
+                     onClose={() => setQuoteFor(null)}
+                     onDone={() => { setQuoteFor(null); load() }} />
+      )}
 
       {next && <NextJob order={next} myId={me.id} />}
 

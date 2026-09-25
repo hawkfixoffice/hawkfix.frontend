@@ -1,5 +1,6 @@
 import type { Locale, PriceItem, Settings } from '../../lib/types'
 import Icon from '../Icon'
+import { PTYPE_LABEL, nameOf, priceText, ptypeOf } from '../../lib/price'
 
 interface Props {
   item: PriceItem
@@ -15,16 +16,20 @@ interface Props {
  *  после выбора превращается в счётчик. Зоны нажатия ≥44px. */
 export default function ItemRow({ item, qty, locale, settings, onAdd, onSet, labels }: Props) {
   const unit = settings.units[locale]?.[item.unit] ?? item.unit
-  const name = item.name[locale]
+  const name = nameOf(item, locale)
   const selected = qty > 0
+  const pt = priceText(item, locale, settings)
+  const type = ptypeOf(item)
 
   return (
     <li className="irow" data-selected={selected}>
       <div className="irow__main">
         <span className="irow__name">{name}</span>
         <span className="irow__price num">
-          {item.price} {settings.currency}
-          <span className="irow__unit"> / {unit}</span>
+          {pt.main}
+          {pt.unit && <span className="irow__unit"> / {pt.unit}</span>}
+          {/* Тип цены виден сразу: у «за объём» нужно фото, у «за м²» — площадь */}
+          {type !== 'fixed' && <span className="ptype" data-t={type}>{PTYPE_LABEL[type][locale]}</span>}
         </span>
       </div>
 

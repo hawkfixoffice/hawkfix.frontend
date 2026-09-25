@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { sb } from '../lib/supabase'
 import { useT } from '../lib/i18n'
 import Avatar from './Avatar'
+import { rid, toWebp } from '../../../src/lib/webp'
 
 /** Загрузка фотографии. Свою ставит сам сотрудник, чужую — администратор;
  *  права проверяет Storage, а не эта форма. */
@@ -20,8 +21,10 @@ export default function AvatarPicker({ staffId, name, path, onDone }: {
     try {
       // Путь начинается с id сотрудника: по нему Storage и различает,
       // свой это файл или чужой
-      const key = `${staffId}/${Date.now()}-${file.name.replace(/[^\w.\-]/g, '_')}`
-      const up = await sb.storage.from('avatars').upload(key, file, { upsert: true })
+      // Любое фото сначала переводим в WebP и уменьшаем: аватару хватит 640 px
+      const webp = await toWebp(file, 640, 0.85)
+      const key = `${staffId}/${Date.now()}-${rid()}.webp`
+      const up = await sb.storage.from('avatars').upload(key, webp, { upsert: true, contentType: 'image/webp' })
       if (up.error) throw up.error
       const { error } = await sb.rpc('set_staff_avatar', { p_staff: staffId, p_path: key })
       if (error) throw error
@@ -39,7 +42,7 @@ export default function AvatarPicker({ staffId, name, path, onDone }: {
                 onClick={() => input.current?.click()}>
           {busy ? <span className="spin" /> : t('prof.photo')}
         </button>
-        <input ref={input} type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={pick} />
+        <input ref={input} type="file" accept="image/*" hidden onChange={pick} />
         {err && <p className="err tiny">{err}</p>}
       </div>
     </div>

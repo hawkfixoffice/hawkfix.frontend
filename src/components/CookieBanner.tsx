@@ -4,6 +4,7 @@ import { KEY_PAGES, pathOf } from '../data/content'
 import { REOPEN_EVENT, readConsent, writeConsent } from '../lib/consent'
 import { usePage } from './PageContext'
 import Icon from './Icon'
+import { U } from '../cms/E'
 
 /**
  * Баннер согласия. Правила, которых держимся:
@@ -42,8 +43,8 @@ export default function CookieBanner() {
         aria-labelledby="cookie-title" tabIndex={-1} ref={ref}
       >
         <div className="cookie__head">
-          <p className="cookie__title" id="cookie-title">{t.cookie.title}</p>
-          <p className="cookie__text">{t.cookie.text}</p>
+          <U as="p" className="cookie__title" id="cookie-title" k="cookie.title" />
+          <U as="p" className="cookie__text" k="cookie.text" multiline />
         </div>
 
         {expanded && (
@@ -52,7 +53,7 @@ export default function CookieBanner() {
               <input type="checkbox" checked disabled />
               <span>
                 <b>{t.cookie.necessary}</b>
-                <small>{t.cookie.necessaryNote}</small>
+                <U as="small" k="cookie.necessaryNote" multiline />
               </span>
             </label>
             <label className="cookie__cat">
@@ -62,7 +63,7 @@ export default function CookieBanner() {
               />
               <span>
                 <b>{t.cookie.analytics}</b>
-                <small>{t.cookie.analyticsNote}</small>
+                <U as="small" k="cookie.analyticsNote" multiline />
               </span>
             </label>
           </div>

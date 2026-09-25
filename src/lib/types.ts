@@ -87,13 +87,25 @@ export interface PageRec {
   group?: string
 }
 
+/** Как считается цена позиции:
+ *  fixed — за штуку/услугу, сразу;
+ *  area  — за м² или погонный метр, человек вводит площадь;
+ *  scope — «за объём работ»: цена ориентировочная (или 0 — «по фото»),
+ *          клиент прикладывает фото, точную цену называет мастер. */
+export type PriceType = 'fixed' | 'area' | 'scope'
+
 export interface PriceItem {
   key: string; group: string; dept: string
   price: number; hours: number; unit: string
   min: number; max: number
   name: Record<Locale, string>
+  ptype?: PriceType
+  /** Подкатегория внутри группы, если админ её завёл. */
+  sub?: string
   a?: string; au?: string; s?: string; su?: string; wet?: number; dry?: number
 }
+
+export interface Subgroup { key: string; group: string; name: Partial<Record<Locale, string>> }
 
 export interface Chain {
   key: string; trigger: string[]; visits: number; minPrice: number

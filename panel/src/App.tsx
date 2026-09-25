@@ -15,6 +15,7 @@ import StaffCard from './pages/StaffCard'
 import Profile from './pages/Profile'
 import Settings from './pages/Settings'
 import Reports from './pages/Reports'
+import Prices from './pages/Prices'
 
 export default function App() {
   const [me, setMe] = useState<Me | null>(null)
@@ -67,6 +68,7 @@ export default function App() {
             {me.role !== 'master' && <Route path="/team" element={<Team me={me} />} />}
             {me.role !== 'master' && <Route path="/team/:id" element={<StaffCard me={me} />} />}
             {me.role === 'admin' && <Route path="/settings" element={<Settings />} />}
+            {me.role === 'admin' && <Route path="/prices" element={<Prices />} />}
             <Route path="*" element={<Navigate to="/" replace state={{ from: loc.pathname }} />} />
           </Routes>
         </Layout>

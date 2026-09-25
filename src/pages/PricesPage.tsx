@@ -1,5 +1,5 @@
 import { Link, useLoaderData } from 'react-router-dom'
-import { KEY_PAGES, groups, items, pathOf, services, settings } from '../data/content'
+import { KEY_PAGES, pathOf, services, settings } from '../data/content'
 import type { PageBody } from '../lib/types'
 import { toSections } from '../lib/sections'
 import { usePage } from '../components/PageContext'
@@ -8,6 +8,9 @@ import Breadcrumbs from '../components/Breadcrumbs'
 import Picture from '../components/Picture'
 import Icon from '../components/Icon'
 import Reveal from '../components/Reveal'
+import { PT, U } from '../cms/E'
+import { useCatalog } from '../lib/catalog'
+import { PTYPE_LABEL, bySub, minPrice, nameOf, priceText, ptypeOf } from '../lib/price'
 
 const GROUP_PHOTO: Record<string, string> = Object.fromEntries(
   services.filter((s) => s.group && s.image).map((s) => [s.group as string, s.image as string]),
@@ -19,6 +22,8 @@ export default function PricesPage() {
   const body = (useLoaderData() as PageBody | undefined) ?? { blocks: [] }
   const sections = toSections(body.blocks)
   const cur = settings.currency
+  // Живой прайс: правка цены в панели видна здесь сразу, без пересборки
+  const { items, groups, subgroups } = useCatalog()
 
   const rows = groups
     .map((g) => ({ g, list: items.filter((i) => i.group === g.key) }))
@@ -38,25 +43,25 @@ export default function PricesPage() {
           ]} />
           <div className="pagehead__split">
             <div>
-              <h1>{tr.h1}</h1>
-              <p className="pagehead__lead">{tr.description}</p>
+              <PT as="h1" field="h1" v={tr.h1} />
+              <PT as="p" className="pagehead__lead" field="lead" v={tr.description} multiline />
               <div className="pagehead__actions">
                 <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
-                  {t.cta.quote} <Icon name="arrow" size={17} />
+                  <U k="cta.quote" /> <Icon name="arrow" size={17} />
                 </Link>
               </div>
             </div>
             <div className="blocks blocks--stat pagehead__stats">
               <div className="blk blk--accent">
-                <p className="blk__n">{t.home.minVisitTitle}</p>
+                <U as="p" className="blk__n" k="home.minVisitTitle" />
                 <p className="blk__v">{settings.minVisit} {cur}</p>
               </div>
               <div className="blk blk--mute">
-                <p className="blk__n">{t.nav.prices}</p>
+                <U as="p" className="blk__n" k="nav.prices" />
                 <p className="blk__v">{items.length}</p>
               </div>
               <div className="blk blk--forest">
-                <p className="blk__n">{t.form.urgent}</p>
+                <U as="p" className="blk__n" k="form.urgent" />
                 <p className="blk__v">+{settings.urgentPct}%</p>
               </div>
             </div>
@@ -73,10 +78,10 @@ export default function PricesPage() {
               {shortLists.slice(0, 2).map((sec, i) => (
                 <Reveal key={sec.heading} delay={i * 80}>
                   <div className={`blk blk--tall ${i === 0 ? 'blk--accent' : 'blk--forest'}`}>
-                    <h2 className="blk__t">{sec.heading}</h2>
+                    <PT as="h2" className="blk__t" v={sec.heading ?? ''} />
                     <ul className="blk__list">
                       {(sec.lists[0] ?? []).map((x) => (
-                        <li key={x}><Icon name={i === 0 ? 'check' : 'minus'} size={15} /><span>{x}</span></li>
+                        <li key={x}><Icon name={i === 0 ? 'check' : 'minus'} size={15} /><PT v={x} multiline /></li>
                       ))}
                     </ul>
                   </div>
@@ -102,7 +107,7 @@ export default function PricesPage() {
                     <span className="vbar__meta">{list.length} {t.prices.positions}</span>
                   </span>
                   <span className="vbar__v num">
-                    {t.prices.from} {Math.min(...list.map((i2) => i2.price))} {cur}
+                    {t.prices.from} {minPrice(list)} {cur}
                   </span>
                 </a>
               </Reveal>
@@ -131,20 +136,31 @@ export default function PricesPage() {
                     )}
                     <h2>{g.name[locale] ?? g.key}</h2>
                     <p className="num">
-                      {t.prices.from} {Math.min(...list.map((i) => i.price))} {cur}
+                      {t.prices.from} {minPrice(list)} {cur}
                     </p>
                   </div>
-                  <ul className="pricelist">
-                    {list.map((i) => (
-                      <li key={i.key}>
-                        <span>{i.name[locale]}</span>
-                        <span className="num">
-                          {i.price} {cur}
-                          <small> / {settings.units[locale]?.[i.unit] ?? i.unit}</small>
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                  {bySub(list, subgroups.filter((x) => x.group === g.key)).map((part) => (
+                    <div key={part.key || 'rest'}>
+                      {part.name && <h3 className="pricegroup__sub">{nameOf({ name: part.name }, locale)}</h3>}
+                      <ul className="pricelist">
+                        {part.list.map((i) => {
+                          const pt = priceText(i, locale, settings)
+                          return (
+                            <li key={i.key}>
+                              <span>
+                                {nameOf(i, locale)}
+                                {ptypeOf(i) !== 'fixed' && <small className="ptype" data-t={ptypeOf(i)}>{PTYPE_LABEL[ptypeOf(i)][locale]}</small>}
+                              </span>
+                              <span className="num">
+                                {pt.main}
+                                {pt.unit && <small> / {pt.unit}</small>}
+                              </span>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>
+                  ))}
                 </section>
               </Reveal>
             ))}
@@ -154,8 +170,8 @@ export default function PricesPage() {
             <div className="pricenotes">
               {notes.map((sec) => (
                 <div key={sec.heading || sec.paras[0]}>
-                  {sec.heading && <h2 className="sec-h2">{sec.heading}</h2>}
-                  {sec.paras.map((x) => <p key={x}>{x}</p>)}
+                  {sec.heading && <PT as="h2" className="sec-h2" v={sec.heading} />}
+                  {sec.paras.map((x) => <PT as="p" key={x} v={x} multiline />)}
                 </div>
               ))}
             </div>
@@ -165,3 +181,4 @@ export default function PricesPage() {
     </>
   )
 }
+

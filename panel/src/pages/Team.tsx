@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { sb, type Me } from '../lib/supabase'
 import { useT } from '../lib/i18n'
 import { money, fromNow } from '../lib/fmt'
@@ -19,9 +19,13 @@ export default function Team({ me }: { me: Me }) {
   const [role, setRole] = useState('all')
   const [onlyActive, setOnlyActive] = useState(false)
   const [add, setAdd] = useState(false)
+  // Сообщение после удаления сотрудника (приходит из его карточки)
+  const gone = (useLocation().state ?? null) as { staffDeleted?: string; mode?: string; moved?: number } | null
 
   const load = () => {
+    // Удалённые (deleted_at) в команде не показываем — их имена живут в истории заказов
     sb.from('staff').select('*, staff_skills(group_key), staff_locations(updated_at)')
+      .is('deleted_at', null)
       .order('role').then(({ data }) => setRows(data ?? []))
     sb.from('price_groups').select('key, price_group_tr(name, locale)').then(({ data }) => {
       setGroups((data ?? []).map((g: any) => ({
@@ -71,6 +75,13 @@ export default function Team({ me }: { me: Me }) {
           {me.role === 'admin' && <button className="btn btn--primary" onClick={() => setAdd(true)}>+ {t('team.add')}</button>}
         </div>
       </div>
+
+      {gone?.staffDeleted && (
+        <p className="notice">
+          {t(gone.mode === 'archived' ? 'staffDel.doneArchived' : 'staffDel.done', { n: gone.staffDeleted })}
+          {gone.moved ? ` ${t('staffDel.moved', { n: gone.moved })}` : ''}
+        </p>
+      )}
 
       <div className="chips">
         {['all', 'master', 'manager', 'admin'].map((r) => (

@@ -1,10 +1,11 @@
-import type { Chain, Group, Locale, PageRec, Photo, PriceItem, Settings } from '../lib/types'
+import type { Chain, Group, Locale, PageRec, Photo, PriceItem, Settings, Subgroup } from '../lib/types'
 import { LOCALES } from '../lib/types'
 
 import indexJson from '../../content/index.json'
 import itemsJson from '../../content/items.json'
 import chainsJson from '../../content/chains.json'
 import groupsJson from '../../content/groups.json'
+import subgroupsJson from '../../content/subgroups.json'
 import settingsJson from '../../content/settings.json'
 import photosJson from '../../content/photos.json'
 import groupWordsJson from '../../content/group-words.json'
@@ -15,6 +16,7 @@ export const services = allPages.filter((p) => p.type === 'service')
 export const items = itemsJson as unknown as PriceItem[]
 export const chains = chainsJson as unknown as Chain[]
 export const groups = groupsJson as unknown as Group[]
+export const subgroups = subgroupsJson as unknown as Subgroup[]
 export const settings = settingsJson as unknown as Settings
 export const photos = photosJson as unknown as Record<string, Photo>
 /** Синонимы для поиска по прайсу: группа → язык → текст страницы услуги. */

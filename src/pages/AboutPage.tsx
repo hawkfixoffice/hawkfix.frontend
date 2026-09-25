@@ -10,6 +10,7 @@ import Icon from '../components/Icon'
 import Reveal from '../components/Reveal'
 import Accordion from '../components/Accordion'
 import { CONTACT } from '../lib/ui'
+import { PT, U } from '../cms/E'
 
 export default function AboutPage() {
   const { page, locale, t } = usePage()
@@ -37,20 +38,20 @@ export default function AboutPage() {
           ]} />
           <div className="pagehead__split">
             <div>
-              <h1>{tr.h1}</h1>
-              <p className="pagehead__lead">{tr.description}</p>
+              <PT as="h1" field="h1" v={tr.h1} />
+              <PT as="p" className="pagehead__lead" field="lead" v={tr.description} multiline />
             </div>
             <div className="blocks blocks--stat pagehead__stats">
               <div className="blk blk--accent">
-                <p className="blk__n">{t.home.minVisitTitle}</p>
+                <U as="p" className="blk__n" k="home.minVisitTitle" />
                 <p className="blk__v">{settings.minVisit} {settings.currency}</p>
               </div>
               <div className="blk blk--mute">
-                <p className="blk__n">{t.nav.services}</p>
+                <U as="p" className="blk__n" k="nav.services" />
                 <p className="blk__v">{services.length}</p>
               </div>
               <div className="blk blk--forest">
-                <p className="blk__n">{t.nav.prices}</p>
+                <U as="p" className="blk__n" k="nav.prices" />
                 <p className="blk__v">{items.length}</p>
               </div>
             </div>
@@ -74,7 +75,7 @@ export default function AboutPage() {
                 {(intro?.paras ?? []).slice(0, 4).map((x, i) => (
                   <div className={`blk blk--tall${i === 0 ? ' blk--forest' : i === 3 ? ' blk--accent' : ''}`} key={x}>
                     <p className="blk__n">0{i + 1}</p>
-                    <p className="blk__s blk__s--lead">{x}</p>
+                    <PT as="p" className="blk__s blk__s--lead" v={x} multiline />
                   </div>
                 ))}
               </div>
@@ -88,15 +89,15 @@ export default function AboutPage() {
         <section className="band band--tight" key={sec.heading}>
           <div className="wrap">
             <Reveal>
-              <h2 className="sec-h2">{sec.heading}</h2>
+              <PT as="h2" className="sec-h2" v={sec.heading ?? ''} />
             </Reveal>
-            {sec.paras.map((x) => <p className="prose sec-p" key={x}>{x}</p>)}
+            {sec.paras.map((x) => <PT as="p" className="prose sec-p" key={x} v={x} multiline />)}
             <div className="blocks blocks--3">
               {(sec.lists[0] ?? []).map((x, i) => (
                 <Reveal key={x} delay={(i % 3) * 70}>
                   <div className={`blk blk--xs blk--line${i === 0 ? ' blk--forest' : i === 1 ? ' blk--accent' : ''}`}>
                     <p className="blk__n">{String(i + 1).padStart(2, '0')}</p>
-                    <p className="blk__t blk__t--sm">{x}</p>
+                    <PT as="p" className="blk__t blk__t--sm" v={x} multiline />
                   </div>
                 </Reveal>
               ))}
@@ -112,15 +113,15 @@ export default function AboutPage() {
             <div className="blocks blocks--wide-left blocks--top">
               <Reveal>
                 <div>
-                  <h2 className="sec-h2">{qa?.heading}</h2>
-                  <Accordion items={qaPairs} className="acc--gap" />
+                  <PT as="h2" className="sec-h2" v={qa?.heading ?? ''} />
+                  <Accordion items={qaPairs} className="acc--gap" cmsKey={`page:${page.key}:qa`} />
                 </div>
               </Reveal>
               <Reveal delay={90}>
                 <div className="panel panel--card panel--mono panel--fill about-hero">
                   <Picture name="hero-alt" alt={t.alt.interior} ratio="4x3" widths={[900, 1400, 2000]} sizes="(max-width:900px) 100vw, 34vw" />
                   <Link className="badge badge--accent badge--bl" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
-                    <span className="badge__text">{t.cta.quote}</span>
+                    <U as="span" className="badge__text" k="cta.quote" />
                     <span className="badge__dot"><Icon name="arrow" size={18} /></span>
                   </Link>
                 </div>

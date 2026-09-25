@@ -39,6 +39,7 @@ export default function Layout({ me, children }: { me: Me; children: React.React
     ...(me.role === 'admin' ? [{ to: '/finance', label: t('nav.finance') }] : []),
     ...(me.role === 'admin' ? [{ to: '/reports', label: t('nav.reports') }] : []),
     ...(me.role !== 'master' ? [{ to: '/team', label: t('nav.team') }] : []),
+    ...(me.role === 'admin' ? [{ to: '/prices', label: t('nav.prices') }] : []),
     ...(me.role === 'admin' ? [{ to: '/settings', label: t('nav.settings') }] : []),
     { to: '/profile', label: t('nav.profile') },
   ]
@@ -62,6 +63,12 @@ export default function Layout({ me, children }: { me: Me; children: React.React
               <button key={l} data-on={l === lang || undefined} onClick={() => setLang(l)}>{l}</button>
             ))}
           </div>
+          {/* Сайт на том же домене: сессия панели узнаётся там, и открывается редактор */}
+          {me.role === 'admin' && (
+            <a className="btn btn--dark btn--sm topright__site" href="/?edit=1" title={t('nav.siteHint')}>
+              ✎ {t('nav.site')}
+            </a>
+          )}
           <button className="btn btn--ghost btn--sm topright__out" onClick={() => signOut()}>
             {t('nav.logout')}
           </button>
@@ -99,6 +106,9 @@ export default function Layout({ me, children }: { me: Me; children: React.React
                 {x.label}
               </NavLink>
             ))}
+            {me.role === 'admin' && (
+              <a href="/?edit=1" style={{ animationDelay: `${40 + tabs.length * 35}ms` }}>✎ {t('nav.site')}</a>
+            )}
           </nav>
 
           <div className="mobmenu__foot">

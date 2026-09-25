@@ -528,3 +528,21 @@ a.toc__card:hover { transform: translateY(-3px); }
      чипов отодвигал сами группы работ за пределы экрана. */
   .calc__chips .chip:nth-child(n + 5) { display: none; }
 }
+
+/* ---------- Тип цены: «за м²» и «по фото» (2026-09-25) ---------- */
+.ptype {
+  display: inline-block; margin-inline-start: var(--sp-2); vertical-align: 1px;
+  padding: 2px 8px; border-radius: var(--r-pill);
+  font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap;
+  background: var(--paper-2); color: var(--ink-2);
+}
+.ptype[data-t='scope'] { background: var(--accent-soft); color: var(--accent-text); }
+.pricelist .ptype { font-weight: 600; }
+.ilist__sub, .pricegroup__sub {
+  margin: 0; padding: var(--sp-3) var(--sp-5) var(--sp-2);
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3);
+}
+.grp .ilist__sub { background: var(--card); border-top: 1px solid rgb(0 0 0 / 8%); }
+.pricegroup__sub { padding-inline: 0; margin-top: var(--sp-4); }
+.sum__from { font-size: 0.5em; letter-spacing: 0; color: var(--ink-3); }
+.sum__note--scope { color: var(--accent-text); }

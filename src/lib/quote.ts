@@ -19,6 +19,9 @@ export interface Quote {
   total: number
   hours: number
   count: number           // сколько позиций выбрано (с учётом количеств)
+  /** В смете есть работы «за объём»: итог — ориентир «от», нужны фото. */
+  hasScope: boolean
+  scopeLines: QuoteLine[]
 }
 
 /**
@@ -62,6 +65,8 @@ export function calcQuote(
     lines, labour, minimum, minimumApplied, base, urgentFee,
     total: base + urgentFee, hours,
     count: lines.reduce((a, l) => a + l.qty, 0),
+    hasScope: lines.some((l) => l.item.ptype === 'scope'),
+    scopeLines: lines.filter((l) => l.item.ptype === 'scope'),
   }
 }
 

@@ -10,6 +10,8 @@ import Status from '../ui/Status'
 import Avatar from '../ui/Avatar'
 import Assign from '../ui/Assign'
 import DeleteOrder from '../ui/DeleteOrder'
+import { AcceptQuote, ScopeCard } from '../ui/Scope'
+import { rid, toWebp } from '../../../src/lib/webp'
 
 /** Карточка заказа: путь мастера, магазин по дороге, отчёт и деньги.
  *  Мастер видит только свои 80 %, доля фирмы — для админа. */
@@ -25,6 +27,7 @@ export default function OrderCard({ me }: { me: Me }) {
   const [offers, setOffers] = useState<any[]>([])
   const [assign, setAssign] = useState(false)
   const [del, setDel] = useState(false)
+  const [quoteAccept, setQuoteAccept] = useState(false)
   const [msg, setMsg] = useState('')
 
   const load = async () => {
@@ -70,6 +73,8 @@ export default function OrderCard({ me }: { me: Me }) {
   const isMine = o.master_id === me.id
   const canDrive = isMine || me.role === 'admin'
   const items: { name: string; qty: number; sum: number }[] = o.items ?? []
+  // Работу «за объём» не начать, пока не названа цена — база тоже это проверяет
+  const needQuote = o.quote_state === 'pending' || o.quote_state === 'onsite'
 
   async function step(status: string) {
     const { error } = await sb.rpc('set_order_status', { o_id: id, new_status: status })
@@ -78,6 +83,8 @@ export default function OrderCard({ me }: { me: Me }) {
   }
 
   async function answerOffer(yes: boolean) {
+    // Работы «за объём»: перед «беру» мастер смотрит фото и называет цену
+    if (yes && o.quote_state === 'pending') { setQuoteAccept(true); return }
     const { error } = yes
       ? await sb.rpc('accept_offer', { f_id: offer.id })
       : await sb.rpc('decline_offer', { f_id: offer.id, why: null })
@@ -120,10 +127,14 @@ export default function OrderCard({ me }: { me: Me }) {
           {canDrive && o.status === 'en_route' && (
             <>
               <button className="btn btn--ghost" onClick={() => step('shopping')}>{t('ord.buy')}</button>
-              <button className="btn btn--dark" onClick={() => step('in_progress')}>{t('ord.start')}</button>
+              <button className="btn btn--dark" disabled={needQuote} title={needQuote ? t('scope.onsiteHint') : undefined}
+                      onClick={() => step('in_progress')}>{t('ord.start')}</button>
             </>
           )}
-          {canDrive && o.status === 'shopping' && <button className="btn btn--dark" onClick={() => step('in_progress')}>{t('ord.start')}</button>}
+          {canDrive && o.status === 'shopping' && (
+            <button className="btn btn--dark" disabled={needQuote} title={needQuote ? t('scope.onsiteHint') : undefined}
+                    onClick={() => step('in_progress')}>{t('ord.start')}</button>
+          )}
           {/* Удаление — только у админа: заказ уносит с собой отчёт и деньги */}
           {me.role === 'admin' && (
             <button className="btn btn--danger" onClick={() => setDel(true)}>{t('del.title')}</button>
@@ -132,10 +143,19 @@ export default function OrderCard({ me }: { me: Me }) {
       </div>
 
       {msg && <p className="err">{msg}</p>}
+      {canDrive && needQuote && ['assigned', 'en_route', 'shopping'].includes(o.status) && (
+        <p className="notice" data-kind="quiet">{t('scope.onsiteHint')}</p>
+      )}
 
       {assign && (
         <Assign orderId={o.id} orderNo={o.order_no}
                 onClose={() => setAssign(false)} onDone={load} />
+      )}
+
+      {quoteAccept && offer && (
+        <AcceptQuote offerId={offer.id} order={o}
+                     onClose={() => setQuoteAccept(false)}
+                     onDone={() => { setQuoteAccept(false); load() }} />
       )}
 
       {del && (
@@ -204,6 +224,9 @@ export default function OrderCard({ me }: { me: Me }) {
                 <span className="list__right" style={{ maxWidth: 260, whiteSpace: 'normal' }}>{o.comment}</span></div>}
             </div>
           </div>
+
+          {/* -------- работы «за объём»: фото клиента и цена мастера -------- */}
+          <ScopeCard order={o} me={me} onDone={load} />
 
           {/* -------- смета -------- */}
           <div className="card">
@@ -501,8 +524,13 @@ function ReportForm({ orderId, onDone }: { orderId: string; onDone: () => void }
       if (file) {
         // Чек кладём в папку заказа: политика Storage пускает мастера
         // только в свою папку, а офис читает всё.
-        path = `${orderId}/receipt-${Date.now()}-${file.name.replace(/[^\w.\-]/g, '_')}`
-        const up = await sb.storage.from('receipts').upload(path, file, { upsert: false })
+        // Фото чека — в WebP (правило проекта), PDF со счётом — как есть
+        const isPdf = file.type === 'application/pdf'
+        const body = isPdf ? file : await toWebp(file, 2200, 0.85)
+        path = `${orderId}/receipt-${Date.now()}-${rid()}.${isPdf ? 'pdf' : 'webp'}`
+        const up = await sb.storage.from('receipts').upload(path, body, {
+          upsert: false, contentType: isPdf ? 'application/pdf' : 'image/webp',
+        })
         if (up.error) throw up.error
       }
       const { error } = await sb.rpc('finish_order', {

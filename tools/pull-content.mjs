@@ -10,14 +10,28 @@ import { selectAll } from './supabase.mjs'
 const LOCALES = ['pl', 'uk', 'ru', 'en']
 const write = (f, d) => writeFile(`content/${f}`, JSON.stringify(d, null, 1), 'utf8')
 
-const [pagesRows, pageTr, groupRows, groupTr, itemRows, itemTr, chainRows, chainTr, faqRows, faqTr, settingRows] =
+/** Прайс берём тем же вызовом, что и калькулятор на живой странице,
+ *  чтобы запечённая и живая версии совпадали по форме до байта. */
+async function rpc(fn) {
+  const res = await fetch(`${process.env.SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+    method: 'POST',
+    headers: {
+      apikey: process.env.SUPABASE_SERVICE_KEY,
+      Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: '{}',
+  })
+  if (!res.ok) throw new Error(`${fn}: ${res.status} ${await res.text()}`)
+  return res.json()
+}
+
+const [pagesRows, pageTr, catalog, overrideRows, chainRows, chainTr, faqRows, faqTr, settingRows] =
   await Promise.all([
     selectAll('pages', '*', 'sort.asc'),
     selectAll('page_tr'),
-    selectAll('price_groups', '*', 'sort.asc'),
-    selectAll('price_group_tr'),
-    selectAll('price_items', '*', 'sort.asc'),
-    selectAll('price_item_tr'),
+    rpc('catalog'),
+    selectAll('site_content'),
     selectAll('chains'),
     selectAll('chain_tr'),
     selectAll('faq', '*', 'sort.asc'),
@@ -61,17 +75,22 @@ const pages = pagesRows.map((p) => {
 const services = pages.filter((p) => p.type === 'service')
 const others = pages.filter((p) => p.type !== 'service')
 
-const items = itemRows.map((it) => ({
-  key: it.key, group: it.group_key, dept: it.dept,
-  price: it.price, hours: Number(it.hours), unit: it.unit,
-  min: it.min_qty, max: it.max_qty,
-  ...(it.extra ?? {}),
-  name: byLocale(itemTr, 'item_key', it.key, (r) => r.name),
+/** Языки внутри name — в заданном порядке, ради воспроизводимой сборки. */
+const ordered = (name) => Object.fromEntries(LOCALES.filter((l) => name?.[l]).map((l) => [l, name[l]]))
+// jsonb отдаёт ключи в своём порядке — раскладываем в привычный, иначе
+// каждая выгрузка переписывает файл целиком и дифф нечитаем
+const items = catalog.items.map(({ key, group, dept, price, hours, unit, min, max, name, ptype, sub, ...extra }) => ({
+  key, group, dept, price, hours, unit, min, max, ...extra, ptype, ...(sub ? { sub } : {}),
+  name: ordered(name),
 }))
+const groups = catalog.groups.map((g) => ({ key: g.key, name: ordered(g.name) }))
+const subgroups = catalog.subgroups.map((g) => ({ key: g.key, group: g.group, name: ordered(g.name) }))
 
-const groups = groupRows.map((g) => ({
-  key: g.key, name: byLocale(groupTr, 'group_key', g.key, (r) => r.name),
-}))
+/** Правки визуального редактора: { locale: { key: {v, k} } }, locale '*' — фото. */
+const overrides = {}
+for (const r of [...overrideRows].sort((a, b) => (a.key + a.locale).localeCompare(b.key + b.locale))) {
+  ;(overrides[r.locale] ??= {})[r.key] = { v: r.value, k: r.kind }
+}
 
 const chains = chainRows.map((c) => ({
   key: c.key, trigger: c.trigger, visits: c.visits, minPrice: c.min_price, steps: c.steps,
@@ -108,10 +127,12 @@ await Promise.all([
   write('services.json', services),
   write('items.json', items),
   write('groups.json', groups),
+  write('subgroups.json', subgroups),
+  write('overrides.json', overrides),
   write('chains.json', chains),
   write('settings.json', settings),
   write('faq.json', faq),
 ])
 
-console.log(`выгружено: ${others.length} страниц, ${services.length} услуг, ${items.length} позиций, ${chains.length} цепочек`)
+console.log(`выгружено: ${others.length} страниц, ${services.length} услуг, ${items.length} позиций, ${subgroups.length} подкатегорий, ${chains.length} цепочек, ${overrideRows.length} правок редактора`)
 execFileSync('node', ['tools/split-content.mjs'], { stdio: 'inherit' })

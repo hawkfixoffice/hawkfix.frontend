@@ -9,6 +9,7 @@ import Picture from '../components/Picture'
 import Icon from '../components/Icon'
 import Reveal from '../components/Reveal'
 import { CONTACT } from '../lib/ui'
+import { PT, U } from '../cms/E'
 
 export default function ContactPage() {
   const { page, locale, t } = usePage()
@@ -29,8 +30,8 @@ export default function ContactPage() {
             { name: t.breadcrumbs.home, to: pathOf(KEY_PAGES.home, locale) },
             { name: tr.h1, to: page.paths[locale] },
           ]} />
-          <h1>{tr.h1}</h1>
-          <p className="pagehead__lead">{tr.description}</p>
+          <PT as="h1" field="h1" v={tr.h1} />
+          <PT as="p" className="pagehead__lead" field="lead" v={tr.description} multiline />
           <Rule className="pagehead__rule" />
         </div>
       </section>
@@ -42,7 +43,7 @@ export default function ContactPage() {
             <div className="blocks blocks--3 contact-cards">
                 <a className="blk blk--tall blk--forest contact-card" href={CONTACT.phoneHref}>
                   <Icon name="phone" size={22} />
-                  <p className="blk__t">{t.cta.call}</p>
+                  <U as="p" className="blk__t" k="cta.call" />
                   <p className="contact-card__v num">{CONTACT.phone}</p>
                 </a>
                 <a
@@ -50,7 +51,7 @@ export default function ContactPage() {
                   href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener"
                 >
                   <Icon name="whatsapp" size={22} />
-                  <p className="blk__t">{t.cta.whatsapp}</p>
+                  <U as="p" className="blk__t" k="cta.whatsapp" />
                   <p className="contact-card__v num">+{CONTACT.whatsapp}</p>
                 </a>
                 <a className="blk blk--tall contact-card" href={`mailto:${CONTACT.email}`}>
@@ -66,14 +67,14 @@ export default function ContactPage() {
               <div className="blocks blocks--2 contact-notes">
                 {(intro?.paras ?? []).map((x) => (
                   <div className="blk" key={x}>
-                    <p className="blk__s blk__s--lead">{x}</p>
+                    <PT as="p" className="blk__s blk__s--lead" v={x} multiline />
                   </div>
                 ))}
                 {rest.map((sec) => (
                   <div className="blk" key={sec.heading}>
-                    {sec.eyebrow && <p className="blk__n">{sec.eyebrow}</p>}
-                    <h2 className="blk__t">{sec.heading}</h2>
-                    {sec.paras.map((x) => <p className="blk__s" key={x}>{x}</p>)}
+                    {sec.eyebrow && <PT as="p" className="blk__n" v={sec.eyebrow} />}
+                    <PT as="h2" className="blk__t" v={sec.heading ?? ''} />
+                    {sec.paras.map((x) => <PT as="p" className="blk__s" key={x} v={x} multiline />)}
                   </div>
                 ))}
               </div>
@@ -84,7 +85,7 @@ export default function ContactPage() {
                 <Picture name="moveout" alt={t.alt.keys} ratio="4x3" widths={[800, 1200, 1600]} sizes="(max-width:900px) 100vw, 34vw" />
                 <span className="sticker" style={{ left: -26, top: '38%' }}>{CONTACT.city}<br />{CONTACT.radiusKm} km</span>
                 <span className="badge badge--accent badge--bl">
-                  <span className="badge__text">{t.home.minVisitTitle} — {settings.minVisit} {settings.currency}</span>
+                  <span className="badge__text"><U k="home.minVisitTitle" /> — {settings.minVisit} {settings.currency}</span>
                   <span className="badge__dot"><Icon name="check" size={18} /></span>
                 </span>
               </div>
@@ -98,9 +99,9 @@ export default function ContactPage() {
         <section className="band band--tight">
           <div className="wrap">
             <Reveal>
-              <h2 className="sec-h2">{districtSec?.heading}</h2>
+              <PT as="h2" className="sec-h2" v={districtSec?.heading ?? ''} />
               {/* абзацы этой секции — часть текста старого сайта, не теряем их */}
-              {districtSec?.paras.map((x) => <p className="prose sec-p" key={x}>{x}</p>)}
+              {districtSec?.paras.map((x) => <PT as="p" className="prose sec-p" key={x} v={x} multiline />)}
               <div className="chipwall">
                 {districts.map((d) => <span className="chip" key={d}>{d}</span>)}
               </div>
@@ -112,11 +113,11 @@ export default function ContactPage() {
       <section className="band band--tight ctaband">
         <div className="wrap ctaband__in">
           <div>
-            <h2>{t.home.ctaHead}</h2>
-            <p className="prose">{t.home.ctaLead}</p>
+            <U as="h2" k="home.ctaHead" />
+            <U as="p" className="prose" k="home.ctaLead" multiline />
           </div>
           <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
-            {t.cta.quote} <Icon name="arrow" size={17} />
+            <U k="cta.quote" /> <Icon name="arrow" size={17} />
           </Link>
         </div>
       </section>

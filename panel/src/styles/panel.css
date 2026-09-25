@@ -400,7 +400,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
   .top { gap: 10px; }
   .topright { margin-inline-start: auto; }
   .tabs { display: none; }
-  .topright__out { display: none; }   /* «Выйти» живёт внутри меню */
+  .topright__out, .topright__site { display: none; }   /* «Выйти» и редактор сайта живут внутри меню */
   .burger { display: block; }
   .grid--2 { grid-template-columns: minmax(0, 1fr); }
 }
@@ -520,3 +520,103 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 }
 .shoppick b { display: block; }
 .shoppick small { color: var(--ink-3); }
+
+/* ============================================================
+   Редактор прайса (2026-09-25)
+   ============================================================ */
+.pr { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 960px) { .pr { grid-template-columns: 1fr; } }
+.pr-groups { position: sticky; top: 84px; }
+@media (max-width: 960px) { .pr-groups { position: static; } }
+.pr-glist { display: grid; gap: 2px; max-height: calc(100vh - 260px); overflow: auto; margin: 0 -6px; padding: 0 6px; }
+.pr-g { display: flex; align-items: center; gap: 4px; border-radius: 12px; }
+.pr-g[data-on] { background: var(--accent-soft); }
+.pr-g__name {
+  flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 9px 10px; border: 0; background: none; text-align: start; border-radius: 12px;
+}
+.pr-g__name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pr-g__name small { color: var(--ink-3); }
+.pr-g:not([data-on]) .pr-g__name:hover { background: var(--paper); }
+.pr-arrows { display: inline-flex; gap: 2px; flex: none; }
+.pr-arrows button {
+  width: 26px; height: 26px; border: 0; border-radius: 8px; background: var(--paper-2);
+  color: var(--ink-2); font-size: 13px; line-height: 1;
+}
+.pr-arrows button:disabled { opacity: .3; cursor: default; }
+.pr-arrows button:not(:disabled):hover { background: var(--accent); }
+
+.pr-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.pr-type { font-size: 12px; padding: 5px 10px; border-radius: var(--r-pill); background: var(--card); border: 1px solid var(--line); }
+.pr-type small { color: var(--ink-3); }
+.pr-type[data-t='area'] { border-color: #b7d4f5; }
+.pr-type[data-t='scope'] { border-color: var(--accent); }
+
+.pr-saved { font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-3); }
+.pr-saved--saving { background: var(--warn-soft); color: var(--warn); }
+.pr-saved--ok { background: var(--accent-soft); color: var(--accent-text); }
+.pr-saved--err { background: var(--bad-soft); color: var(--bad); }
+
+.pr-names { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+.pr-name { display: flex; align-items: center; gap: 8px; background: var(--paper); border-radius: 12px; padding: 4px 4px 4px 10px; }
+.pr-name span { font-size: 11px; font-weight: 800; color: var(--ink-3); width: 20px; }
+.pr-name input { flex: 1; min-width: 0; border: 0; background: var(--card); border-radius: 9px; padding: 8px 10px; }
+
+.pr-subhead {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: 14px 16px; border-bottom: 1px solid var(--line); background: var(--paper);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+}
+.pr-subname {
+  flex: 1; min-width: 180px; font-weight: 700; font-size: 15px;
+  border: 1px solid transparent; background: transparent; border-radius: 10px; padding: 7px 10px;
+}
+.pr-subname:not(.pr-subname--static):hover, .pr-subname:focus { border-color: var(--line); background: var(--card); outline: none; }
+.pr-tr summary { cursor: pointer; font-size: 12px; color: var(--ink-3); padding: 6px 8px; }
+.pr-tr[open] { flex-basis: 100%; order: 10; }
+
+.pr-items { display: grid; }
+.pr-row { border-bottom: 1px solid var(--line); border-inline-start: 4px solid transparent; }
+.pr-row:last-child { border-bottom: 0; }
+.pr-row[data-t='area'] { border-inline-start-color: #b7d4f5; }
+.pr-row[data-t='scope'] { border-inline-start-color: var(--accent); }
+.pr-row[data-open] { background: #fbfbfa; }
+.pr-row__main { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 12px; }
+.pr-row__main input, .pr-row__main select {
+  border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 7px 9px; min-height: 36px;
+}
+.pr-row__main input:focus, .pr-row__main select:focus { outline: 2px solid var(--accent); border-color: transparent; }
+.pr-row__name { flex: 1 1 260px; min-width: 0; }
+.pr-row__type { width: 150px; }
+.pr-row__price { display: inline-flex; align-items: center; gap: 4px; }
+.pr-row__price input { width: 84px; text-align: end; font-variant-numeric: tabular-nums; }
+.pr-row__price small { color: var(--ink-3); font-size: 12px; }
+.pr-row__unit { width: 96px; }
+.pr-row__more { padding: 4px 16px 16px; display: grid; gap: 10px; }
+.pr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+@media (max-width: 640px) {
+  .pr-row__type, .pr-row__unit { width: auto; flex: 1; }
+}
+
+/* ============================================================
+   Работы «за объём»: фото клиента и цена мастера (2026-09-25)
+   ============================================================ */
+.photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.photos__item {
+  aspect-ratio: 1; border: 0; padding: 0; border-radius: 14px; overflow: hidden;
+  background: var(--paper-2); display: grid; place-items: center;
+}
+.photos__item img { width: 100%; height: 100%; object-fit: cover; transition: transform .2s; }
+.photos__item:hover img { transform: scale(1.04); }
+.lightbox {
+  position: fixed; inset: 0; z-index: 90; background: rgb(0 0 0 / 86%);
+  display: grid; place-items: center; padding: 20px; cursor: zoom-out;
+}
+.lightbox img { max-width: 100%; max-height: 100%; border-radius: 12px; }
+.lightbox__x { position: absolute; top: 16px; right: 16px; background: var(--card); }
+.scope { border: 2px solid var(--accent); }
+.scope__price { margin: 12px 0 0; font-size: 16px; }
+.scope__form { align-items: flex-end; }
+.scope__comment { margin: 10px 0 0; color: var(--ink-2); font-style: italic; }
+.check { display: flex; gap: 10px; align-items: flex-start; margin-top: 10px; cursor: pointer; }
+.check input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--forest); }

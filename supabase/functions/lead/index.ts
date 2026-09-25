@@ -107,6 +107,7 @@ function buildEmail(row: Record<string, unknown>, orderNo: string) {
       ${line('Dzielnica', row.district)}
       ${line('Adres', row.address)}
       ${line('Termin', [row.when_date, row.when_time].filter(Boolean).join(', '))}
+      ${line('Zdjęcia od klienta', (row.photos as string[] | undefined)?.length ? `${(row.photos as string[]).length} — w panelu, w karcie zlecenia` : '')}
       ${line('Język', row.locale, false)}
       ${line('Strona', row.page, false)}
     </table>
@@ -151,6 +152,7 @@ function buildEmail(row: Record<string, unknown>, orderNo: string) {
     row.email ? `E-mail: ${row.email}` : '',
     row.district ? `Dzielnica: ${row.district}` : '',
     row.address ? `Adres: ${row.address}` : '',
+    (row.photos as string[] | undefined)?.length ? `Zdjęcia od klienta: ${(row.photos as string[]).length} (w panelu)` : '',
     row.when_date ? `Termin: ${row.when_date}${row.when_time ? ', ' + row.when_time : ''}` : '',
     row.comment ? `\nOpis: ${row.comment}` : '', '',
     'Kosztorys:',
@@ -446,6 +448,12 @@ async function turnstileOk(token: string | undefined, ip: string | null): Promis
 const coord = (v: unknown, limit: number): number | null =>
   typeof v === 'number' && Number.isFinite(v) && Math.abs(v) <= limit ? v : null
 
+/** Пути фото клиента: файлы уже лежат в бакете lead-photos, сюда приходят
+ *  только имена. Берём то, что похоже на наш формат, не больше шести. */
+const PHOTO_RE = /^in\/[0-9a-f-]{36}\/[0-9a-z-]{1,40}\.webp$/
+const photoPaths = (v: unknown): string[] =>
+  Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string' && PHOTO_RE.test(x)).slice(0, 6) : []
+
 const str = (v: unknown, max: number): string | null => {
   if (typeof v !== 'string') return null
   const s = v.trim()
@@ -547,6 +555,7 @@ Deno.serve(async (req) => {
     items,
     totals: (body.totals ?? {}) as Record<string, unknown>,
     source: 'fn',
+    photos: photoPaths(body.photos),
     page: str(body.page, 300),
     user_agent: (req.headers.get('user-agent') ?? '').slice(0, 400),
   }

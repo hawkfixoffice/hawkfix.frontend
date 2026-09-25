@@ -8,6 +8,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wymiana lub montaż baterii",
    "uk": "Заміна або встановлення змішувача",
@@ -24,6 +25,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż lub wymiana syfonu",
    "uk": "Встановлення або заміна сифона",
@@ -40,6 +42,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wymiana wężyków przyłączeniowych",
    "uk": "Заміна гнучких підводок",
@@ -56,6 +59,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Podłączenie pralki",
    "uk": "Підключення пральної машини",
@@ -72,6 +76,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Podłączenie zmywarki",
    "uk": "Підключення посудомийної машини",
@@ -88,6 +93,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż lub wymiana sedesu",
    "uk": "Встановлення або заміна унітаза",
@@ -104,6 +110,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż umywalki",
    "uk": "Встановлення умивальника",
@@ -120,6 +127,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż bidetu",
    "uk": "Встановлення біде",
@@ -136,6 +144,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Naprawa spłuczki",
    "uk": "Ремонт зливного бачка",
@@ -153,6 +162,7 @@
   "min": 1,
   "max": 99,
   "s": true,
+  "ptype": "scope",
   "name": {
    "pl": "Udrożnienie odpływu",
    "uk": "Прочищення зливу",
@@ -169,6 +179,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Demontaż sanitariatu",
    "uk": "Демонтаж сантехніки",
@@ -185,6 +196,7 @@
   "unit": "mb",
   "min": 1,
   "max": 999,
+  "ptype": "area",
   "name": {
    "pl": "Wymiana silikonu: wanna, brodzik, blat",
    "uk": "Заміна силікону: ванна, піддон, стільниця",
@@ -201,6 +213,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wymiana żarówki lub halogenu",
    "uk": "Заміна лампочки або галогена",
@@ -217,6 +230,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż lub wymiana gniazdka",
    "uk": "Встановлення або заміна розетки",
@@ -233,6 +247,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż lub wymiana włącznika",
    "uk": "Встановлення або заміна вимикача",
@@ -249,6 +264,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż i podłączenie żyrandola",
    "uk": "Встановлення та підключення люстри",
@@ -265,6 +281,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Naprawa lampy lub żyrandola",
    "uk": "Ремонт лампи або люстри",
@@ -281,6 +298,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż taśmy LED",
    "uk": "Монтаж LED-стрічки",
@@ -297,6 +315,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Naprawa połączeń elektrycznych",
    "uk": "Ремонт електричних з'єднань",
@@ -313,6 +332,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wymiana różnicówki lub bezpiecznika",
    "uk": "Заміна диференціала або запобіжника",
@@ -329,6 +349,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wykonanie punktu elektrycznego",
    "uk": "Влаштування електроточки",
@@ -345,6 +366,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Podłączenie płyty elektrycznej",
    "uk": "Підключення електричної варильної панелі",
@@ -362,6 +384,7 @@
   "min": 1,
   "max": 99,
   "s": true,
+  "ptype": "scope",
   "name": {
    "pl": "Lokalizacja usterki instalacji elektrycznej",
    "uk": "Пошук несправності електропроводки",
@@ -378,6 +401,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż wieszaków i haczyków",
    "uk": "Монтаж вішалок і гачків",
@@ -394,6 +418,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Powieszenie obrazu lub lustra",
    "uk": "Повісити картину або дзеркало",
@@ -410,6 +435,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż półki",
    "uk": "Монтаж полиці",
@@ -426,6 +452,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż karnisza",
    "uk": "Монтаж карниза",
@@ -442,6 +469,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż rolety lub żaluzji",
    "uk": "Монтаж ролети або жалюзі",
@@ -458,6 +486,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż telewizora na ścianie",
    "uk": "Монтаж телевізора на стіну",
@@ -474,6 +503,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Klejenie lustra",
    "uk": "Приклеювання дзеркала",
@@ -490,6 +520,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż mebla: komoda, stolik, krzesło",
    "uk": "Збирання меблів: комод, столик, стілець",
@@ -506,6 +537,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż łóżka",
    "uk": "Збирання ліжка",
@@ -522,6 +554,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż szafy",
    "uk": "Збирання шафи",
@@ -538,6 +571,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Powieszenie szafki kuchennej średniej, do 60 × 70 cm",
    "uk": "Навішування кухонної шафки середньої, до 60 × 70 см",
@@ -554,6 +588,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Powieszenie szafki kuchennej dużej, od 80 × 90 cm lub narożnej",
    "uk": "Навішування кухонної шафки великої, від 80 × 90 см або кутової",
@@ -570,6 +605,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż szafki stojącej z wypoziomowaniem",
    "uk": "Монтаж напільної шафки з вирівнюванням",
@@ -586,6 +622,7 @@
   "unit": "mb",
   "min": 1,
   "max": 999,
+  "ptype": "area",
   "name": {
    "pl": "Montaż mebli kuchennych",
    "uk": "Збирання кухонних меблів",
@@ -602,6 +639,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wymiana zawiasu, regulacja frontu",
    "uk": "Заміна завіси, регулювання фасаду",
@@ -618,6 +656,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Naprawa prowadnicy szuflady",
    "uk": "Ремонт напрямної шухляди",
@@ -634,6 +673,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Naprawa łóżka lub tapczanu",
    "uk": "Ремонт ліжка або тахти",
@@ -650,6 +690,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Naprawa szafy przesuwnej",
    "uk": "Ремонт шафи-купе",
@@ -666,6 +707,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wymiana zawiasów w lodówce",
    "uk": "Заміна завіс у холодильнику",
@@ -682,6 +724,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Demontaż mebla",
    "uk": "Розбирання меблів",
@@ -698,6 +741,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wymiana klamki",
    "uk": "Заміна ручки",
@@ -714,6 +758,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wymiana zamka w skrzynce pocztowej",
    "uk": "Заміна замка в поштовій скриньці",
@@ -730,6 +775,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wymiana wkładki zamka",
    "uk": "Заміна циліндра замка",
@@ -746,6 +792,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Regulacja drzwi",
    "uk": "Регулювання дверей",
@@ -762,6 +809,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Regulacja okna, serwis okucia",
    "uk": "Регулювання вікна, сервіс фурнітури",
@@ -778,6 +826,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wymiana uszczelki w oknie",
    "uk": "Заміна ущільнювача у вікні",
@@ -794,6 +843,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż lub wymiana zamka",
    "uk": "Встановлення або заміна замка",
@@ -810,6 +860,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Naprawa i regulacja drzwi aluminiowych",
    "uk": "Ремонт і регулювання алюмінієвих дверей",
@@ -826,6 +877,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż drzwi wewnętrznych",
    "uk": "Встановлення міжкімнатних дверей",
@@ -842,6 +894,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż wentylatora w łazience",
    "uk": "Встановлення вентилятора у ванній",
@@ -858,6 +911,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Zabudowa piekarnika",
    "uk": "Вбудовування духової шафи",
@@ -874,6 +928,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Osadzenie płyty grzewczej w gotowym otworze",
    "uk": "Монтаж варильної панелі в готовий отвір",
@@ -890,6 +945,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż filtra wody",
    "uk": "Встановлення фільтра для води",
@@ -906,6 +962,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż okapu z wyprowadzeniem",
    "uk": "Монтаж витяжки з відведенням",
@@ -924,6 +981,7 @@
   "max": 999,
   "su": true,
   "wet": true,
+  "ptype": "area",
   "name": {
    "pl": "Malowanie ścian, dwie warstwy, dowolny kolor",
    "uk": "Фарбування стін, два шари, будь-який колір",
@@ -942,6 +1000,7 @@
   "max": 999,
   "a": true,
   "wet": true,
+  "ptype": "area",
   "name": {
    "pl": "Trzecia warstwa: krycie ciemnego koloru albo intensywny kolor",
    "uk": "Третій шар: перекриття темного кольору або інтенсивний колір",
@@ -960,6 +1019,7 @@
   "max": 999,
   "su": true,
   "wet": true,
+  "ptype": "area",
   "name": {
    "pl": "Malowanie sufitu, dwie warstwy",
    "uk": "Фарбування стелі, два шари",
@@ -978,6 +1038,7 @@
   "max": 999,
   "s": true,
   "su": true,
+  "ptype": "area",
   "name": {
    "pl": "Skucie odparzonego tynku i łuszczącej się farby",
    "uk": "Збивання відсталої штукатурки та фарби, що лущиться",
@@ -997,6 +1058,7 @@
   "s": true,
   "su": true,
   "dry": true,
+  "ptype": "area",
   "name": {
    "pl": "Usunięcie pleśni i grzyba, oprysk biobójczy",
    "uk": "Видалення плісняви та грибка, біоцидна обробка",
@@ -1017,6 +1079,7 @@
   "su": true,
   "dry": true,
   "wet": true,
+  "ptype": "area",
   "name": {
    "pl": "Odtworzenie tynku po zawilgoceniu",
    "uk": "Відновлення штукатурки після замокання",
@@ -1035,6 +1098,7 @@
   "max": 999,
   "a": true,
   "wet": true,
+  "ptype": "area",
   "name": {
    "pl": "Gruntowanie ścian lub sufitu",
    "uk": "Ґрунтування стін або стелі",
@@ -1053,6 +1117,7 @@
   "max": 999,
   "a": true,
   "wet": true,
+  "ptype": "area",
   "name": {
    "pl": "Przygotowanie powierzchni: szpachlowanie i szlifowanie",
    "uk": "Підготовка поверхні: шпаклювання та шліфування",
@@ -1071,6 +1136,7 @@
   "max": 99,
   "a": true,
   "au": true,
+  "ptype": "fixed",
   "name": {
    "pl": "Przygotowanie i zabezpieczenie pomieszczenia",
    "uk": "Підготовка та захист приміщення",
@@ -1087,6 +1153,7 @@
   "unit": "mb",
   "min": 1,
   "max": 999,
+  "ptype": "area",
   "name": {
    "pl": "Montaż listwy przypodłogowej",
    "uk": "Монтаж плінтуса",
@@ -1104,6 +1171,7 @@
   "min": 1,
   "max": 999,
   "su": true,
+  "ptype": "area",
   "name": {
    "pl": "Układanie paneli podłogowych",
    "uk": "Укладання ламінату",
@@ -1120,6 +1188,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Montaż progu",
    "uk": "Встановлення порога",
@@ -1137,6 +1206,7 @@
   "min": 1,
   "max": 99,
   "s": true,
+  "ptype": "scope",
   "name": {
    "pl": "Naprawa dziury lub pęknięcia w ścianie",
    "uk": "Ремонт дірки або тріщини у стіні",
@@ -1153,6 +1223,7 @@
   "unit": "h",
   "min": 3,
   "max": 999,
+  "ptype": "fixed",
   "name": {
    "pl": "Sprzątanie lekkie: kurze, podłogi, kuchnia, łazienka, balkon",
    "uk": "Легке прибирання: пил, підлоги, кухня, ванна, балкон",
@@ -1169,6 +1240,7 @@
   "unit": "h",
   "min": 3,
   "max": 999,
+  "ptype": "fixed",
   "name": {
    "pl": "Sprzątanie średnie: generalne — okna, piekarnik, lodówka, szafki w środku",
    "uk": "Середнє прибирання: генеральне — вікна, духовка, холодильник, шафи всередині",
@@ -1185,6 +1257,7 @@
   "unit": "h",
   "min": 4,
   "max": 999,
+  "ptype": "fixed",
   "name": {
    "pl": "Sprzątanie ciężkie: po remoncie, pył budowlany, zacieki",
    "uk": "Важке прибирання: після ремонту, будівельний пил, патьоки",
@@ -1201,6 +1274,7 @@
   "unit": "h",
   "min": 1,
   "max": 999,
+  "ptype": "fixed",
   "name": {
    "pl": "Prasowanie",
    "uk": "Прасування",
@@ -1217,6 +1291,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Przegląd przed zdaniem: protokół z listą usterek i zdjęciami",
    "uk": "Огляд перед здачею: протокол зі списком зауважень і фото",
@@ -1233,6 +1308,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Zaszpachlowanie otworów po kołkach i karniszach, do 10 sztuk",
    "uk": "Замазування отворів від дюбелів і карнизів, до 10 штук",
@@ -1249,6 +1325,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Punktowe malowanie po szpachlowaniu, do 2 m²",
    "uk": "Точкове фарбування після шпаклювання, до 2 м²",
@@ -1265,6 +1342,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Podklejenie odchodzącej tapety",
    "uk": "Підклеїти шпалери, що відійшли",
@@ -1281,6 +1359,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Powrót po uwagach właściciela, w ciągu 7 dni",
    "uk": "Повернення за зауваженнями власника, протягом 7 днів",
@@ -1297,6 +1376,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Przesadzenie rośliny w doniczce do 30 cm",
    "uk": "Пересадка рослини в горщику до 30 см",
@@ -1313,6 +1393,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Przesadzenie dużej rośliny od 30 cm",
    "uk": "Пересадка великої рослини від 30 см",
@@ -1329,6 +1410,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Przycięcie, podwiązanie i oprysk na szkodniki",
    "uk": "Обрізка, підв'язування та обробка від шкідників",
@@ -1346,6 +1428,7 @@
   "min": 1,
   "max": 99,
   "a": true,
+  "ptype": "fixed",
   "name": {
    "pl": "Przeniesienie dużej rośliny do innego pokoju",
    "uk": "Перенесення великої рослини в іншу кімнату",
@@ -1362,6 +1445,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Podlewanie roślin pod nieobecność: jedna wizyta",
    "uk": "Полив рослин за вашої відсутності: один візит",
@@ -1378,6 +1462,7 @@
   "unit": "h",
   "min": 2,
   "max": 999,
+  "ptype": "fixed",
   "name": {
    "pl": "Bus i dwie osoby, do 80 km w cenie",
    "uk": "Бус і двоє вантажників, до 80 км у ціні",
@@ -1395,6 +1480,7 @@
   "min": 1,
   "max": 999,
   "a": true,
+  "ptype": "fixed",
   "name": {
    "pl": "Dodatkowa osoba do noszenia",
    "uk": "Додаткова людина на перенесення",
@@ -1412,6 +1498,7 @@
   "min": 1,
   "max": 999,
   "a": true,
+  "ptype": "fixed",
   "name": {
    "pl": "Pakowanie rzeczy",
    "uk": "Пакування речей",
@@ -1429,6 +1516,7 @@
   "min": 1,
   "max": 999,
   "a": true,
+  "ptype": "fixed",
   "name": {
    "pl": "Noszenie po schodach, bez windy",
    "uk": "Перенесення сходами, без ліфта",
@@ -1445,6 +1533,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wniesienie ciężkiego przedmiotu: pianino, sejf",
    "uk": "Занесення важкого предмета: піаніно, сейф",
@@ -1462,6 +1551,7 @@
   "min": 1,
   "max": 999,
   "a": true,
+  "ptype": "fixed",
   "name": {
    "pl": "Dojazd poza Warszawę, za kilometr",
    "uk": "Виїзд за межі Варшави, за кілометр",
@@ -1478,6 +1568,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wywóz na PSZOK: do 4 rzeczy, stare meble, gruz, gałęzie",
    "uk": "Вивезення на PSZOK: до 4 речей, старі меблі, сміття, гілки",
@@ -1494,6 +1585,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wywóz na PSZOK: pełny bus, cały pokój albo piwnica",
    "uk": "Вивезення на PSZOK: повний бус, ціла кімната або підвал",
@@ -1511,6 +1603,7 @@
   "min": 1,
   "max": 99,
   "s": true,
+  "ptype": "scope",
   "name": {
    "pl": "Opróżnienie mieszkania: kilka kursów na PSZOK",
    "uk": "Звільнення квартири: кілька рейсів на PSZOK",
@@ -1527,6 +1620,7 @@
   "unit": "h",
   "min": 1,
   "max": 999,
+  "ptype": "fixed",
   "name": {
    "pl": "Koszenie trawnika",
    "uk": "Косіння газону",
@@ -1543,6 +1637,7 @@
   "unit": "mb",
   "min": 5,
   "max": 999,
+  "ptype": "area",
   "name": {
    "pl": "Przycinanie żywopłotu do 2 m",
    "uk": "Обрізання живоплоту до 2 м",
@@ -1559,6 +1654,7 @@
   "unit": "mb",
   "min": 5,
   "max": 999,
+  "ptype": "area",
   "name": {
    "pl": "Przycinanie żywopłotu 2–4 m",
    "uk": "Обрізання живоплоту 2–4 м",
@@ -1575,6 +1671,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Przycinanie drzewa do 5 m",
    "uk": "Обрізання дерева до 5 м",
@@ -1592,6 +1689,7 @@
   "min": 1,
   "max": 99,
   "s": true,
+  "ptype": "scope",
   "name": {
    "pl": "Przycinanie korony drzewa powyżej 5 m",
    "uk": "Обрізання крони дерева понад 5 м",
@@ -1608,6 +1706,7 @@
   "unit": "szt",
   "min": 1,
   "max": 99,
+  "ptype": "fixed",
   "name": {
    "pl": "Wycinka małego drzewa do 5 m, pień zostaje",
    "uk": "Зрізання малого дерева до 5 м, пень залишається",
@@ -1625,6 +1724,7 @@
   "min": 1,
   "max": 99,
   "s": true,
+  "ptype": "scope",
   "name": {
    "pl": "Wycinka dużego drzewa powyżej 5 m, pień zostaje",
    "uk": "Зрізання великого дерева понад 5 м, пень залишається",
@@ -1641,6 +1741,7 @@
   "unit": "h",
   "min": 1,
   "max": 999,
+  "ptype": "fixed",
   "name": {
    "pl": "Rąbanie i cięcie drewna opałowego",
    "uk": "Рубання та різання дров",
@@ -1657,6 +1758,7 @@
   "unit": "h",
   "min": 1,
   "max": 999,
+  "ptype": "fixed",
   "name": {
    "pl": "Porządki na działce: chwasty, liście, gałęzie",
    "uk": "Прибирання ділянки: бур'ян, листя, гілки",
@@ -1674,6 +1776,7 @@
   "min": 10,
   "max": 999,
   "s": true,
+  "ptype": "area",
   "name": {
    "pl": "Remont kosmetyczny, poziom lekki: gruntowanie, ściany, sufity",
    "uk": "Косметичний ремонт, легкий рівень: ґрунтування, стіни, стелі",
@@ -1691,6 +1794,7 @@
   "min": 10,
   "max": 999,
   "s": true,
+  "ptype": "area",
   "name": {
    "pl": "Remont kosmetyczny, poziom średni: gładzie, podłoga, drzwi, osprzęt",
    "uk": "Косметичний ремонт, середній рівень: шпаклівка, підлога, двері, розетки",
@@ -1708,6 +1812,7 @@
   "min": 10,
   "max": 999,
   "s": true,
+  "ptype": "area",
   "name": {
    "pl": "Remont kosmetyczny, poziom ciężki: skuwanie, płytki, instalacje",
    "uk": "Косметичний ремонт, важкий рівень: збивання, плитка, комунікації",

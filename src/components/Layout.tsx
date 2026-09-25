@@ -6,6 +6,7 @@ import Header from './Header'
 import Footer from './Footer'
 import CookieBanner from './CookieBanner'
 import ClientOnly from './ClientOnly'
+import CmsBoot from '../cms/CmsBoot'
 import { detectLocale, isBot, onceThisSession, readPref } from '../lib/locale-pref'
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -43,6 +44,7 @@ function Shell({ children }: { children: React.ReactNode }) {
       <main id="main">{children}</main>
       <Footer />
       <ClientOnly><CookieBanner /></ClientOnly>
+      <ClientOnly><CmsBoot /></ClientOnly>
     </>
   )
 }

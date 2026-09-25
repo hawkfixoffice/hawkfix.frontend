@@ -1,9 +1,14 @@
 import { useId, useState } from 'react'
 import Icon from './Icon'
 import Collapse from './Collapse'
+import E from '../cms/E'
 
 /** Аккордеон вопросов: открыт один пункт, знак «+» поворачивается в «×». */
-export default function Accordion({ items, className = '' }: { items: { q: string; a: string }[]; className?: string }) {
+/** cmsKey — префикс ключа для визуального редактора: вопрос и ответ
+ *  становятся правимыми на месте (`<cmsKey>:<n>:q` / `:a`). */
+export default function Accordion({ items, className = '', cmsKey }: {
+  items: { q: string; a: string }[]; className?: string; cmsKey?: string
+}) {
   const [openIdx, setOpenIdx] = useState<number | null>(null)
   const base = useId()
   return (
@@ -17,11 +22,13 @@ export default function Accordion({ items, className = '' }: { items: { q: strin
               type="button" className="acc__head" aria-expanded={open} aria-controls={id}
               onClick={() => setOpenIdx(open ? null : i)}
             >
-              <span>{x.q}</span>
+              {cmsKey ? <E k={`${cmsKey}:${i}:q`} v={x.q} /> : <span>{x.q}</span>}
               <span className="acc__sign"><Icon name="plus" size={18} /></span>
             </button>
             <Collapse open={open} id={id}>
-              <p className="acc__body">{x.a}</p>
+              {cmsKey
+                ? <E as="p" className="acc__body" k={`${cmsKey}:${i}:a`} v={x.a} multiline />
+                : <p className="acc__body">{x.a}</p>}
             </Collapse>
           </div>
         )

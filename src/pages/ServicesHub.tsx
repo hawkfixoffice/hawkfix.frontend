@@ -8,6 +8,7 @@ import Picture from '../components/Picture'
 import Icon from '../components/Icon'
 import Reveal from '../components/Reveal'
 import { serviceAlt } from '../lib/ui'
+import E, { PT, U } from '../cms/E'
 
 export default function ServicesHub() {
   const { page, locale, t } = usePage()
@@ -29,16 +30,16 @@ export default function ServicesHub() {
           ]} />
           <div className="pagehead__split">
             <div>
-              <h1>{tr.h1}</h1>
-              <p className="pagehead__lead">{tr.description}</p>
+              <PT as="h1" field="h1" v={tr.h1} />
+              <PT as="p" className="pagehead__lead" field="lead" v={tr.description} multiline />
             </div>
             <div className="blocks blocks--stat pagehead__stats">
               <div className="blk blk--accent">
-                <p className="blk__n">{t.nav.services}</p>
+                <U as="p" className="blk__n" k="nav.services" />
                 <p className="blk__v">{services.length}</p>
               </div>
               <div className="blk blk--forest">
-                <p className="blk__n">{t.nav.prices}</p>
+                <U as="p" className="blk__n" k="nav.prices" />
                 <p className="blk__v">{items.length}</p>
               </div>
             </div>
@@ -72,8 +73,11 @@ export default function ServicesHub() {
                   <Link className={`blk blk--tall${tone}`} to={s.paths[locale]}>
                     <p className="blk__n">{String(i + 1).padStart(2, '0')}</p>
                     <div>
-                      <h2 className="blk__t">{s.tr[locale].h1}</h2>
-                      <p className="blk__s">{s.tr[locale].blurb}{from !== null ? ` · ${t.prices.from} ${from} ${cur}` : ''}</p>
+                      <E as="h2" className="blk__t" k={`page:${s.key}:h1`} v={s.tr[locale].h1} />
+                      <p className="blk__s">
+                        <E k={`page:${s.key}:blurb`} v={s.tr[locale].blurb ?? ''} multiline />
+                        {from !== null ? ` · ${t.prices.from} ${from} ${cur}` : ''}
+                      </p>
                     </div>
                   </Link>
                 </Reveal>
@@ -86,11 +90,11 @@ export default function ServicesHub() {
       <section className="band band--tight ctaband">
         <div className="wrap ctaband__in">
           <div>
-            <h2>{t.home.ctaHead}</h2>
-            <p className="prose">{t.home.ctaLead}</p>
+            <U as="h2" k="home.ctaHead" />
+            <U as="p" className="prose" k="home.ctaLead" multiline />
           </div>
           <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
-            {t.cta.quote} <Icon name="arrow" size={17} />
+            <U k="cta.quote" /> <Icon name="arrow" size={17} />
           </Link>
         </div>
       </section>
