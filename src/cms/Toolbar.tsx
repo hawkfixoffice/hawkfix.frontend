@@ -55,14 +55,13 @@ export default function Toolbar() {
     ? Math.max(half, Math.min(window.innerWidth - half, pos.x))
     : window.innerWidth / 2
 
-  const locale = target.dataset.locale || 'pl'
   const save = () => {
     const key = target.dataset.key
     if (!key) return
     const html = sanitize(target.innerHTML).replace(/(<br>)+$/, '')
     const isHtml = hasTags(html)
     const val = isHtml ? html : (target.textContent ?? '')
-    if (val.trim()) void cms.actions?.saveText(key, locale, val, isHtml ? 'html' : 'text')
+    if (val.trim()) void cms.actions?.saveText(key, val, isHtml ? 'html' : 'text')
   }
   const run = (fn: () => void) => (e: React.MouseEvent) => {
     e.preventDefault(); e.stopPropagation()
@@ -92,7 +91,7 @@ export default function Toolbar() {
   const revert = (e: React.MouseEvent) => {
     e.preventDefault(); e.stopPropagation()
     const key = target.dataset.key
-    if (key) void cms.actions?.revert(key, locale)
+    if (key) void cms.actions?.revert(key)
     target.blur(); setPos(null)
   }
 

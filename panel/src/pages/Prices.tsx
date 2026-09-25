@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { sb } from '../lib/supabase'
 import { useT } from '../lib/i18n'
 import Modal from '../ui/Modal'
+import PublishDialog from '../../../src/cms/PublishDialog'
+import { translateAll, translateError, type Target } from '../../../src/lib/translate'
 
 /**
  * Редактор прайса (только администратор).
@@ -25,9 +27,12 @@ const LOCS = ['pl', 'uk', 'ru', 'en'] as const
 type Loc = (typeof LOCS)[number]
 type Names = Partial<Record<Loc, string>>
 
-interface Group { key: string; sort: number; name: Names }
-interface Sub { key: string; group_key: string; sort: number; name: Names }
-interface Item {
+/** published=false — новая, клиенты её ещё не видят; name_draft — польское
+ *  название, изменённое, но не опубликованное (ждёт перевода). */
+interface Draftable { published: boolean; name_draft: string | null }
+interface Group extends Draftable { key: string; sort: number; name: Names }
+interface Sub extends Draftable { key: string; group_key: string; sort: number; name: Names }
+interface Item extends Draftable {
   key: string; group_key: string; subgroup_key: string | null; dept: string
   price: number; hours: number; unit: string; min_qty: number; max_qty: number
   extra: Record<string, unknown>; sort: number; ptype: 'fixed' | 'area' | 'scope'; name: Names
@@ -64,13 +69,13 @@ export default function Prices() {
 
   async function load() {
     const [g, s, i] = await Promise.all([
-      sb.from('price_groups').select('key, sort, price_group_tr(locale, name)').order('sort'),
-      sb.from('price_subgroups').select('key, group_key, sort, price_subgroup_tr(locale, name)').order('sort'),
+      sb.from('price_groups').select('key, sort, published, name_draft, price_group_tr(locale, name)').order('sort'),
+      sb.from('price_subgroups').select('key, group_key, sort, published, name_draft, price_subgroup_tr(locale, name)').order('sort'),
       sb.from('price_items').select('*, price_item_tr(locale, name)').order('sort'),
     ])
-    const gs = (g.data ?? []).map((r: any) => ({ key: r.key, sort: r.sort, name: names(r.price_group_tr) }))
+    const gs = (g.data ?? []).map((r: any) => ({ key: r.key, sort: r.sort, published: r.published, name_draft: r.name_draft, name: names(r.price_group_tr) }))
     setGroups(gs)
-    setSubs((s.data ?? []).map((r: any) => ({ key: r.key, group_key: r.group_key, sort: r.sort, name: names(r.price_subgroup_tr) })))
+    setSubs((s.data ?? []).map((r: any) => ({ key: r.key, group_key: r.group_key, sort: r.sort, published: r.published, name_draft: r.name_draft, name: names(r.price_subgroup_tr) })))
     setItems((i.data ?? []).map((r: any) => ({
       ...r, hours: Number(r.hours), extra: r.extra ?? {}, name: names(r.price_item_tr),
     })))
@@ -103,18 +108,19 @@ export default function Prices() {
   async function addGroup(name: string) {
     const key = slug(name, 'g-')
     const sort = Math.max(0, ...groups.map((g) => g.sort)) + 1
-    if (await write(sb.from('price_groups').insert({ key, sort }))) {
-      await write(sb.from('price_group_tr').insert({ group_key: key, locale: 'pl', name }))
+    // Новая категория не видна клиентам, пока её не переведут и не опубликуют
+    if (await write(sb.from('price_groups').insert({ key, sort, published: false, name_draft: name }))) {
       await load(); setSel(key)
     }
   }
-  async function renameGroup(key: string, loc: Loc, name: string) {
+  /** Названия правятся только по-польски и ложатся черновиком (name_draft):
+   *  остальные языки появятся переводом при публикации. */
+  async function renameGroup(key: string, name: string) {
     const g = groups.find((x) => x.key === key)
-    if (!g || (g.name[loc] ?? '') === name) return
-    setGroups((v) => v.map((x) => x.key === key ? { ...x, name: { ...x.name, [loc]: name } } : x))
-    await write(name
-      ? sb.from('price_group_tr').upsert({ group_key: key, locale: loc, name })
-      : sb.from('price_group_tr').delete().eq('group_key', key).eq('locale', loc))
+    const draft = !g || name === (g.name.pl ?? '') ? null : name
+    if (!g || !name || (g.name_draft ?? null) === draft) return
+    setGroups((v) => v.map((x) => x.key === key ? { ...x, name_draft: draft } : x))
+    await write(sb.from('price_groups').update({ name_draft: draft }).eq('key', key))
   }
   async function moveGroup(key: string, dir: -1 | 1) {
     const list = [...groups].sort((a, b) => a.sort - b.sort)
@@ -132,18 +138,16 @@ export default function Prices() {
     if (!sel) return
     const key = slug(name, 'sg-')
     const sort = Math.max(0, ...gSubs.map((s) => s.sort)) + 1
-    if (await write(sb.from('price_subgroups').insert({ key, group_key: sel, sort }))) {
-      await write(sb.from('price_subgroup_tr').insert({ subgroup_key: key, locale: 'pl', name }))
+    if (await write(sb.from('price_subgroups').insert({ key, group_key: sel, sort, published: false, name_draft: name }))) {
       await load()
     }
   }
-  async function renameSub(key: string, loc: Loc, name: string) {
+  async function renameSub(key: string, name: string) {
     const s = subs.find((x) => x.key === key)
-    if (!s || (s.name[loc] ?? '') === name) return
-    setSubs((v) => v.map((x) => x.key === key ? { ...x, name: { ...x.name, [loc]: name } } : x))
-    await write(name
-      ? sb.from('price_subgroup_tr').upsert({ subgroup_key: key, locale: loc, name })
-      : sb.from('price_subgroup_tr').delete().eq('subgroup_key', key).eq('locale', loc))
+    const draft = !s || name === (s.name.pl ?? '') ? null : name
+    if (!s || !name || (s.name_draft ?? null) === draft) return
+    setSubs((v) => v.map((x) => x.key === key ? { ...x, name_draft: draft } : x))
+    await write(sb.from('price_subgroups').update({ name_draft: draft }).eq('key', key))
   }
   async function moveSub(key: string, dir: -1 | 1) {
     const list = [...gSubs]
@@ -165,10 +169,9 @@ export default function Prices() {
     const dept = gItems[0]?.dept ?? 'fix'
     const row = {
       key, group_key: sel, subgroup_key: sub, dept, price: 0, hours: 0.5, unit: 'szt',
-      min_qty: 1, max_qty: 99, extra: {}, sort, ptype: 'fixed',
+      min_qty: 1, max_qty: 99, extra: {}, sort, ptype: 'fixed', published: false, name_draft: name,
     }
     if (await write(sb.from('price_items').insert(row))) {
-      await write(sb.from('price_item_tr').insert({ item_key: key, locale: 'pl', name }))
       await load(); setOpen(key)
     }
   }
@@ -182,13 +185,42 @@ export default function Prices() {
     const { name: _n, ...db } = patch
     if (Object.keys(db).length) await write(sb.from('price_items').update(db).eq('key', key))
   }
-  async function renameItem(key: string, loc: Loc, name: string) {
+  async function renameItem(key: string, name: string) {
     const it = items.find((x) => x.key === key)
-    if (!it || (it.name[loc] ?? '') === name) return
-    setItems((v) => v.map((x) => x.key === key ? { ...x, name: { ...x.name, [loc]: name } } : x))
-    await write(name
-      ? sb.from('price_item_tr').upsert({ item_key: key, locale: loc, name })
-      : sb.from('price_item_tr').delete().eq('item_key', key).eq('locale', loc))
+    const draft = !it || name === (it.name.pl ?? '') ? null : name
+    if (!it || !name || (it.name_draft ?? null) === draft) return
+    setItems((v) => v.map((x) => x.key === key ? { ...x, name_draft: draft } : x))
+    await write(sb.from('price_items').update({ name_draft: draft }).eq('key', key))
+  }
+
+  /* -------------------------- публикация -------------------------- */
+  const pending = [
+    ...groups.filter(isPending).map((x) => ({ kind: 'group' as const, key: x.key, pl: plName(x) })),
+    ...subs.filter(isPending).map((x) => ({ kind: 'subgroup' as const, key: x.key, pl: plName(x) })),
+    ...items.filter(isPending).map((x) => ({ kind: 'item' as const, key: x.key, pl: plName(x) })),
+  ]
+  const [publishing, setPublishing] = useState(false)
+
+  async function publishAll(report: (p: any) => void) {
+    report({ stage: 'translate', total: pending.length })
+    const invoke = async (to: Target, texts: string[]) => {
+      const { data, error } = await sb.functions.invoke('translate', { body: { to, texts } })
+      if (error || data?.error || !Array.isArray(data?.out)) {
+        let code = data?.error ?? error?.message ?? 'unknown'
+        try { code = (await (error as any)?.context?.json())?.error ?? code } catch { /* */ }
+        throw new Error(translateError(String(code)))
+      }
+      return data.out as string[]
+    }
+    const tr = await translateAll(pending.map((x) => x.pl), invoke, (done) => report({ done }))
+    report({ stage: 'publish' })
+    const rows = pending.map((x, i) => ({
+      kind: x.kind, key: x.key,
+      names: { pl: x.pl, uk: tr.uk[i].trim(), ru: tr.ru[i].trim(), en: tr.en[i].trim() },
+    }))
+    const { error } = await sb.rpc('price_publish', { rows })
+    if (error) throw new Error(`Publikacja nie powiodła się: ${error.message}`)
+    await load()
   }
   async function moveItem(key: string, dir: -1 | 1) {
     const it = items.find((i) => i.key === key)
@@ -220,9 +252,9 @@ export default function Prices() {
           key={i.key} item={i} first={n === 0} last={n === list.length - 1}
           open={open === i.key} onToggle={() => setOpen(open === i.key ? null : i.key)}
           groups={groups} subs={subs}
-          onField={(p) => setField(i.key, p)} onName={(l, v) => renameItem(i.key, l, v)}
+          onField={(p) => setField(i.key, p)} onName={(v) => renameItem(i.key, v)}
           onMove={(d) => moveItem(i.key, d)}
-          onDelete={() => setConfirm({ kind: 'item', key: i.key, title: i.name.pl ?? i.key })}
+          onDelete={() => setConfirm({ kind: 'item', key: i.key, title: plName(i) })}
         />
       ))}
       {list.length === 0 && <p className="muted tiny" style={{ padding: '8px 12px' }}>{t('pr.emptySection')}</p>}
@@ -237,6 +269,10 @@ export default function Prices() {
           <p className="sub">{t('pr.sub', { g: groups.length, i: items.length })}</p>
         </div>
         <div className="split">
+          <button className={`btn ${pending.length ? 'btn--primary' : 'btn--ghost'}`} disabled={!pending.length}
+                  onClick={() => setPublishing(true)} title={t('pr.publishHint')}>
+            ⇪ {t('pr.publish')}{pending.length ? ` (${pending.length})` : ''}
+          </button>
           <span className={`pr-saved pr-saved--${saved}`} role="status">
             {saved === 'saving' ? t('pr.saving') : saved === 'ok' ? t('pr.saved') : saved === 'err' ? t('pr.error') : t('pr.live')}
           </span>
@@ -268,7 +304,7 @@ export default function Prices() {
               {[...groups].sort((a, b) => a.sort - b.sort).map((g, n, arr) => (
                 <div key={g.key} className="pr-g" data-on={g.key === sel || undefined}>
                   <button type="button" className="pr-g__name" onClick={() => { setSel(g.key); setOpen(null) }}>
-                    <span>{g.name.pl ?? g.key}</span>
+                    <span>{plName(g)}{isPending(g) && <i className="pr-dot" title={t('pr.pendingHint')} />}</span>
                     <small className="num">{items.filter((i) => i.group_key === g.key).length}</small>
                   </button>
                   <span className="pr-arrows">
@@ -288,13 +324,13 @@ export default function Prices() {
             {group && (
               <div className="card">
                 <div className="card__head">
-                  <h2 className="h2">{group.name.pl ?? group.key}</h2>
+                  <h2 className="h2">{plName(group)} {!group.published && <span className="badge badge--warn">{t('pr.unpublished')}</span>}</h2>
                   <button className="btn btn--danger btn--sm"
-                          onClick={() => setConfirm({ kind: 'group', key: group.key, title: group.name.pl ?? group.key, n: gItems.length })}>
+                          onClick={() => setConfirm({ kind: 'group', key: group.key, title: plName(group), n: gItems.length })}>
                     {t('pr.delGroup')}
                   </button>
                 </div>
-                <NamesEditor value={group.name} onSave={(l, v) => renameGroup(group.key, l, v)} />
+                <NamesEditor value={group.name} draft={group.name_draft} pending={isPending(group)} onSave={(v) => renameGroup(group.key, v)} />
                 <p className="tiny muted" style={{ margin: '10px 0 0' }}>{t('pr.skillsHint')}</p>
               </div>
             )}
@@ -304,8 +340,9 @@ export default function Prices() {
               return (
                 <div className="card card--flush" key={s.key}>
                   <div className="pr-subhead">
-                    <input className="pr-subname" defaultValue={s.name.pl ?? ''} key={`${s.key}-${s.name.pl}`}
-                           onBlur={(e) => renameSub(s.key, 'pl', e.target.value.trim())}
+                    <input className="pr-subname" defaultValue={plName(s)} key={`${s.key}-${plName(s)}`}
+                           data-pending={isPending(s) || undefined}
+                           onBlur={(e) => renameSub(s.key, e.target.value.trim())}
                            aria-label={t('pr.subName')} />
                     <span className="pr-arrows">
                       <button type="button" disabled={n === 0} onClick={() => moveSub(s.key, -1)}>↑</button>
@@ -313,11 +350,11 @@ export default function Prices() {
                     </span>
                     <details className="pr-tr">
                       <summary>{t('pr.translations')}</summary>
-                      <NamesEditor value={s.name} onSave={(l, v) => renameSub(s.key, l, v)} skipPl />
+                      <NamesEditor value={s.name} draft={s.name_draft} pending={isPending(s)} onSave={(v) => renameSub(s.key, v)} skipPl />
                     </details>
                     <button className="btn btn--ghost btn--sm" onClick={() => setAsk({ title: t('pr.newItemName'), go: (n) => addItem(s.key, n) })}>+ {t('pr.addItem')}</button>
                     <button className="btn btn--danger btn--sm"
-                            onClick={() => setConfirm({ kind: 'subgroup', key: s.key, title: s.name.pl ?? s.key, n: list.length })}>✕</button>
+                            onClick={() => setConfirm({ kind: 'subgroup', key: s.key, title: plName(s), n: list.length })}>✕</button>
                   </div>
                   {renderItems(list)}
                 </div>
@@ -336,6 +373,15 @@ export default function Prices() {
             )}
           </section>
         </div>
+      )}
+
+      {publishing && (
+        <PublishDialog
+          title={t('pr.publishTitle')}
+          changes={pending.map((x) => ({ kind: x.kind, label: x.pl }))}
+          run={publishAll}
+          onClose={() => setPublishing(false)}
+        />
       )}
 
       {ask && <AskName title={ask.title} onClose={() => setAsk(null)} onOk={(n) => { setAsk(null); ask.go(n) }} />}
@@ -380,16 +426,26 @@ function AskName({ title, onClose, onOk }: { title: string; onClose: () => void;
   )
 }
 
-/** Названия на четырёх языках: польский обязателен, остальные — по желанию
- *  (пустой язык на сайте показывается польским). */
-function NamesEditor({ value, onSave, skipPl = false }: { value: Names; onSave: (l: Loc, v: string) => void; skipPl?: boolean }) {
+/** Названия: польское правится (при skipPl — в другом месте), остальные
+ *  языки только показываются — их даёт перевод при публикации. */
+function NamesEditor({ value, draft, pending, onSave, skipPl = false }: {
+  value: Names; draft: string | null; pending: boolean; onSave: (v: string) => void; skipPl?: boolean
+}) {
+  const { t } = useT()
+  const pl = draft ?? value.pl ?? ''
   return (
     <div className="pr-names">
-      {LOCS.filter((l) => !(skipPl && l === 'pl')).map((l) => (
-        <label className="pr-name" key={l}>
+      {!skipPl && (
+        <label className="pr-name">
+          <span>PL</span>
+          <input defaultValue={pl} key={`pl-${pl}`} onBlur={(e) => { const v = e.target.value.trim(); if (v) onSave(v) }} />
+        </label>
+      )}
+      {LOCS.filter((l) => l !== 'pl').map((l) => (
+        <label className="pr-name pr-name--ro" key={l} title={t('pr.autoTr')}>
           <span>{l.toUpperCase()}</span>
-          <input defaultValue={value[l] ?? ''} key={`${l}-${value[l] ?? ''}`}
-                 onBlur={(e) => { const v = e.target.value.trim(); if (l !== 'pl' || v) onSave(l, v) }} />
+          <input value={pending ? '' : value[l] ?? ''} readOnly tabIndex={-1}
+                 placeholder={pending ? t('pr.willTranslate') : '—'} />
         </label>
       ))}
     </div>
@@ -399,7 +455,7 @@ function NamesEditor({ value, onSave, skipPl = false }: { value: Names; onSave: 
 function ItemRow({ item, first, last, open, onToggle, groups, subs, onField, onName, onMove, onDelete }: {
   item: Item; first: boolean; last: boolean; open: boolean; onToggle: () => void
   groups: Group[]; subs: Sub[]
-  onField: (p: Partial<Item>) => void; onName: (l: Loc, v: string) => void
+  onField: (p: Partial<Item>) => void; onName: (v: string) => void
   onMove: (d: -1 | 1) => void; onDelete: () => void
 }) {
   const { t } = useT()
@@ -412,9 +468,13 @@ function ItemRow({ item, first, last, open, onToggle, groups, subs, onField, onN
   return (
     <div className="pr-row" data-open={open || undefined} data-t={item.ptype}>
       <div className="pr-row__main">
-        <input className="pr-row__name" defaultValue={item.name.pl ?? ''} key={`n-${item.name.pl}`}
-               onBlur={(e) => { const v = e.target.value.trim(); if (v) onName('pl', v) }}
+        <input className="pr-row__name" defaultValue={plName(item)} key={`n-${plName(item)}`}
+               data-pending={isPending(item) || undefined}
+               onBlur={(e) => { const v = e.target.value.trim(); if (v) onName(v) }}
                aria-label={t('pr.name')} />
+        {!item.published
+          ? <span className="badge badge--warn" title={t('pr.pendingHint')}>{t('pr.new')}</span>
+          : item.name_draft && <span className="badge badge--warn" title={t('pr.pendingHint')}>{t('pr.renamed')}</span>}
         <select className="pr-row__type" value={item.ptype} aria-label={t('pr.type')}
                 onChange={(e) => {
                   const ptype = e.target.value as Item['ptype']
@@ -445,7 +505,7 @@ function ItemRow({ item, first, last, open, onToggle, groups, subs, onField, onN
 
       {open && (
         <div className="pr-row__more">
-          <NamesEditor value={item.name} onSave={onName} skipPl />
+          <NamesEditor value={item.name} draft={item.name_draft} pending={isPending(item)} onSave={onName} skipPl />
           <div className="pr-grid">
             <label className="field"><span className="flabel">{t('pr.hours')}</span>
               <input inputMode="decimal" onFocus={(e) => e.target.select()} defaultValue={item.hours} key={`h-${item.hours}`}
@@ -487,4 +547,13 @@ function ItemRow({ item, first, last, open, onToggle, groups, subs, onField, onN
       )}
     </div>
   )
+}
+
+/** Польское название с учётом черновика. */
+function plName(x: { name: Names; name_draft: string | null; key: string }): string {
+  return x.name_draft ?? x.name.pl ?? x.key
+}
+/** Ждёт публикации: новая или с изменённым названием. */
+function isPending(x: Draftable): boolean {
+  return !x.published || x.name_draft != null
 }

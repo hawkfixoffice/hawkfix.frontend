@@ -620,3 +620,9 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .scope__comment { margin: 10px 0 0; color: var(--ink-2); font-style: italic; }
 .check { display: flex; gap: 10px; align-items: flex-start; margin-top: 10px; cursor: pointer; }
 .check input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--forest); }
+
+/* Черновики прайса: ждут перевода и публикации (2026-09-25) */
+.pr-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #f0a500; margin-inline-start: 6px; vertical-align: 1px; }
+.pr-name--ro { background: #f7f7f5; }
+.pr-name--ro input { background: transparent; color: var(--ink-3); cursor: default; }
+.pr-row__main input[data-pending], .pr-subname[data-pending] { border-color: #f0a500 !important; background: #fffaf0; }

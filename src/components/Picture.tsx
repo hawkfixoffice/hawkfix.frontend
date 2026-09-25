@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
 import { photos } from '../data/content'
-import { cms, useCms, type UploadStage } from '../cms/store'
+import { cms, pickImage, useCms, type UploadStage } from '../cms/store'
 import UploadStatus from '../cms/UploadStatus'
+import { usePage } from './PageContext'
 
 type Ratio = '3x2' | '4x3' | '16x9' | '1x1'
 
@@ -30,13 +31,17 @@ export default function Picture({
   name, alt, ratio = '3x2', widths = [800, 1200, 1600], sizes = '(max-width: 900px) 100vw, 50vw',
   priority = false, className,
 }: Props) {
-  const { ov, editing } = useCms()
+  const cmsState = useCms()
+  const { locale } = usePage()
+  // Фото общие для всех языков, но меняются, как и тексты, только на польской версии
+  const editing = cmsState.editing && locale === 'pl'
   const [st, setSt] = useState<UploadStage | null>(null)
   const input = useRef<HTMLInputElement>(null)
   const [rw, rh] = ratio.split('x').map(Number)
   const base = widths[0]
   const tint = photos[name]?.color
-  const custom = ov['*']?.[`img:${name}`]?.v
+  const custom = cmsState.admin ? pickImage(cmsState, name) : cmsState.ov['*']?.[`img:${name}`]?.v
+  const isDraft = cmsState.admin && !!cmsState.drafts[`img:${name}`]
 
   const img = custom ? (
     <img
@@ -78,7 +83,7 @@ export default function Picture({
   return (
     <span data-cms-img="" style={{ display: 'contents' }} onClick={open}>
       {img}
-      <span className="cms-imgtag" aria-hidden="true">{custom ? '▲ Zdjęcie · zmienione' : '▲ Zdjęcie'}</span>
+      <span className="cms-imgtag" aria-hidden="true">{isDraft ? '▲ Zdjęcie · do publikacji' : custom ? '▲ Zdjęcie · zmienione' : '▲ Zdjęcie'}</span>
       {st && <span className="cms-imgst"><UploadStatus st={st} /></span>}
       <input ref={input} type="file" accept="image/*" hidden onChange={onPick} onClick={(e) => e.stopPropagation()} />
     </span>

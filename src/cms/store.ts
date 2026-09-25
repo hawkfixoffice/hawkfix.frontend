@@ -24,11 +24,14 @@ export interface CmsState {
   admin: boolean
   /** Включён ли режим правки. */
   editing: boolean
+  /** Черновики администратора (только польский): видны ему, но не посетителю
+   *  до публикации. kind 'reset' — «вернуть исходный текст». */
+  drafts: Record<string, Ov>
 }
 
 export interface CmsActions {
-  saveText: (key: string, locale: string, value: string, kind: 'text' | 'html') => Promise<void>
-  revert: (key: string, locale: string) => Promise<void>
+  saveText: (key: string, value: string, kind: 'text' | 'html') => Promise<void>
+  revert: (key: string) => Promise<void>
   uploadImage: (name: string, file: File, onStage: (s: UploadStage) => void) => Promise<void>
 }
 
@@ -39,7 +42,7 @@ export type UploadStage =
   | { stage: 'error'; error: string }
 
 const baked = bakedJson as unknown as Overrides
-const serverState: CmsState = { ov: baked, admin: false, editing: false }
+const serverState: CmsState = { ov: baked, admin: false, editing: false, drafts: {} }
 let state: CmsState = serverState
 const subs = new Set<() => void>()
 
@@ -71,8 +74,8 @@ export function useCms(): CmsState {
 
 let loaded = false
 /** Дочитать свежие правки из базы. Один запрос на загрузку страницы. */
-export function loadLiveOverrides() {
-  if (loaded || typeof window === 'undefined') return
+export function loadLiveOverrides(force = false) {
+  if ((loaded && !force) || typeof window === 'undefined') return
   loaded = true
   fetch(`${SUPA_URL}/rest/v1/site_content?select=key,locale,value,kind`, { headers: anonHeaders })
     .then((r) => (r.ok ? r.json() : null))
@@ -88,6 +91,20 @@ export function loadLiveOverrides() {
 /** Значение по ключу: правка на этом языке или исходный текст. */
 export function pick(ov: Overrides, locale: string, key: string, fallback: string): Ov {
   return ov[locale]?.[key] ?? { v: fallback, k: 'text' }
+}
+
+/** То же, но администратор на польской версии видит свой черновик. */
+export function pickDraft(st: CmsState, locale: string, key: string, fallback: string): Ov {
+  const d = locale === 'pl' ? st.drafts[key] : undefined
+  if (d) return d.k === 'reset' ? { v: fallback, k: 'text' } : d
+  return pick(st.ov, locale, key, fallback)
+}
+
+/** Картинка: черновик администратора или опубликованная замена. */
+export function pickImage(st: CmsState, name: string): string | undefined {
+  const d = st.drafts[`img:${name}`]
+  if (d) return d.k === 'reset' ? undefined : d.v
+  return st.ov['*']?.[`img:${name}`]?.v
 }
 
 /* ------------------------------------------------------------------

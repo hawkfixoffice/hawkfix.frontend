@@ -88,3 +88,9 @@
   .cms-tb { flex-wrap: wrap; max-width: calc(100vw - 16px); justify-content: center; }
   .cmsbar { bottom: 8px; border-radius: 16px; }
 }
+
+/* Черновик, ещё не опубликованный: оранжевая обводка */
+[data-cms-editing] [data-editable][data-draft] { outline-style: solid; outline-color: #f0a500; background-color: rgba(240, 165, 0, .08); }
+.cmsbar__btn--pub { background: #f0a500; color: #1c1c1c; }
+.cmsbar__btn--pub:hover { background: #ffb81c; }
+.cmsbar__note a { color: #fff; text-decoration: underline; }

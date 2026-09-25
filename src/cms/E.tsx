@@ -1,5 +1,7 @@
 import { createElement, useEffect, useRef } from 'react'
-import { cms, hasTags, pick, sanitize, useCms } from './store'
+import { cms, hasTags, pickDraft, sanitize, useCms } from './store'
+import { useLoaderData } from 'react-router-dom'
+import type { PageBody } from '../lib/types'
 import { usePage } from '../components/PageContext'
 import { UI } from '../lib/ui'
 
@@ -27,8 +29,12 @@ interface Props {
  */
 export default function E({ k, v, as = 'span', className, id, multiline = false }: Props) {
   const { locale } = usePage()
-  const { ov, editing } = useCms()
-  const val = pick(ov, locale, k, v)
+  const st = useCms()
+  const { ov } = st
+  // Правим только польскую версию: остальные языки получаются переводом при публикации
+  const editing = st.editing && locale === 'pl'
+  const val = st.admin ? pickDraft(st, locale, k, v) : pickDraft({ ...st, drafts: {} }, locale, k, v)
+  const isDraft = st.admin && locale === 'pl' && !!st.drafts[k]
   const html = val.k === 'html' || hasTags(val.v)
   const ref = useRef<HTMLElement>(null)
 
@@ -53,8 +59,8 @@ export default function E({ k, v, as = 'span', className, id, multiline = false 
     const next = isHtml ? raw : text
     if (next === val.v) return
     // Пустое поле = вернуть исходный текст, а не стереть надпись на сайте
-    if (!text.trim()) { void cms.actions?.revert(k, locale); return }
-    void cms.actions?.saveText(k, locale, next, isHtml ? 'html' : 'text')
+    if (!text.trim()) { void cms.actions?.revert(k); return }
+    void cms.actions?.saveText(k, next, isHtml ? 'html' : 'text')
   }
 
   return createElement(as, {
@@ -63,6 +69,7 @@ export default function E({ k, v, as = 'span', className, id, multiline = false 
     'data-key': k,
     'data-locale': locale,
     'data-edited': ov[locale]?.[k] ? '' : undefined,
+    'data-draft': isDraft ? '' : undefined,
     contentEditable: true,
     suppressContentEditableWarning: true,
     spellCheck: true,
@@ -102,10 +109,31 @@ export function textHash(s: string): string {
   return (h >>> 0).toString(36)
 }
 
+/** Все тексты тела страницы в одном порядке. Структура страниц одинакова
+ *  во всех языках (проверено на всех 35), поэтому номер текста в этом
+ *  списке указывает на одно и то же место в pl / uk / ru / en — по нему
+ *  польская правка находит, куда положить перевод. */
+export function flatTexts(b: PageBody | undefined): string[] {
+  if (!b) return []
+  const out: string[] = []
+  for (const x of b.blocks ?? []) {
+    if (x.type === 'list') out.push(...x.items)
+    else if (x.type !== 'image') out.push(x.text)
+  }
+  for (const k of ['checklist', 'intro', 'note'] as const) out.push(...(b[k] ?? []))
+  return out
+}
+
 /** Текст тела текущей страницы: `<PT v={абзац} as="p" />`.
- *  Ключ — `page:<страница>:t.<хеш исходного текста>`. */
+ *  Ключ — `page:<страница>:n<номер текста>`; если текст не нашёлся в теле
+ *  (собран раскладкой) — `t.<хеш>`, такой правится, но не переводится. */
 export function PT({ v, field, ...rest }: Omit<Props, 'k'> & { field?: string }) {
   const { page } = usePage()
-  const k = `page:${page.key}:${field ?? `t.${textHash(v)}`}`
+  const body = useLoaderData() as PageBody | undefined
+  let k = `page:${page.key}:${field ?? ''}`
+  if (!field) {
+    const n = flatTexts(body).indexOf(v)
+    k += n >= 0 ? `n${n}` : `t.${textHash(v)}`
+  }
   return <E k={k} v={v} {...rest} />
 }
