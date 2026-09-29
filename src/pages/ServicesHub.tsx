@@ -1,103 +1,18 @@
-import { Link } from 'react-router-dom'
-import { KEY_PAGES, items, pathOf, services, settings } from '../data/content'
 import { usePage } from '../components/PageContext'
-import Rule from '../components/Rule'
-import SparkDot from '../components/SparkDot'
-import Breadcrumbs from '../components/Breadcrumbs'
-import Picture from '../components/Picture'
-import Icon from '../components/Icon'
-import Reveal from '../components/Reveal'
-import { serviceAlt } from '../lib/ui'
-import E, { PT, U } from '../cms/E'
+import { CtaBand, MainActions, PageHead, ServiceRows } from '../components/Simple'
 
+/** Хаб услуг: заголовок и все услуги крупными строками с ценой «от». */
 export default function ServicesHub() {
-  const { page, locale, t } = usePage()
-  const tr = page.tr[locale]
-  const cur = settings.currency
-
-  const priceOf = (s: (typeof services)[number]) => {
-    const list = s.group ? items.filter((i) => i.group === s.group) : []
-    return list.length ? Math.min(...list.map((i) => i.price)) : null
-  }
-
+  const { page, locale } = usePage()
   return (
     <>
-      <section className="pagehead">
+      <PageHead lead={page.tr[locale].description} actions={<MainActions />} />
+      <section className="s-band s-band--first">
         <div className="wrap">
-          <Breadcrumbs trail={[
-            { name: t.breadcrumbs.home, to: pathOf(KEY_PAGES.home, locale) },
-            { name: tr.h1, to: page.paths[locale] },
-          ]} />
-          <div className="pagehead__split">
-            <div>
-              <PT as="h1" field="h1" v={tr.h1} />
-              <PT as="p" className="pagehead__lead" field="lead" v={tr.description} multiline />
-            </div>
-            <div className="blocks blocks--stat pagehead__stats">
-              <div className="blk blk--accent">
-                <U as="p" className="blk__n" k="nav.services" />
-                <p className="blk__v">{services.length}</p>
-              </div>
-              <div className="blk blk--forest">
-                <U as="p" className="blk__n" k="nav.prices" />
-                <p className="blk__v">{items.length}</p>
-              </div>
-            </div>
-          </div>
-          <Rule className="pagehead__rule" />
+          <ServiceRows heading="h2" />
         </div>
       </section>
-
-      <section className="band band--tight">
-        <div className="wrap">
-          <div className="blocks blocks--3 hub-grid">
-            {services.map((s, i) => {
-              const from = priceOf(s)
-              // каждая третья — фотография в тёмной рамке, остальные — высокие карточки
-              if (i % 3 === 1) {
-                return (
-                  <Reveal key={s.key} delay={60}>
-                    <Link className="panel panel--card panel--mono hub-photo" to={s.paths[locale]}>
-                      <Picture name={s.image!} alt={serviceAlt(s.tr[locale].h1)} ratio="3x2" widths={[800, 1200, 1600]} sizes="(max-width: 900px) 100vw, 30vw" />
-                      <span className="badge badge--accent badge--bl team__badge">
-                        <span className="badge__dot"><SparkDot tone="accent" /></span>
-                        <span className="badge__text"><b>{s.tr[locale].h1.split(' — ')[0]}</b><small>{from !== null ? `${t.prices.from} ${from} ${cur}` : s.tr[locale].blurb}</small></span>
-                      </span>
-                    </Link>
-                  </Reveal>
-                )
-              }
-              const tone = i % 6 === 0 ? ' blk--forest' : i % 6 === 2 ? ' blk--accent' : ''
-              return (
-                <Reveal key={s.key} delay={(i % 3) * 60}>
-                  <Link className={`blk blk--tall${tone}`} to={s.paths[locale]}>
-                    <p className="blk__n">{String(i + 1).padStart(2, '0')}</p>
-                    <div>
-                      <E as="h2" className="blk__t" k={`page:${s.key}:h1`} v={s.tr[locale].h1} />
-                      <p className="blk__s">
-                        <E k={`page:${s.key}:blurb`} v={s.tr[locale].blurb ?? ''} multiline />
-                        {from !== null ? ` · ${t.prices.from} ${from} ${cur}` : ''}
-                      </p>
-                    </div>
-                  </Link>
-                </Reveal>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="band band--tight ctaband">
-        <div className="wrap ctaband__in">
-          <div>
-            <U as="h2" k="home.ctaHead" />
-            <U as="p" className="prose" k="home.ctaLead" multiline />
-          </div>
-          <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
-            <U k="cta.quote" /> <Icon name="arrow" size={17} />
-          </Link>
-        </div>
-      </section>
+      <CtaBand />
     </>
   )
 }

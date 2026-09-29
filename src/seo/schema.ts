@@ -14,7 +14,22 @@ const DISTRICTS = [
   'Praga-Północ', 'Bielany', 'Ursynów', 'Bemowo', 'Targówek', 'Białołęka',
 ]
 
-const minPrice = Math.min(...items.map((i) => i.price))
+const SLOGAN: Record<Locale, string> = {
+  pl: 'Złota rączka w Warszawie — cenę znasz z góry',
+  uk: 'Майстер на годину у Варшаві — ціну знаєте наперед',
+  ru: 'Мастер на час в Варшаве — цену знаете заранее',
+  en: 'Handyman in Warsaw — you know the price up front',
+}
+
+/** Род занятий словами людей — то, по чему ассистент решает, кого советовать. */
+const KNOWS: Record<Locale, string[]> = {
+  pl: ['złota rączka', 'mąż na godzinę', 'fachowiec', 'hydraulik', 'elektryk', 'montaż mebli', 'montaż AGD', 'drobne naprawy', 'malowanie ścian', 'sprzątanie', 'przeprowadzki', 'prace w ogrodzie'],
+  uk: ['майстер на годину', 'чоловік на годину', 'сантехнік', 'електрик', 'збирання меблів', 'монтаж побутової техніки', 'дрібний ремонт', 'фарбування стін', 'прибирання', 'переїзди'],
+  ru: ['мастер на час', 'муж на час', 'сантехник', 'электрик', 'сборка мебели', 'установка бытовой техники', 'мелкий ремонт', 'покраска стен', 'уборка', 'переезды'],
+  en: ['handyman', 'husband for hire', 'plumber', 'electrician', 'furniture assembly', 'appliance installation', 'small home repairs', 'wall painting', 'cleaning', 'moving'],
+}
+
+const minPrice = Math.min(...items.map((i) => i.price).filter((p) => p > 0))
 const maxPrice = Math.max(...items.map((i) => i.price))
 
 /** Организация + локальный бизнес. Один и тот же @id на всех страницах —
@@ -24,6 +39,11 @@ export function businessNode(locale: Locale, description: string) {
     '@type': ['HomeAndConstructionBusiness', 'LocalBusiness'],
     '@id': BUSINESS_ID,
     name: 'HAWK.FIX',
+    // Как нас называют люди и как нас ищут: ассистенты сопоставляют сущность
+    // по всем этим именам (HAWKFIX, Hawk Fix) и по роду занятий
+    alternateName: ['HAWKFIX', 'Hawk Fix', 'hawkfix.pl'],
+    slogan: SLOGAN[locale],
+    knowsAbout: KNOWS[locale],
     description,
     url: `${SITE}/`,
     telephone: CONTACT.phone,
@@ -90,6 +110,8 @@ export function webPageNode(
     isPartOf: { '@id': WEBSITE_ID },
     about: { '@id': BUSINESS_ID },
     dateModified: BUILT,
+    // Что зачитывать голосовому ассистенту: заголовок и блок «коротко»
+    speakable: { '@type': 'SpeakableSpecification', cssSelector: ['h1', '.facts', '.s-lead'] },
     ...(extra.keywords?.length ? { keywords: extra.keywords.join(', ') } : {}),
     ...(extra.image ? { primaryImageOfPage: { '@type': 'ImageObject', url: extra.image } } : {}),
   }

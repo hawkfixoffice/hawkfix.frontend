@@ -3,6 +3,12 @@ import { HREFLANG, IS_STAGING, OG_LOCALE, SITE, type Locale, LOCALES } from '../
 import type { PageRec } from '../lib/types'
 import { keywords } from '../data/keywords'
 
+const VERIFY = {
+  google: import.meta.env.VITE_GOOGLE_SITE_VERIFICATION as string | undefined,
+  bing: import.meta.env.VITE_BING_SITE_VERIFICATION as string | undefined,
+  yandex: import.meta.env.VITE_YANDEX_VERIFICATION as string | undefined,
+}
+
 interface Props {
   page: PageRec
   locale: Locale
@@ -52,6 +58,18 @@ export default function Seo({ page, locale, schema, title, description, ogImage 
           description, заголовках, alt и schema.org keywords. */}
       {kw.length > 0 && <meta name="keywords" content={kw.join(', ')} />}
       <meta name="author" content="HAWK.FIX" />
+      {/* Гео-метки: Google их не читает, Bing и Яндекс учитывают для локальной
+          выдачи. Координаты — центр Варшавы, как в schema.org. */}
+      <meta name="geo.region" content="PL-MZ" />
+      <meta name="geo.placename" content="Warszawa" />
+      <meta name="geo.position" content="52.2297;21.0122" />
+      <meta name="ICBM" content="52.2297, 21.0122" />
+      {/* Подтверждение прав в Search Console / Bing Webmaster / Яндекс Вебмастере.
+          Коды публичные по назначению, задаются переменными репозитория
+          (Settings → Variables): без них тег не выводится. */}
+      {VERIFY.google && <meta name="google-site-verification" content={VERIFY.google} />}
+      {VERIFY.bing && <meta name="msvalidate.01" content={VERIFY.bing} />}
+      {VERIFY.yandex && <meta name="yandex-verification" content={VERIFY.yandex} />}
       <meta name="theme-color" content="#111312" />
 
       <meta property="og:type" content="website" />

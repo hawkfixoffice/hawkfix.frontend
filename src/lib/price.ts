@@ -3,7 +3,8 @@ import type { Locale, PriceItem, PriceType, Settings } from './types'
 /** Подпись типа цены — короткая, для бейджа у позиции. */
 export const PTYPE_LABEL: Record<PriceType, Record<Locale, string>> = {
   fixed: { pl: 'Stała cena', uk: 'Фіксована ціна', ru: 'Фиксированная цена', en: 'Fixed price' },
-  area: { pl: 'Cena za m²', uk: 'Ціна за м²', ru: 'Цена за м²', en: 'Price per m²' },
+  // area — это и м², и погонный метр (mb): подпись не должна врать про единицу
+  area: { pl: 'Cena za metr', uk: 'Ціна за метр', ru: 'Цена за метр', en: 'Price per metre' },
   scope: { pl: 'Wycena po zdjęciu', uk: 'Оцінка за фото', ru: 'Оценка по фото', en: 'Priced from a photo' },
 }
 

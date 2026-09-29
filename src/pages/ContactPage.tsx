@@ -1,18 +1,14 @@
-import { Link, useLoaderData } from 'react-router-dom'
-import { KEY_PAGES, pathOf, settings } from '../data/content'
+import { useLoaderData } from 'react-router-dom'
 import type { PageBody } from '../lib/types'
 import { toSections } from '../lib/sections'
 import { usePage } from '../components/PageContext'
-import Rule from '../components/Rule'
-import Breadcrumbs from '../components/Breadcrumbs'
-import Picture from '../components/Picture'
 import Icon from '../components/Icon'
-import Reveal from '../components/Reveal'
+import { CtaBand, PageHead } from '../components/Simple'
 import { CONTACT } from '../lib/ui'
 import { PT, U } from '../cms/E'
 
 export default function ContactPage() {
-  const { page, locale, t } = usePage()
+  const { page, locale } = usePage()
   const tr = page.tr[locale]
   const body = (useLoaderData() as PageBody | undefined) ?? { blocks: [] }
   const sections = toSections(body.blocks)
@@ -24,103 +20,67 @@ export default function ContactPage() {
 
   return (
     <>
-      <section className="pagehead">
+      <PageHead lead={tr.description} />
+
+      {/* три способа связи — крупными строками, во всю ширину */}
+      <section className="s-band s-band--first">
         <div className="wrap">
-          <Breadcrumbs trail={[
-            { name: t.breadcrumbs.home, to: pathOf(KEY_PAGES.home, locale) },
-            { name: tr.h1, to: page.paths[locale] },
-          ]} />
-          <PT as="h1" field="h1" v={tr.h1} />
-          <PT as="p" className="pagehead__lead" field="lead" v={tr.description} multiline />
-          <Rule className="pagehead__rule" />
+          <ul className="s-contacts">
+            <li>
+              <a href={CONTACT.phoneHref}>
+                <Icon name="phone" size={28} />
+                <U as="span" className="s-contacts__k" k="cta.call" />
+                <span className="s-contacts__v num">{CONTACT.phone}</span>
+              </a>
+            </li>
+            <li>
+              <a href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener">
+                <Icon name="whatsapp" size={28} />
+                <U as="span" className="s-contacts__k" k="cta.whatsapp" />
+                <span className="s-contacts__v num">+{CONTACT.whatsapp.replace(/^48(\d{3})(\d{3})(\d{3})$/, '48 $1 $2 $3')}</span>
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${CONTACT.email}`}>
+                <Icon name="mail" size={28} />
+                <span className="s-contacts__k">E-mail</span>
+                <span className="s-contacts__v s-contacts__v--mail">{CONTACT.email}</span>
+              </a>
+            </li>
+          </ul>
         </div>
       </section>
 
-      {/* три способа связи + фото */}
-      <section className="band band--tight">
-        <div className="wrap">
-          <Reveal>
-            <div className="blocks blocks--3 contact-cards">
-                <a className="blk blk--tall blk--forest contact-card" href={CONTACT.phoneHref}>
-                  <Icon name="phone" size={22} />
-                  <U as="p" className="blk__t" k="cta.call" />
-                  <p className="contact-card__v num">{CONTACT.phone}</p>
-                </a>
-                <a
-                  className="blk blk--tall blk--accent contact-card"
-                  href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener"
-                >
-                  <Icon name="whatsapp" size={22} />
-                  <U as="p" className="blk__t" k="cta.whatsapp" />
-                  <p className="contact-card__v num">+{CONTACT.whatsapp}</p>
-                </a>
-                <a className="blk blk--tall contact-card" href={`mailto:${CONTACT.email}`}>
-                  <Icon name="mail" size={22} />
-                  <p className="blk__t">E-mail</p>
-                  <p className="contact-card__v">{CONTACT.email}</p>
-                </a>
-            </div>
-          </Reveal>
-
-          <div className="blocks blocks--wide-left contact-below">
-            <Reveal delay={60}>
-              <div className="blocks blocks--2 contact-notes">
-                {(intro?.paras ?? []).map((x) => (
-                  <div className="blk" key={x}>
-                    <PT as="p" className="blk__s blk__s--lead" v={x} multiline />
-                  </div>
-                ))}
-                {rest.map((sec) => (
-                  <div className="blk" key={sec.heading}>
-                    {sec.eyebrow && <PT as="p" className="blk__n" v={sec.eyebrow} />}
-                    <PT as="h2" className="blk__t" v={sec.heading ?? ''} />
-                    {sec.paras.map((x) => <PT as="p" className="blk__s" key={x} v={x} multiline />)}
-                  </div>
-                ))}
+      {(intro?.paras.length || rest.length) ? (
+        <section className="s-band">
+          <div className="wrap s-narrow s-prose s-prose--big">
+            {(intro?.paras ?? []).map((x) => <PT as="p" key={x} v={x} multiline />)}
+            {rest.map((sec) => (
+              <div key={sec.heading}>
+                {sec.eyebrow && <PT as="p" className="s-kicker" v={sec.eyebrow} />}
+                <PT as="h2" className="s-h3" v={sec.heading ?? ''} />
+                {sec.paras.map((x) => <PT as="p" key={x} v={x} multiline />)}
               </div>
-            </Reveal>
-
-            <Reveal delay={120}>
-              <div className="panel panel--card panel--mono panel--fill contact-photo">
-                <Picture name="moveout" alt={t.alt.keys} ratio="4x3" widths={[800, 1200, 1600]} sizes="(max-width:900px) 100vw, 34vw" />
-                <span className="sticker" style={{ left: -26, top: '38%' }}>{CONTACT.city}<br />{CONTACT.radiusKm} km</span>
-                <span className="badge badge--accent badge--bl">
-                  <span className="badge__text"><U k="home.minVisitTitle" /> — {settings.minVisit} {settings.currency}</span>
-                  <span className="badge__dot"><Icon name="check" size={18} /></span>
-                </span>
-              </div>
-            </Reveal>
+            ))}
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
-      {/* районы */}
       {districts.length > 0 && (
-        <section className="band band--tight">
-          <div className="wrap">
-            <Reveal>
-              <PT as="h2" className="sec-h2" v={districtSec?.heading ?? ''} />
-              {/* абзацы этой секции — часть текста старого сайта, не теряем их */}
-              {districtSec?.paras.map((x) => <PT as="p" className="prose sec-p" key={x} v={x} multiline />)}
-              <div className="chipwall">
-                {districts.map((d) => <span className="chip" key={d}>{d}</span>)}
-              </div>
-            </Reveal>
+        <section className="s-band">
+          <div className="wrap s-narrow">
+            <PT as="h2" className="s-h2" v={districtSec?.heading ?? ''} />
+            <div className="s-prose">
+              {districtSec?.paras.map((x) => <PT as="p" key={x} v={x} multiline />)}
+            </div>
+            <ul className="s-districts">
+              {districts.map((d) => <li key={d}><PT v={d} /></li>)}
+            </ul>
           </div>
         </section>
       )}
 
-      <section className="band band--tight ctaband">
-        <div className="wrap ctaband__in">
-          <div>
-            <U as="h2" k="home.ctaHead" />
-            <U as="p" className="prose" k="home.ctaLead" multiline />
-          </div>
-          <Link className="btn btn--primary" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
-            <U k="cta.quote" /> <Icon name="arrow" size={17} />
-          </Link>
-        </div>
-      </section>
+      <CtaBand />
     </>
   )
 }

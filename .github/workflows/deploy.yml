@@ -65,6 +65,11 @@ jobs:
           # маршрутизатора живёт в секретах Supabase.
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+          # Коды подтверждения Search Console / Bing Webmaster / Яндекса —
+          # публичные, задаются в Settings → Variables; без них тег не пишется.
+          VITE_GOOGLE_SITE_VERIFICATION: ${{ vars.VITE_GOOGLE_SITE_VERIFICATION }}
+          VITE_BING_SITE_VERIFICATION: ${{ vars.VITE_BING_SITE_VERIFICATION }}
+          VITE_YANDEX_VERIFICATION: ${{ vars.VITE_YANDEX_VERIFICATION }}
           # Переменная репозитория перебивает автоопределение — на случай,
           # когда домен Pages и нужный адрес сборки расходятся.
           VITE_SITE: ${{ vars.VITE_SITE || steps.pages.outputs.base_url }}
@@ -78,12 +83,20 @@ jobs:
           test -f dist/sitemap.xml
           test -f dist/robots.txt
           test -f dist/404.html
+          test -f dist/llms.txt
+          test -f dist/llms-full.txt
           test -f dist/CNAME
           test -f dist/panel/index.html
 
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
+      # Карта сайта нужна шагу IndexNow после деплоя
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sitemap
+          path: dist/sitemap.xml
 
   deploy:
     needs: build
@@ -94,3 +107,16 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+      # Сообщаем Bing/Яндексу об обновлении (только боевой домен, см. скрипт).
+      # Ошибка пинга деплой не валит.
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: tools
+      - uses: actions/download-artifact@v4
+        with:
+          name: sitemap
+          path: dist
+      - name: IndexNow
+        continue-on-error: true
+        run: node tools/indexnow.mjs

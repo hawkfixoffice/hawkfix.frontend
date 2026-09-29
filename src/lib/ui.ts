@@ -1,8 +1,9 @@
 import type { Locale } from './types'
+import { EXTRA, type UiExtra } from './ui-extra'
 
 /** Строки интерфейса нового сайта. Тексты страниц берутся из content/ (со старого сайта),
  *  здесь — только новая обвязка: навигация, секции главной, формы, баннер cookie. */
-export interface UiStrings {
+interface UiBase {
   nav: { services: string; prices: string; about: string; contact: string }
   cta: { quote: string; call: string; whatsapp: string; more: string; allServices: string; toQuote: string }
   hero: { eyebrow: string; kicker: string; tagline: string; sub: string; scroll: string }
@@ -38,13 +39,13 @@ export interface UiStrings {
   alt: { about: string; interior: string; keys: string; workshop: string }
 }
 
-export const UI: Record<Locale, UiStrings> = {
+const BASE: Record<Locale, UiBase> = {
   pl: {
     nav: { services: 'Usługi', prices: 'Cennik', about: 'O nas', contact: 'Kontakt' },
     cta: { quote: 'Policz cenę', call: 'Zadzwoń', whatsapp: 'WhatsApp', more: 'Więcej', allServices: 'Wszystkie usługi', toQuote: 'Do wyceny' },
     hero: {
       eyebrow: 'Serwis domowy · Warszawa',
-      kicker: 'Warszawa i 25 km wokół',
+      kicker: 'Złota rączka · Warszawa i 25 km wokół',
       tagline: 'Naprawy domowe zamówisz w minutę — cenę znasz z góry.',
       sub: 'Zaznaczasz, co jest do zrobienia — cena i czas liczą się na bieżąco. Bez telefonu, bez „wycenimy na miejscu”.',
       scroll: 'Zobacz, jak to działa',
@@ -102,7 +103,7 @@ export const UI: Record<Locale, UiStrings> = {
     cta: { quote: 'Порахувати ціну', call: 'Подзвонити', whatsapp: 'WhatsApp', more: 'Докладніше', allServices: 'Усі послуги', toQuote: 'До кошторису' },
     hero: {
       eyebrow: 'Домашній сервіс · Варшава',
-      kicker: 'Варшава і 25 км навколо',
+      kicker: 'Майстер на годину · Варшава і 25 км навколо',
       tagline: 'Домашній ремонт замовите за хвилину — ціну знаєте наперед.',
       sub: 'Позначаєте, що треба зробити — ціна й час рахуються одразу. Без дзвінків і без «оцінимо на місці».',
       scroll: 'Подивитись, як це працює',
@@ -160,7 +161,7 @@ export const UI: Record<Locale, UiStrings> = {
     cta: { quote: 'Посчитать цену', call: 'Позвонить', whatsapp: 'WhatsApp', more: 'Подробнее', allServices: 'Все услуги', toQuote: 'К смете' },
     hero: {
       eyebrow: 'Домашний сервис · Варшава',
-      kicker: 'Варшава и 25 км вокруг',
+      kicker: 'Мастер на час · Варшава и 25 км вокруг',
       tagline: 'Домашний ремонт закажете за минуту — цену знаете заранее.',
       sub: 'Отмечаете, что нужно сделать — цена и время считаются сразу. Без звонков и без «оценим на месте».',
       scroll: 'Посмотреть, как это работает',
@@ -218,7 +219,7 @@ export const UI: Record<Locale, UiStrings> = {
     cta: { quote: 'Get a price', call: 'Call', whatsapp: 'WhatsApp', more: 'Learn more', allServices: 'All services', toQuote: 'To the quote' },
     hero: {
       eyebrow: 'Home services · Warsaw',
-      kicker: 'Warsaw and 25 km around',
+      kicker: 'Handyman · Warsaw and 25 km around',
       tagline: 'Home repairs booked in a minute — price known upfront.',
       sub: 'Tick what needs doing — price and time add up as you go. No phone tag, no “we’ll quote on site”.',
       scroll: 'See how it works',
@@ -270,6 +271,15 @@ export const UI: Record<Locale, UiStrings> = {
       workshop: 'Handyman workshop — tools for home repairs',
     },
   },
+}
+
+export type UiStrings = UiBase & UiExtra
+
+export const UI: Record<Locale, UiStrings> = {
+  pl: { ...BASE.pl, ...EXTRA.pl },
+  uk: { ...BASE.uk, ...EXTRA.uk },
+  ru: { ...BASE.ru, ...EXTRA.ru },
+  en: { ...BASE.en, ...EXTRA.en },
 }
 
 /** Alt для фото услуги: название + город. Так снимок участвует

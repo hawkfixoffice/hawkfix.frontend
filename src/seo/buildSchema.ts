@@ -1,6 +1,6 @@
 import type { Locale, PageRec } from '../lib/types'
 import { SITE } from '../lib/types'
-import { KEY_PAGES, allPages, items, pathOf, settings } from '../data/content'
+import { KEY_PAGES, allPages, pathOf } from '../data/content'
 import { faq } from '../data/faq'
 import { UI } from '../lib/ui'
 import {
@@ -8,6 +8,7 @@ import {
   serviceListNode, serviceNode, webPageNode, websiteNode,
 } from './schema'
 import { keywords } from '../data/keywords'
+import { priceFromOf, serviceFaq } from '../lib/facts'
 import { services } from '../data/content'
 
 const titleOf = (key: string, locale: Locale) =>
@@ -40,8 +41,7 @@ export function buildSchema(page: PageRec, locale: Locale): object {
       break
 
     case 'service': {
-      const groupItems = page.group ? items.filter((i) => i.group === page.group) : []
-      const priceFrom = groupItems.length ? Math.min(...groupItems.map((i) => i.price)) : settings.minVisit
+      const priceFrom = priceFromOf(page)
       trail.push({ name: t.nav.services, url: SITE + pathOf(KEY_PAGES.services, locale) })
       trail.push({ name: tr.h1, url })
       nodes.push(webPageNode(url, tr.title, tr.description, locale, 'WebPage', meta))
@@ -50,6 +50,8 @@ export function buildSchema(page: PageRec, locale: Locale): object {
         image: img, group: page.group,
       }))
       nodes.push(breadcrumbNode(trail))
+      // Те же вопросы, что видны на странице (блок «Pytania o tę usługę»)
+      nodes.push(faqNode(serviceFaq(page, locale)))
       break
     }
 

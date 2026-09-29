@@ -5,7 +5,7 @@ import type { PageBody } from '../lib/types'
 import { usePage } from '../components/PageContext'
 import { UI } from '../lib/ui'
 
-type Tag = 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'small' | 'b' | 'div' | 'li'
+type Tag = 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'small' | 'b' | 'div' | 'li' | 'dt' | 'dd'
 
 interface Props {
   /** Ключ места: `ui:hero.tagline`, `page:o-nas:b.3` … */

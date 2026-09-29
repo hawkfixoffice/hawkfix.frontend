@@ -73,6 +73,20 @@ await writeFile('dist/sitemap.xml', sitemap, 'utf8')
 
 // Витрину для проверки закрываем целиком: одинаковый контент на двух адресах
 // уводит позиции с боевого домена. На проде — обычный открытый robots.
+//
+// Боты ассистентов перечислены в ОДНОЙ группе со звёздочкой. Раньше у каждого
+// была своя группа только с `Allow: /` — а бот с собственной группой правила
+// `*` не читает, то есть GPTBot и компания видели /panel/ и /404. Теперь
+// правила одни для всех, а список имён — явное «добро пожаловать».
+const AI_BOTS = [
+  // OpenAI: обучение, поиск ChatGPT, переходы по ссылке из чата
+  'GPTBot', 'OAI-SearchBot', 'ChatGPT-User',
+  // Anthropic
+  'ClaudeBot', 'Claude-SearchBot', 'Claude-User',
+  // Perplexity, Google (Gemini / AI Overviews), Apple, Microsoft, Meta, Amazon…
+  'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot', 'Applebot-Extended',
+  'Bingbot', 'meta-externalagent', 'Amazonbot', 'DuckAssistBot', 'MistralAI-User', 'CCBot',
+]
 await writeFile('dist/robots.txt', IS_STAGING ? [
   `# ${SITE} — витрина для проверки, не для индекса`,
   '',
@@ -81,10 +95,12 @@ await writeFile('dist/robots.txt', IS_STAGING ? [
   '',
 ].join('\n') : [
   `# ${SITE} — robots.txt`,
+  '# Поисковики и ассистенты — добро пожаловать: для локального сервиса',
+  '# упоминание в ответах ChatGPT, Claude, Perplexity и Gemini — это клиенты.',
   '',
   'User-agent: *',
+  ...AI_BOTS.map((b) => `User-agent: ${b}`),
   'Allow: /',
-  '',
   '# Служебные файлы генератора и страница 404 — не для индекса.',
   '# CSS и JS намеренно открыты: без них Google не отрендерит страницу.',
   'Disallow: /404',
@@ -92,51 +108,140 @@ await writeFile('dist/robots.txt', IS_STAGING ? [
   '# Панель управления — служебная часть, в поиске ей делать нечего.',
   'Disallow: /panel/',
   '',
-  '# Ассистенты пускаем: для локального сервиса упоминание в их ответах полезно.',
-  '# Чтобы закрыть — заменить Allow на Disallow в блоках ниже.',
-  'User-agent: GPTBot',
-  'Allow: /',
-  '',
-  'User-agent: ClaudeBot',
-  'Allow: /',
-  '',
-  'User-agent: PerplexityBot',
-  'Allow: /',
-  '',
   `Sitemap: ${SITE}/sitemap.xml`,
   '',
 ].join('\n'), 'utf8')
 
-// --- llms.txt: краткая карта сайта для языковых моделей ---
+// --- IndexNow: мгновенное уведомление Bing, Яндекса, Seznam и Naver ---
+// Поиск ChatGPT и Copilot стоят на индексе Bing, поэтому свежесть там важна.
+// Ключ публичный по протоколу: файл с ним доказывает, что сайт наш.
+// Пинг после деплоя — tools/indexnow.mjs (шаг в .github/workflows/deploy.yml).
+const INDEXNOW_KEY = 'aa7c2d65e76f5aec83eb114e32c55cdc'
+if (!IS_STAGING) await writeFile(`dist/${INDEXNOW_KEY}.txt`, INDEXNOW_KEY, 'utf8')
+
+// --- llms.txt и llms-full.txt: сайт в виде простого текста для языковых моделей ---
+// llms.txt — карта (что это, главные страницы на 4 языках, услуги с ценой «от»).
+// llms-full.txt — всё, что нужно, чтобы ответить на вопрос клиента без
+// открытия страниц: факты, каждая услуга с описанием, полный прайс, вопросы.
+// Числа берутся из прайса и настроек, как на самих страницах.
+const items = JSON.parse(await readFile('content/items.json', 'utf8'))
+const groups = JSON.parse(await readFile('content/groups.json', 'utf8'))
+const settings = JSON.parse(await readFile('content/settings.json', 'utf8'))
+const faqAll = JSON.parse(await readFile('content/faq.json', 'utf8'))
 const svc = index.filter((p) => p.type === 'service')
+const priced = (list) => list.map((i) => i.price).filter((x) => x > 0)
+const fromOf = (p) => {
+  const pr = priced(items.filter((i) => i.group && i.group === p.group))
+  return pr.length ? Math.min(...pr) : settings.minVisit
+}
+const bodyOf = async (key, loc) => {
+  try { return JSON.parse(await readFile(`content/bodies/${key}__${loc}.json`, 'utf8')) } catch { return {} }
+}
+const byKey = (k) => index.find((x) => x.key === k)
+const cur = settings.currency
+
+const L = {
+  pl: {
+    lang: 'Polski', home: 'Strona główna', svcs: 'Usługi', prices: 'Cennik', about: 'O nas', contact: 'Kontakt',
+    from: 'od', photo: 'wycena po zdjęciu',
+    summary: [
+      `HAWK.FIX to złota rączka (mąż na godzinę) w Warszawie i do ${25} km wokół.`,
+      'Jeden fachowiec albo cała ekipa: hydraulik, elektryk, montaż mebli i AGD, ściany i malowanie,',
+      'drobne naprawy, sprzątanie, przeprowadzki, ogród.',
+      `Klient sam składa kosztorys na stronie i od razu widzi cenę. Minimalna wizyta ${settings.minVisit} ${cur}.`,
+      `Cennik: ${items.length} pozycji z cenami. Przyjazd dziś lub jutro: +${settings.urgentPct}%, najwyżej +${settings.urgentMax} ${cur}.`,
+      'Godziny: poniedziałek–piątek 08:00–20:00. Języki obsługi: polski, ukraiński, rosyjski, angielski.',
+    ],
+    facts: 'Najważniejsze fakty', list: 'Pełny cennik', faq: 'Częste pytania', contactH: 'Kontakt',
+    included: 'Co wchodzi',
+  },
+  en: {
+    lang: 'English', home: 'Home', svcs: 'Services', prices: 'Prices', about: 'About', contact: 'Contact',
+    from: 'from', photo: 'quoted from a photo',
+    summary: [
+      'HAWK.FIX is a handyman service (złota rączka) in Warsaw, Poland, and up to 25 km around.',
+      'One handyman or a whole crew: plumber, electrician, furniture and appliance assembly, walls and painting,',
+      'small repairs, cleaning, moving, garden work.',
+      `Customers build the estimate on the website and see the price right away. Minimum visit ${settings.minVisit} ${cur} (PLN).`,
+      `Price list: ${items.length} items with prices. Visit today or tomorrow: +${settings.urgentPct}%, at most +${settings.urgentMax} ${cur}.`,
+      'Hours: Monday–Friday 08:00–20:00. Languages: Polish, Ukrainian, Russian, English.',
+    ],
+    facts: 'Key facts', list: 'Full price list', faq: 'Frequently asked questions', contactH: 'Contact',
+    included: 'Included',
+  },
+}
+const CONTACT_LINES = [
+  '- Telefon / Phone: +48 532 481 505',
+  '- WhatsApp: +48 735 369 350',
+  '- E-mail: hawk.fix.office@gmail.com',
+  `- ${SITE}/`,
+]
+
+// llms.txt — карта
 await writeFile('dist/llms.txt', [
   '# HAWK.FIX',
   '',
-  `> ${index.find((p) => p.type === 'home').tr.pl.description}`,
+  `> ${L.pl.summary.join(' ')}`,
   '',
-  'Złota rączka w Warszawie i 25 km wokół. Hydraulika, elektryka, meble i AGD,',
-  'ściany, sprzątanie, przeprowadzki, ogród. Klient sam składa kosztorys na',
-  'stronie i od razu widzi cenę oraz czas. Minimalna wizyta 246 zł.',
-  'Strona w czterech językach: pl (domyślny), uk, ru, en.',
+  ...L.en.summary,
   '',
-  '## Główne strony',
-  // Подписи задаём явно: h1 главной — это вопрос калькулятора,
-  // названием страницы он не является.
-  ...[['home', 'Strona główna'], ['uslugi', 'Usługi'], ['cennik', 'Cennik'],
-      ['o-nas', 'O nas'], ['kontakt', 'Kontakt']].map(([k, label]) => {
-    const p = index.find((x) => x.key === k)
-    return p ? `- [${label}](${SITE}${p.paths.pl}): ${p.tr.pl.description}` : ''
-  }).filter(Boolean),
+  `Pełny tekst dla modeli językowych / full text for LLMs: ${SITE}/llms-full.txt`,
   '',
-  '## Usługi',
-  ...svc.map((p) => `- [${p.tr.pl.h1}](${SITE}${p.paths.pl}): ${p.tr.pl.blurb ?? ''}`),
+  ...['pl', 'uk', 'ru', 'en'].flatMap((loc) => [
+    `## ${loc.toUpperCase()}`,
+    // Подписи задаём явно: h1 главной — это вопрос калькулятора, а не название
+    ...['home', 'uslugi', 'cennik', 'o-nas', 'kontakt'].map((k) => {
+      const p = byKey(k)
+      if (!p?.paths[loc]) return ''
+      const label = k === 'home' ? 'HAWK.FIX' : p.tr[loc].h1
+      return `- [${label}](${SITE}${p.paths[loc]}): ${p.tr[loc].description}`
+    }).filter(Boolean),
+    '',
+  ]),
+  '## Usługi / Services',
+  ...svc.map((p) => `- [${p.tr.pl.h1}](${SITE}${p.paths.pl}) / [${p.tr.en.h1}](${SITE}${p.paths.en}): ${L.pl.from} ${fromOf(p)} ${cur}. ${p.tr.pl.blurb ?? ''}`),
   '',
-  '## Kontakt',
-  '- Telefon: +48 532 481 505',
-  '- WhatsApp: +48 735 369 350',
-  '- E-mail: hawk.fix.office@gmail.com',
+  '## Kontakt / Contact',
+  ...CONTACT_LINES,
   '',
 ].join('\n'), 'utf8')
+
+// llms-full.txt — полный текст на польском и английском
+const full = []
+for (const loc of ['pl', 'en']) {
+  const t = L[loc]
+  full.push(`# HAWK.FIX — ${t.lang}`, '', ...t.summary, '')
+  full.push(`## ${t.svcs}`, '')
+  for (const p of svc) {
+    const b = await bodyOf(p.key, loc)
+    full.push(`### ${p.tr[loc].h1}`, `${SITE}${p.paths[loc]}`, '')
+    full.push(`${t.from} ${fromOf(p)} ${cur}. ${p.tr[loc].description}`)
+    for (const x of b.intro ?? []) full.push('', x)
+    if (b.checklist?.length) full.push('', `${t.included}:`, ...b.checklist.map((x) => `- ${x}`))
+    full.push('')
+  }
+  full.push(`## ${t.list}`, `${SITE}${byKey('cennik').paths[loc]}`, '')
+  for (const g of groups) {
+    const list = items.filter((i) => i.group === g.key)
+    if (!list.length) continue
+    full.push(`### ${g.name[loc] ?? g.name.pl}`)
+    for (const i of list) {
+      const unit = settings.units[loc]?.[i.unit] ?? i.unit
+      const price = i.ptype === 'scope'
+        ? (i.price > 0 ? `${t.from} ${i.price} ${cur}` : t.photo)
+        : `${i.price} ${cur}`
+      full.push(`- ${i.name[loc] || i.name.pl}: ${price} / ${unit}`)
+    }
+    full.push('')
+  }
+  const f = faqAll[loc]
+  if (f?.items?.length) {
+    full.push(`## ${t.faq}`, '')
+    for (const x of f.items) full.push(`### ${x.q}`, x.a, '')
+  }
+  full.push(`## ${t.contactH}`, ...CONTACT_LINES, '', '---', '')
+}
+await writeFile('dist/llms-full.txt', full.join('\n'), 'utf8')
 
 // --- manifest: иконка и цвет при добавлении на домашний экран ---
 await writeFile('dist/manifest.webmanifest', JSON.stringify({
@@ -199,4 +304,4 @@ await writeFile('dist/CNAME', `${DOMAIN}\n`, 'utf8')
 const withImg = urls.filter((u) => u.includes('<image:image>')).length
 console.log(`адрес сборки: ${SITE}${IS_STAGING ? '  (витрина: noindex + Disallow: /)' : ''}`)
 console.log(`sitemap.xml: ${urls.length} URL, из них с картинкой ${withImg}`)
-console.log('robots.txt, llms.txt, manifest.webmanifest, security.txt, humans.txt, 404.html, .nojekyll, CNAME — записаны')
+console.log('robots.txt, llms.txt, llms-full.txt, IndexNow-ключ, manifest.webmanifest, security.txt, humans.txt, 404.html, .nojekyll, CNAME — записаны')

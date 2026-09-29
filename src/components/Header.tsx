@@ -27,7 +27,7 @@ export default function Header() {
     let anchorBottom = 240
 
     const measure = () => {
-      const a = document.querySelector('.herox, .pagehead') as HTMLElement | null
+      const a = document.querySelector('.s-hero, .pagehead') as HTMLElement | null
       anchorBottom = a ? a.getBoundingClientRect().bottom + window.scrollY : 240
     }
     const apply = () => {
