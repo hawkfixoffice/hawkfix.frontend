@@ -171,7 +171,6 @@ const L = {
   },
 }
 const CONTACT_LINES = [
-  '- Telefon / Phone: +48 532 481 505',
   '- WhatsApp: +48 735 369 350',
   '- E-mail: hawk.fix.office@gmail.com',
   `- ${SITE}/`,

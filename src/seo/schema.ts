@@ -46,7 +46,7 @@ export function businessNode(locale: Locale, description: string) {
     knowsAbout: KNOWS[locale],
     description,
     url: `${SITE}/`,
-    telephone: CONTACT.phone,
+    telephone: CONTACT.whatsappLabel,
     email: CONTACT.email,
     image: `${SITE}/img/out/hero-1200.webp`,
     priceRange: `${minPrice}–${maxPrice} PLN`,
@@ -60,7 +60,7 @@ export function businessNode(locale: Locale, description: string) {
     hasOfferCatalog: { '@id': CATALOG_ID },
     contactPoint: [{
       '@type': 'ContactPoint',
-      telephone: CONTACT.phone,
+      telephone: CONTACT.whatsappLabel,
       email: CONTACT.email,
       contactType: 'customer service',
       areaServed: 'PL',

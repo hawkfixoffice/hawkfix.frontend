@@ -280,3 +280,20 @@
   .s-contacts__v { grid-column: 2; }
   .s-prices li { flex-direction: column; gap: 4px; }
 }
+
+/* ───────── Цены: жирные и тёмно-зелёные на всём сайте (2026-09-30) ─────────
+   Один токен — чтобы оттенок менять в одном месте. Файл грузится последним
+   из стилей сайта, поэтому перекрывает правила sections/lead/content.
+   На тёмных подложках (выбранный чип, нижняя панель калькулятора) цвет
+   не трогаем — там только вес. */
+:root { --price: var(--forest); --price-fw: 700; }
+
+.price,
+.s-row__p, .s-price b, .s-prices b, .s-pgroup__head p,
+.irow__price, .chip--pick .num, .sum__lp, .sum__big, .rush__fee, .rcp__amount {
+  color: var(--price);
+  font-weight: var(--price-fw);
+}
+.s-prices b small, .irow__unit { font-weight: 500; }
+.chip--pick[data-on='true'] .num { color: var(--on-dark-2); }
+.calcbar__sum { font-weight: var(--price-fw); }

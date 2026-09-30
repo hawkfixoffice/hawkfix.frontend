@@ -38,7 +38,7 @@ export default function Home() {
         </div>
         <div className="wrap">
           <ul className="s-stats">
-            <li><b className="num">{settings.minVisit} {cur}</b><U as="span" k="home.minVisitTitle" /></li>
+            <li><b className="num price">{settings.minVisit} {cur}</b><U as="span" k="home.minVisitTitle" /></li>
             <li><b className="num">{items.length}</b><U as="span" k="prices.positions" /></li>
             <li><b className="num">{services.length}</b><U as="span" k="nav.services" /></li>
             <li><b>{CONTACT.radiusKm} km</b><span>{CONTACT.city}</span></li>

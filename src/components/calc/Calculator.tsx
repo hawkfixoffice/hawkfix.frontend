@@ -203,7 +203,7 @@ export default function Calculator() {
                       <span className="grp__text">
                         <span className="grp__name">{g.name[locale] ?? g.key}</span>
                         <span className="grp__meta num">
-                          {t.prices.from} {from} {settings.currency} · {list.length} {t.prices.positions}
+                          <span className="price">{t.prices.from} {from} {settings.currency}</span> · {list.length} {t.prices.positions}
                         </span>
                       </span>
                       {chosen > 0 && <span className="grp__badge num">{chosen}</span>}

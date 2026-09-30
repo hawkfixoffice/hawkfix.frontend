@@ -38,7 +38,7 @@ export function PageHead({ lead, leadField = 'lead', crumbs, actions, aside }: {
   )
 }
 
-/** Кнопки «посчитать цену» и «позвонить» — одинаковые на всех страницах. */
+/** Кнопки «посчитать цену» и «WhatsApp» — одинаковые на всех страницах. */
 export function MainActions() {
   const { locale } = usePage()
   return (
@@ -46,8 +46,8 @@ export function MainActions() {
       <Link className="btn btn--primary btn--lg" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}>
         <U k="cta.quote" /> <Icon name="arrow" size={18} />
       </Link>
-      <a className="btn btn--ghost btn--lg" href={CONTACT.phoneHref}>
-        <Icon name="phone" size={17} /> {CONTACT.phone}
+      <a className="btn btn--ghost btn--lg" href={CONTACT.whatsappHref} target="_blank" rel="noopener">
+        <Icon name="whatsapp" size={17} /> {CONTACT.whatsappLabel}
       </a>
     </>
   )

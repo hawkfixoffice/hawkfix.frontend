@@ -32,8 +32,8 @@ export default function Footer() {
             <U as="p" className="s-foot__tag" k="hero.kicker" />
           </div>
           <div className="s-foot__contact">
-            <a className="s-foot__big num" href={CONTACT.phoneHref}>{CONTACT.phone}</a>
-            <a href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener"><U k="cta.whatsapp" /></a>
+            <a className="s-foot__big num" href={CONTACT.whatsappHref} target="_blank" rel="noopener">{CONTACT.whatsappLabel}</a>
+            <a href={CONTACT.whatsappHref} target="_blank" rel="noopener"><U k="cta.whatsapp" /></a>
             <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
           </div>
         </div>

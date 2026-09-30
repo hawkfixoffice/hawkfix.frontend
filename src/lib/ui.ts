@@ -75,7 +75,7 @@ const BASE: Record<Locale, UiBase> = {
       comment: 'Opisz, co jest do zrobienia', when: 'Kiedy', urgent: 'Dziś lub jutro (+50%)',
       submit: 'Wyślij zlecenie', sending: 'Wysyłamy…',
       ok: 'Mamy Twoje zgłoszenie.', okNote: 'Odzywamy się w godzinach pracy, zwykle w ciągu godziny.',
-      error: 'Nie udało się wysłać. Zadzwoń albo napisz na WhatsApp.',
+      error: 'Nie udało się wysłać. Napisz do nas na WhatsApp.',
       required: 'To pole jest wymagane.', agree: 'Wysyłając zgłoszenie akceptujesz',
       emailHint: 'Opcjonalnie — potrzebny tylko do faktury',
       emailBad: 'Sprawdź adres e-mail.',
@@ -133,7 +133,7 @@ const BASE: Record<Locale, UiBase> = {
       comment: 'Опишіть, що треба зробити', when: 'Коли', urgent: 'Сьогодні або завтра (+50%)',
       submit: 'Надіслати заявку', sending: 'Надсилаємо…',
       ok: 'Заявку отримали.', okNote: 'Відповідаємо в робочі години, зазвичай протягом години.',
-      error: 'Не вдалося надіслати. Зателефонуйте або напишіть у WhatsApp.',
+      error: 'Не вдалося надіслати. Напишіть нам у WhatsApp.',
       required: 'Це поле обов’язкове.', agree: 'Надсилаючи заявку, ви приймаєте',
       emailHint: 'Необов’язково — потрібна лише для рахунка',
       emailBad: 'Перевірте адресу e-mail.',
@@ -191,7 +191,7 @@ const BASE: Record<Locale, UiBase> = {
       comment: 'Опишите, что нужно сделать', when: 'Когда', urgent: 'Сегодня или завтра (+50%)',
       submit: 'Отправить заявку', sending: 'Отправляем…',
       ok: 'Заявку получили.', okNote: 'Отвечаем в рабочие часы, обычно в течение часа.',
-      error: 'Не удалось отправить. Позвоните или напишите в WhatsApp.',
+      error: 'Не удалось отправить. Напишите нам в WhatsApp.',
       required: 'Это поле обязательно.', agree: 'Отправляя заявку, вы принимаете',
       emailHint: 'Необязательно — нужна только для счёта',
       emailBad: 'Проверьте адрес e-mail.',
@@ -249,7 +249,7 @@ const BASE: Record<Locale, UiBase> = {
       comment: 'Describe what needs doing', when: 'When', urgent: 'Today or tomorrow (+50%)',
       submit: 'Send the request', sending: 'Sending…',
       ok: 'We’ve got your request.', okNote: 'We reply during working hours, usually within the hour.',
-      error: 'Sending failed. Call us or write on WhatsApp.',
+      error: 'Sending failed. Message us on WhatsApp.',
       required: 'This field is required.', agree: 'By sending the request you accept the',
       emailHint: 'Optional — only needed for an invoice',
       emailBad: 'Check the e-mail address.',
@@ -289,9 +289,11 @@ export function serviceAlt(h1: string, city = 'Warszawa'): string {
 }
 
 export const CONTACT = {
-  phone: '+48 532 481 505',
-  phoneHref: 'tel:+48532481505',
+  // Один номер — WhatsApp (прежний телефон +48 532 481 505 снят 2026-09-30).
+  // В schema.org идёт как telephone: по нему можно и позвонить.
   whatsapp: '48735369350',
+  whatsappLabel: '+48 735 369 350',
+  whatsappHref: 'https://wa.me/48735369350',
   email: 'hawk.fix.office@gmail.com',
   facebook: 'https://www.facebook.com/profile.php?id=61593152744112',
   city: 'Warszawa',

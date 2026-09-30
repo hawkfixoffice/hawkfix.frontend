@@ -22,22 +22,15 @@ export default function ContactPage() {
     <>
       <PageHead lead={tr.description} />
 
-      {/* три способа связи — крупными строками, во всю ширину */}
+      {/* два способа связи — крупными строками, во всю ширину */}
       <section className="s-band s-band--first">
         <div className="wrap">
           <ul className="s-contacts">
             <li>
-              <a href={CONTACT.phoneHref}>
-                <Icon name="phone" size={28} />
-                <U as="span" className="s-contacts__k" k="cta.call" />
-                <span className="s-contacts__v num">{CONTACT.phone}</span>
-              </a>
-            </li>
-            <li>
-              <a href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener">
+              <a href={CONTACT.whatsappHref} target="_blank" rel="noopener">
                 <Icon name="whatsapp" size={28} />
                 <U as="span" className="s-contacts__k" k="cta.whatsapp" />
-                <span className="s-contacts__v num">+{CONTACT.whatsapp.replace(/^48(\d{3})(\d{3})(\d{3})$/, '48 $1 $2 $3')}</span>
+                <span className="s-contacts__v num">+{CONTACT.whatsappLabel}</span>
               </a>
             </li>
             <li>

@@ -177,7 +177,7 @@ const CLIENT_TEXT = {
     hours: 'ok. {h} godz.',
     urgent: 'Pilne · dopłata +50%',
     note: 'Cena z kosztorysu jest wiążąca dla prac z cennika. Jeśli na miejscu okaże się, że zakres jest inny, powiemy o tym przed rozpoczęciem pracy.',
-    call: 'Zadzwoń do nas',
+    call: 'Napisz na WhatsApp',
     keep: 'Zachowaj ten e-mail — numer zgłoszenia przyda się przy kontakcie.',
     auto: 'Wiadomość wysłana automatycznie z hawkfix.pl',
     noItems: 'Bez pozycji z cennika — wycenimy na podstawie opisu.',
@@ -193,7 +193,7 @@ const CLIENT_TEXT = {
     hours: 'бл. {h} год.',
     urgent: 'Терміново · +50%',
     note: 'Ціна з кошторису чинна для робіт із прайсу. Якщо на місці обсяг виявиться іншим, скажемо про це до початку роботи.',
-    call: 'Зателефонувати нам',
+    call: 'Написати у WhatsApp',
     keep: 'Збережіть цей лист — номер заявки знадобиться при зверненні.',
     auto: 'Лист надіслано автоматично з hawkfix.pl',
     noItems: 'Без позицій із прайсу — порахуємо за описом.',
@@ -209,7 +209,7 @@ const CLIENT_TEXT = {
     hours: 'ок. {h} ч.',
     urgent: 'Срочно · +50%',
     note: 'Цена из сметы действует для работ из прайса. Если на месте объём окажется другим, скажем об этом до начала работы.',
-    call: 'Позвонить нам',
+    call: 'Написать в WhatsApp',
     keep: 'Сохраните это письмо — номер заявки пригодится при обращении.',
     auto: 'Письмо отправлено автоматически с hawkfix.pl',
     noItems: 'Без позиций из прайса — посчитаем по описанию.',
@@ -225,7 +225,7 @@ const CLIENT_TEXT = {
     hours: 'approx. {h} hrs',
     urgent: 'Urgent · +50%',
     note: 'The estimate holds for priced items. If the scope turns out different on site, we tell you before starting.',
-    call: 'Call us',
+    call: 'Message us on WhatsApp',
     keep: 'Keep this e-mail — the request number helps when you get in touch.',
     auto: 'Sent automatically from hawkfix.pl',
     noItems: 'No priced items — we will quote from your description.',
@@ -330,8 +330,8 @@ function buildClientEmail(row: Record<string, unknown>, orderNo: string) {
   </td></tr>` : ''}
 
   <tr><td align="center" style="padding:8px 0 4px">
-    <a href="tel:+48532481505" style="display:inline-block;background:${MINT};color:${INK};text-decoration:none;
-       padding:14px 26px;border-radius:999px;font-size:15px;font-weight:600;font-family:${FONT}">${L.call} · +48 532 481 505</a>
+    <a href="https://wa.me/48735369350" style="display:inline-block;background:${MINT};color:${INK};text-decoration:none;
+       padding:14px 26px;border-radius:999px;font-size:15px;font-weight:600;font-family:${FONT}">${L.call} · +48 735 369 350</a>
   </td></tr>
 
   <tr><td align="center" style="padding:22px 10px 0;font-family:${FONT};color:#9a9a9a;font-size:12px;line-height:1.6">
@@ -347,7 +347,7 @@ function buildClientEmail(row: Record<string, unknown>, orderNo: string) {
     ...items.map((i) => `  - ${i.name} x${i.qty} = ${money(i.sum)}`),
     row.when_date ? `\n${L.vDate}: ${row.when_date}${row.when_time ? `, ${row.when_time}` : ''}` : '',
     row.address ? `${L.vAddr}: ${row.address}` : '',
-    '', L.note, '', '+48 532 481 505 · hawkfix.pl',
+    '', L.note, '', 'WhatsApp +48 735 369 350 · hawkfix.pl',
   ].filter(Boolean).join('\n')
 
   return { subject: L.subject(orderNo), html, text }

@@ -32,7 +32,7 @@ export default function PricesPage() {
         lead={tr.description} actions={<MainActions />}
         aside={
           <ul className="s-keyfacts">
-            <li><U as="span" k="home.minVisitTitle" /><b className="num">{settings.minVisit} {cur}</b></li>
+            <li><U as="span" k="home.minVisitTitle" /><b className="num price">{settings.minVisit} {cur}</b></li>
             <li><U as="span" k="form.urgent" /><b className="num">+{settings.urgentPct}%</b></li>
             <li><U as="span" k="prices.positions" /><b className="num">{items.length}</b></li>
           </ul>
