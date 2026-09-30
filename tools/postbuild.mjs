@@ -171,7 +171,7 @@ const L = {
   },
 }
 const CONTACT_LINES = [
-  '- WhatsApp: +48 735 369 350',
+  '- WhatsApp: +48 735 369 350 (calls Mon–Fri 9:00–17:00, messages any time / dzwonić pn–pt 9:00–17:00, pisać o każdej porze)',
   '- E-mail: hawk.fix.office@gmail.com',
   `- ${SITE}/`,
 ]

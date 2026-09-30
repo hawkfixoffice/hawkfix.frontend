@@ -33,6 +33,10 @@ export interface UiExtra {
     otherHead: string
     contactHead: string
     districtsHead: string
+    /** Кнопка WhatsApp в герое — «написать», а не номер */
+    write: string
+    /** Когда можно звонить, когда писать */
+    hours: string
   }
 }
 
@@ -48,6 +52,7 @@ export const EXTRA: Record<Locale, UiExtra> = {
         { k: 'Kiedy', v: 'Od poniedziałku do piątku, 08:00–20:00. Przyjazd dziś lub jutro: +{pct}%, najwyżej +{max} zł.' },
         { k: 'Jak zamówić', v: 'Kosztorys na tej stronie albo WhatsApp. Majster potwierdza termin i przyjeżdża.' },
         { k: 'Języki', v: 'Polski, українська, русский, English.' },
+        { k: 'Kontakt', v: 'WhatsApp +48 735 369 350: dzwoń w dni robocze 9:00–17:00, pisz o każdej porze.' },
       ],
     },
     sfaq: {
@@ -65,6 +70,8 @@ export const EXTRA: Record<Locale, UiExtra> = {
       otherHead: 'Inne usługi',
       contactHead: 'Napisz do nas',
       districtsHead: 'Dzielnice',
+      write: 'Napisz',
+      hours: 'Dzwoń w dni robocze 9:00–17:00, pisz o każdej porze.',
     },
   },
 
@@ -79,6 +86,7 @@ export const EXTRA: Record<Locale, UiExtra> = {
         { k: 'Коли', v: 'З понеділка по пʼятницю, 08:00–20:00. Виїзд сьогодні або завтра: +{pct}%, не більше +{max} zł.' },
         { k: 'Як замовити', v: 'Кошторис на цьому сайті або WhatsApp. Майстер підтверджує час і приїжджає.' },
         { k: 'Мови', v: 'Polski, українська, русский, English.' },
+        { k: 'Зв’язок', v: 'WhatsApp +48 735 369 350: телефонуйте в робочі дні з 9:00 до 17:00, пишіть будь-коли.' },
       ],
     },
     sfaq: {
@@ -96,6 +104,8 @@ export const EXTRA: Record<Locale, UiExtra> = {
       otherHead: 'Інші послуги',
       contactHead: 'Напишіть нам',
       districtsHead: 'Райони',
+      write: 'Написати',
+      hours: 'Телефонуйте в робочі дні з 9:00 до 17:00, пишіть будь-коли.',
     },
   },
 
@@ -110,6 +120,7 @@ export const EXTRA: Record<Locale, UiExtra> = {
         { k: 'Когда', v: 'С понедельника по пятницу, 08:00–20:00. Выезд сегодня или завтра: +{pct}%, не больше +{max} zł.' },
         { k: 'Как заказать', v: 'Смета на этом сайте или WhatsApp. Мастер подтверждает время и приезжает.' },
         { k: 'Языки', v: 'Polski, українська, русский, English.' },
+        { k: 'Связь', v: 'WhatsApp +48 735 369 350: звоните в рабочие дни с 9:00 до 17:00, пишите в любое время.' },
       ],
     },
     sfaq: {
@@ -127,6 +138,8 @@ export const EXTRA: Record<Locale, UiExtra> = {
       otherHead: 'Другие услуги',
       contactHead: 'Напишите нам',
       districtsHead: 'Районы',
+      write: 'Написать',
+      hours: 'Звоните в рабочие дни с 9:00 до 17:00, пишите в любое время.',
     },
   },
 
@@ -141,6 +154,7 @@ export const EXTRA: Record<Locale, UiExtra> = {
         { k: 'When', v: 'Monday to Friday, 08:00–20:00. Visit today or tomorrow: +{pct}%, at most +{max} zł.' },
         { k: 'How to order', v: 'Build the estimate on this site or message us on WhatsApp. The handyman confirms the time and comes over.' },
         { k: 'Languages', v: 'Polski, українська, русский, English.' },
+        { k: 'Contact', v: 'WhatsApp +48 735 369 350: call on weekdays 9:00–17:00, message us any time.' },
       ],
     },
     sfaq: {
@@ -158,6 +172,8 @@ export const EXTRA: Record<Locale, UiExtra> = {
       otherHead: 'Other services',
       contactHead: 'Message us',
       districtsHead: 'Districts',
+      write: 'Message us',
+      hours: 'Call on weekdays 9:00–17:00, message us any time.',
     },
   },
 }

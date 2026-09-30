@@ -63,6 +63,12 @@ export function businessNode(locale: Locale, description: string) {
       telephone: CONTACT.whatsappLabel,
       email: CONTACT.email,
       contactType: 'customer service',
+      // Звонки — в рабочие дни 9–17, писать в WhatsApp можно всегда
+      hoursAvailable: [{
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00', closes: '17:00',
+      }],
       areaServed: 'PL',
       availableLanguage: ['pl', 'uk', 'ru', 'en'],
     }],

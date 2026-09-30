@@ -47,7 +47,7 @@ export function MainActions() {
         <U k="cta.quote" /> <Icon name="arrow" size={18} />
       </Link>
       <a className="btn btn--ghost btn--lg" href={CONTACT.whatsappHref} target="_blank" rel="noopener">
-        <Icon name="whatsapp" size={17} /> {CONTACT.whatsappLabel}
+        <Icon name="whatsapp" size={17} /> <U k="simple.write" />
       </a>
     </>
   )

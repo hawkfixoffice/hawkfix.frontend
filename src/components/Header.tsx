@@ -93,7 +93,7 @@ export default function Header() {
             <LangSwitch page={page} locale={locale} label={t.a11y.lang} />
             <a className="tel" href={CONTACT.whatsappHref} target="_blank" rel="noopener" aria-label={`WhatsApp ${CONTACT.whatsappLabel}`}>
               <Icon name="whatsapp" size={16} />
-              <span>{CONTACT.whatsappLabel}</span>
+              <span>{t.cta.whatsapp}</span>
             </a>
             <button
               className="burger" type="button" aria-expanded={open}
@@ -134,7 +134,7 @@ export default function Header() {
 
           <div className="mobmenu__foot">
             <a className="btn btn--primary" href={CONTACT.whatsappHref} target="_blank" rel="noopener">
-              <Icon name="whatsapp" size={17} /> {CONTACT.whatsappLabel}
+              <Icon name="whatsapp" size={17} /> {t.cta.whatsapp}
             </a>
             <LangSwitch page={page} locale={locale} label={t.a11y.lang} big onPick={() => setOpen(false)} />
           </div>

@@ -224,6 +224,8 @@
 }
 /* адрес почты длинный: кегль ограничен шириной экрана, чтобы не рвать слово */
 .s-contacts__v--mail { font-size: min(clamp(1.6rem, 3.6vw, 3.2rem), 5.4vw); overflow-wrap: normal; }
+/* когда звонить, когда писать — под списком способов связи */
+.s-contacts__hours { margin: var(--sp-5) 0 0; font-size: var(--s-text); color: var(--ink-2); }
 .s-districts { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-5); margin-top: var(--sp-5); }
 .s-districts li { font-size: var(--s-text); }
 
@@ -246,6 +248,7 @@
 .s-foot__tag { margin: 6px 0 0; font-size: 1.05rem; }
 .s-foot__contact { display: grid; gap: 8px; justify-items: end; font-size: 1.1rem; }
 .s-foot__big { font-size: clamp(1.6rem, 2.6vw, 2.4rem); color: var(--on-dark) !important; font-weight: var(--s-fw); letter-spacing: -0.02em; }
+.s-foot__hours { margin: 0; font-size: 0.95rem; max-width: 44ch; text-align: end; }
 .s-foot__nav { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6); margin-top: var(--sp-7); font-size: 1.2rem; color: var(--on-dark); }
 .s-foot__svc {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -269,6 +272,7 @@
   .s-keyfacts { min-width: 0; }
   .facts__row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
   .s-foot__contact { justify-items: start; }
+  .s-foot__hours { text-align: start; }
 }
 @media (max-width: 640px) {
   :root { --s-band: 72px; }

@@ -30,7 +30,7 @@ export default function ContactPage() {
               <a href={CONTACT.whatsappHref} target="_blank" rel="noopener">
                 <Icon name="whatsapp" size={28} />
                 <U as="span" className="s-contacts__k" k="cta.whatsapp" />
-                <span className="s-contacts__v num">+{CONTACT.whatsappLabel}</span>
+                <span className="s-contacts__v num">{CONTACT.whatsappLabel}</span>
               </a>
             </li>
             <li>
@@ -41,6 +41,7 @@ export default function ContactPage() {
               </a>
             </li>
           </ul>
+          <U as="p" className="s-contacts__hours" k="simple.hours" />
         </div>
       </section>
 
