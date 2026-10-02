@@ -11,7 +11,7 @@ import { detectLocale, isBot, onceThisSession, readPref } from '../lib/locale-pr
 
 function Shell({ children }: { children: React.ReactNode }) {
   const { t, page, locale } = usePage()
-  const { pathname } = useLocation()
+  const { pathname, hash, key } = useLocation()
   const navigate = useNavigate()
 
   // При загрузке подставляем язык устройства (или явный выбор пользователя),
@@ -28,7 +28,7 @@ function Shell({ children }: { children: React.ReactNode }) {
   // При переходе между страницами возвращаем прокрутку наверх.
   // Если переход был сменой языка — проигрываем появление контента.
   useEffect(() => {
-    window.scrollTo(0, 0)
+    if (!window.location.hash) window.scrollTo(0, 0)
     const html = document.documentElement
     if (html.getAttribute('data-langswitch') === 'out') {
       html.setAttribute('data-langswitch', 'in')
@@ -36,6 +36,25 @@ function Shell({ children }: { children: React.ReactNode }) {
       return () => window.clearTimeout(id)
     }
   }, [pathname])
+
+  // Якорь в ссылке роутера («/#wycena») браузер сам не отрабатывает: переход
+  // идёт без перезагрузки. Прокручиваем сами; `key` меняется на каждом клике,
+  // поэтому повторное нажатие той же кнопки тоже срабатывает.
+  useEffect(() => {
+    if (!hash) return
+    let id = hash.slice(1)
+    try { id = decodeURIComponent(id) } catch { /* оставляем как есть */ }
+    const el = document.getElementById(id)
+    if (!el) { window.scrollTo(0, 0); return }
+    el.scrollIntoView()
+    // При заходе по прямой ссылке блоки выше дорастают после гидрации, и
+    // плавная прокрутка останавливается выше цели — доводим один раз.
+    const again = window.setTimeout(() => {
+      const want = parseFloat(getComputedStyle(el).scrollMarginTop) || 0
+      if (Math.abs(el.getBoundingClientRect().top - want) > 8) el.scrollIntoView()
+    }, 700)
+    return () => window.clearTimeout(again)
+  }, [pathname, hash, key])
 
   return (
     <>
