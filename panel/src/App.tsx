@@ -9,6 +9,7 @@ import Clients from './pages/Clients'
 import ClientCard from './pages/ClientCard'
 import Orders from './pages/Orders'
 import OrderCard from './pages/OrderCard'
+import OrderEdit from './pages/OrderEdit'
 import Finance from './pages/Finance'
 import Team from './pages/Team'
 import StaffCard from './pages/StaffCard'
@@ -59,7 +60,9 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Dashboard me={me} />} />
             <Route path="/orders" element={<Orders me={me} />} />
+            <Route path="/orders/new" element={<OrderEdit me={me} />} />
             <Route path="/orders/:id" element={<OrderCard me={me} />} />
+            <Route path="/orders/:id/edit" element={<OrderEdit me={me} />} />
             <Route path="/profile" element={<Profile me={me} />} />
             {me.role !== 'master' && <Route path="/clients" element={<Clients me={me} />} />}
             {me.role !== 'master' && <Route path="/clients/:id" element={<ClientCard me={me} />} />}

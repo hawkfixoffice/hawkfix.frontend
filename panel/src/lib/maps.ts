@@ -271,6 +271,43 @@ const photon = (params: Record<string, string>) => {
   return fetch(u.toString()).then((r) => r.json())
 }
 
+/** Подсказка адреса для формы заказа: строка, район и точка. */
+export interface AddrHit { label: string; district: string; lat: number; lon: number; exact: boolean }
+
+/** Подсказки адреса по мере набора — те же правила, что в форме сайта
+ *  (src/lib/address.ts): только Польша, смещение к Варшаве, дом выше улицы. */
+export async function suggestAddress(q: string, signal?: AbortSignal): Promise<AddrHit[]> {
+  const query = q.trim()
+  if (query.length < 3) return []
+  const u = new URL('https://photon.komoot.io/api/')
+  u.searchParams.set('q', query)
+  u.searchParams.set('lat', String(WARSAW.lat))
+  u.searchParams.set('lon', String(WARSAW.lon))
+  u.searchParams.set('limit', '10')
+  u.searchParams.set('lang', 'default')
+  const res = await fetch(u.toString(), { signal })
+  if (!res.ok) throw new Error(`photon ${res.status}`)
+  const data = (await res.json()) as { features?: Feature[] }
+  const hits: AddrHit[] = []
+  const seen = new Set<string>()
+  for (const f of data.features ?? []) {
+    const p = f.properties
+    if (p.countrycode !== 'PL') continue
+    const street = p.street ?? p.name ?? ''
+    const city = p.city ?? p.town ?? p.village ?? p.county ?? ''
+    if (!street || !city) continue
+    const [lon, lat] = f.geometry.coordinates
+    // Дальше ~60 км от центра не ездим — такие подсказки только мешают
+    if (Math.hypot((lat - WARSAW.lat) * 111, (lon - WARSAW.lon) * 68) > 60) continue
+    const label = [[street, p.housenumber].filter(Boolean).join(' '),
+                   [p.postcode, city].filter(Boolean).join(' ')].filter(Boolean).join(', ')
+    if (seen.has(label)) continue
+    seen.add(label)
+    hits.push({ label, district: p.district ?? '', lat, lon, exact: Boolean(p.housenumber) })
+  }
+  return hits.sort((a, b) => Number(b.exact) - Number(a.exact)).slice(0, 6)
+}
+
 /** Адрес → координаты. Запрос смещён к Варшаве, поэтому одноимённые
  *  улицы в других воеводствах не перебивают столичные. */
 export async function geocode(address: string): Promise<Pt | null> {

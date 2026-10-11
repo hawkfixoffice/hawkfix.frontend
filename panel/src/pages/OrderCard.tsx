@@ -11,6 +11,7 @@ import Avatar from '../ui/Avatar'
 import Assign from '../ui/Assign'
 import DeleteOrder from '../ui/DeleteOrder'
 import { AcceptQuote, ScopeCard } from '../ui/Scope'
+import ProofCard, { proofMissing } from '../ui/Proof'
 import { rid, toWebp } from '../../../src/lib/webp'
 
 /** Карточка заказа: путь мастера, магазин по дороге, отчёт и деньги.
@@ -75,6 +76,11 @@ export default function OrderCard({ me }: { me: Me }) {
   const items: { name: string; qty: number; sum: number }[] = o.items ?? []
   // Работу «за объём» не начать, пока не названа цена — база тоже это проверяет
   const needQuote = o.quote_state === 'pending' || o.quote_state === 'onsite'
+  // Без фото «до» работа не начинается, без фото «после» заказ не закрывается
+  const needBefore = proofMissing(o, 'before', me)
+  const needAfter = proofMissing(o, 'after', me)
+  const startBlock = needQuote ? t('scope.onsiteHint') : needBefore ? t('proof.needBefore') : ''
+  const canEdit = (me.role !== 'master' || isMine) && !['done', 'cancelled'].includes(o.status)
 
   async function step(status: string) {
     const { error } = await sb.rpc('set_order_status', { o_id: id, new_status: status })
@@ -103,6 +109,7 @@ export default function OrderCard({ me }: { me: Me }) {
               <span className="badge badge--warn">{t('ord.frozen', { to: quiet.to })}</span>
             )}
             {o.urgent && <span className="badge badge--warn">{t('ord.status.offered') && '!'} +50%</span>}
+            {o.source && <span className="badge badge--ghost">{t(`ord.src.${o.source}`)}</span>}
           </div>
           <h1 className="h1" style={{ marginTop: 10 }}>{o.order_no}</h1>
           <p className="sub">
@@ -127,14 +134,15 @@ export default function OrderCard({ me }: { me: Me }) {
           {canDrive && o.status === 'en_route' && (
             <>
               <button className="btn btn--ghost" onClick={() => step('shopping')}>{t('ord.buy')}</button>
-              <button className="btn btn--dark" disabled={needQuote} title={needQuote ? t('scope.onsiteHint') : undefined}
+              <button className="btn btn--dark" disabled={!!startBlock} title={startBlock || undefined}
                       onClick={() => step('in_progress')}>{t('ord.start')}</button>
             </>
           )}
           {canDrive && o.status === 'shopping' && (
-            <button className="btn btn--dark" disabled={needQuote} title={needQuote ? t('scope.onsiteHint') : undefined}
+            <button className="btn btn--dark" disabled={!!startBlock} title={startBlock || undefined}
                     onClick={() => step('in_progress')}>{t('ord.start')}</button>
           )}
+          {canEdit && <Link className="btn btn--ghost" to={`/orders/${o.id}/edit`}>✎ {t('of.edit')}</Link>}
           {/* Удаление — только у админа: заказ уносит с собой отчёт и деньги */}
           {me.role === 'admin' && (
             <button className="btn btn--danger" onClick={() => setDel(true)}>{t('del.title')}</button>
@@ -145,6 +153,10 @@ export default function OrderCard({ me }: { me: Me }) {
       {msg && <p className="err">{msg}</p>}
       {canDrive && needQuote && ['assigned', 'en_route', 'shopping'].includes(o.status) && (
         <p className="notice" data-kind="quiet">{t('scope.onsiteHint')}</p>
+      )}
+      {/* На телефоне подсказки у заблокированной кнопки не видно — говорим текстом */}
+      {canDrive && !needQuote && needBefore && ['en_route', 'shopping'].includes(o.status) && (
+        <p className="notice" data-kind="quiet">{t('proof.needBefore')}</p>
       )}
 
       {assign && (
@@ -170,8 +182,11 @@ export default function OrderCard({ me }: { me: Me }) {
           <RouteCard order={o} me={me} />
 
           {/* -------- отчёт -------- */}
+          {/* -------- фото «до» и «после» -------- */}
+          <ProofCard order={o} me={me} onDone={load} />
+
           {o.status === 'in_progress' && canDrive && !report && (
-            <ReportForm orderId={o.id} onDone={() => { load(); nav(0) }} />
+            <ReportForm orderId={o.id} needAfter={needAfter} onDone={() => { load(); nav(0) }} />
           )}
           {report && <ReportView report={report} me={me} />}
         </div>
@@ -268,6 +283,8 @@ export default function OrderCard({ me }: { me: Me }) {
                     <small className="muted">
                       {' '}{e.staff?.full_name ?? ''}
                       {e.type === 'status' && e.payload?.status ? t(`ord.status.${e.payload.status}`) : ''}
+                      {e.type === 'edited' && ` · ${editedText(e.payload, t, lang)}`}
+                      {e.type === 'created_manual' && e.payload?.source ? ` · ${t(`ord.src.${e.payload.source}`)}` : ''}
                     </small>
                   </span>
                   <span className="tiny muted">{dateTime(e.at, lang)}</span>
@@ -486,7 +503,19 @@ function RouteCard({ order, me }: { order: any; me: Me }) {
 /* ---------------------------------------------------------------- */
 /*  Отчёт мастера                                                    */
 /* ---------------------------------------------------------------- */
-function ReportForm({ orderId, onDone }: { orderId: string; onDone: () => void }) {
+/** Что именно поменяли при правке: «termin 20.10 12:00–14:00 → 22.10 08:00–10:00, prace». */
+function editedText(p: any, t: (k: string) => string, lang: any): string {
+  const fields: string[] = p?.fields ?? []
+  return fields.map((f) => {
+    if (f === 'date' && p.date) {
+      const side = (d: string | null, s: string | null) => d ? `${dateFull(d, lang)}${s ? ` ${s}` : ''}` : '—'
+      return `${t('edit.f.date')} ${side(p.date.from, p.date.slot_from)} → ${side(p.date.to, p.date.slot_to)}`
+    }
+    return t(`edit.f.${f}`)
+  }).join(', ')
+}
+
+function ReportForm({ orderId, needAfter, onDone }: { orderId: string; needAfter: boolean; onDone: () => void }) {
   const { t, lang } = useT()
   const [cash, setCash] = useState('')
   const [card, setCard] = useState('')
@@ -518,6 +547,7 @@ function ReportForm({ orderId, onDone }: { orderId: string; onDone: () => void }
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     if (needReceipt) { setErr(t('ord.needReceipt')); return }
+    if (needAfter) { setErr(t('proof.needAfter')); return }
     setBusy(true); setErr('')
     try {
       let path: string | null = null
@@ -603,8 +633,9 @@ function ReportForm({ orderId, onDone }: { orderId: string; onDone: () => void }
 
       {err && <p className="err">{err}</p>}
       {needReceipt && <p className="err">{t('ord.needReceipt')}</p>}
+      {needAfter && <p className="err">{t('proof.needAfter')}</p>}
 
-      <button className="btn btn--primary" disabled={busy || gross <= 0}>
+      <button className="btn btn--primary" disabled={busy || gross <= 0 || needAfter}>
         {busy ? <span className="spin" /> : t('ord.finish')}
       </button>
     </form>

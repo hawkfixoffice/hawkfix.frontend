@@ -626,3 +626,94 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .pr-name--ro { background: #f7f7f5; }
 .pr-name--ro input { background: transparent; color: var(--ink-3); cursor: default; }
 .pr-row__main input[data-pending], .pr-subname[data-pending] { border-color: #f0a500 !important; background: #fffaf0; }
+
+/* ============================================================
+   Заказ руками и правка заказа (2026-10-11)
+   ============================================================ */
+.chip--lg { min-height: 40px; padding: 8px 16px; font-size: 0.88rem; }
+.chips--scroll { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.chips--scroll .chip { flex: none; }
+.oform[aria-disabled] { opacity: 0.55; pointer-events: none; }
+.oform .card { display: grid; gap: 14px; align-content: start; }
+.oform .card__head { margin-bottom: 0; }
+/* итог не растягивается на высоту формы и едет вместе с прокруткой */
+.oform > .grid:last-child { align-self: start; position: sticky; top: 92px; }
+.osum .btn { width: 100%; }
+.osum__go { min-height: 52px; font-size: 1rem; }
+.osum .check { margin-top: 0; }
+
+/* подсказки адреса — в потоке под полем */
+.addrlist { display: grid; gap: 4px; }
+.addrlist__row {
+  text-align: start; min-height: var(--tap); padding: 8px 12px; border: 1px solid var(--line);
+  border-radius: var(--r-sm); background: var(--paper); font-size: 0.9rem;
+}
+.addrlist__row:hover, .addrlist__row:focus-visible { background: var(--accent-soft); border-color: var(--accent); }
+.addrlist__row b { font-weight: 600; }
+.addrlist__row small { color: var(--ink-3); }
+
+/* выбранные работы */
+.olines { display: grid; gap: 8px; }
+.oline {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: var(--r-sm); background: var(--paper);
+}
+.oline__name { min-width: 0; }
+.oline__name b { display: block; font-weight: 600; overflow-wrap: anywhere; }
+.oline__name small { font-size: 0.78rem; }
+.oline__sum { min-width: 72px; text-align: end; }
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--card); }
+.stepper button { width: 40px; height: 40px; border: 0; background: transparent; font-size: 1.2rem; border-radius: 50%; }
+.stepper button:hover { background: var(--paper-2); }
+.stepper input { width: 44px; height: 40px; border: 0; background: transparent; text-align: center; font-weight: 600; outline: none; font-variant-numeric: tabular-nums; }
+
+/* прайс: строки-кнопки */
+.picklist--scroll { max-height: 320px; overflow-y: auto; overscroll-behavior: contain; }
+.pickitem {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto 44px; align-items: center; gap: 10px;
+  min-height: var(--tap); padding: 8px 6px 8px 12px; border: 0; border-radius: var(--r-sm);
+  background: var(--paper-2); text-align: start; font-size: 0.9rem;
+}
+.pickitem:hover { background: var(--line); }
+.pickitem[data-on] { background: var(--accent-soft); }
+.pickitem__name { min-width: 0; overflow-wrap: anywhere; }
+.pickitem__add {
+  display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%;
+  background: var(--ink); color: var(--on-dark); font-weight: 600; font-size: 0.9rem;
+}
+.pickitem[data-on] .pickitem__add { background: var(--accent); color: var(--ink); }
+.ocustom { display: grid; grid-template-columns: minmax(0, 1fr) 130px auto; gap: 8px; align-items: start; }
+
+/* ============================================================
+   Фото «до» и «после» (2026-10-11)
+   ============================================================ */
+.proof__side { min-width: 0; }
+.proof__item { position: relative; }
+.proof__open { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.proof__open img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.proof__x {
+  position: absolute; top: 4px; right: 4px; width: 30px; height: 30px; border: 0; border-radius: 50%;
+  background: rgb(17 19 18 / 72%); color: #fff; font-size: 0.8rem;
+}
+.proof__add {
+  border: 2px dashed var(--line); background: var(--card); color: var(--ink-2);
+  display: grid; place-items: center; align-content: center; gap: 2px; cursor: pointer;
+}
+.proof__add span { font-size: 1.5rem; line-height: 1; }
+.proof__add small { font-size: 0.74rem; }
+.proof__add:hover { border-color: var(--forest); color: var(--forest); }
+
+@media (max-width: 1180px) {
+  .oform > .grid:last-child { position: static; }
+}
+@media (max-width: 640px) {
+  /* название во всю ширину, под ним в одну строку: количество, сумма, убрать */
+  .oline { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .oline__name { grid-column: 1 / -1; }
+  .oline .stepper { justify-self: start; }
+  .oline__sum { text-align: end; }
+  .ocustom { grid-template-columns: minmax(0, 1fr) 110px; }
+  .ocustom .btn { grid-column: 1 / -1; min-height: 48px; }
+  .chip--lg { min-height: 44px; }
+  .osum .btn { min-height: 50px; }
+}

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { sb, type Me } from '../lib/supabase'
 import { useT } from '../lib/i18n'
 import { money, dateShort, fromNow } from '../lib/fmt'
@@ -31,7 +31,7 @@ export default function Orders({ me }: { me: Me }) {
   useEffect(() => {
     setBusy(true)
     let req = sb.from('orders')
-      .select('id, order_no, status, deadline_at, scheduled_date, scheduled_slot, quoted_total, address, district, urgent, clients(id, name, phone), staff!orders_master_id_fkey(id, full_name), order_reports(gross, master_share)')
+      .select('id, order_no, status, deadline_at, scheduled_date, scheduled_slot, quoted_total, address, district, urgent, source, clients(id, name, phone), staff!orders_master_id_fkey(id, full_name), order_reports(gross, master_share)')
       .order('deadline_at', { ascending: true, nullsFirst: false })
       .limit(200)
 
@@ -99,6 +99,8 @@ export default function Orders({ me }: { me: Me }) {
           <div className="field" style={{ minWidth: 240 }}>
             <input placeholder={t('common.search')} value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
+          {/* Клиент написал в WhatsApp или позвонил — заказ заводит сотрудник */}
+          <Link className="btn btn--primary" to="/orders/new">＋ {t('of.new')}</Link>
         </div>
       </div>
 
@@ -144,6 +146,7 @@ export default function Orders({ me }: { me: Me }) {
                     <td className="num">
                       <b>{o.order_no}</b>
                       {o.urgent && <span className="badge badge--warn" style={{ marginInlineStart: 6 }}>!</span>}
+                      {o.source && <small className="muted" style={{ display: 'block' }}>{t(`ord.src.${o.source}`)}</small>}
                     </td>
                     <td>
                       <div className="who"><span style={{ minWidth: 0 }}>

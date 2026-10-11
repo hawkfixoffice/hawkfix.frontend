@@ -76,6 +76,7 @@ function AdminView({ me }: { me: Me }) {
         <div className="split">
           <QuietBadge />
           <Range {...range} />
+          <Link className="btn btn--primary" to="/orders/new">＋ {t('of.new')}</Link>
         </div>
       </div>
 
@@ -184,7 +185,10 @@ function ManagerView({ me }: { me: Me }) {
           <h1 className="h1">{t('dash.hello')}, <b>{me.full_name.split(' ')[0]}!</b></h1>
           <p className="sub">{t('dash.dispatch')}</p>
         </div>
-        <QuietBadge />
+        <div className="split">
+          <QuietBadge />
+          <Link className="btn btn--primary" to="/orders/new">＋ {t('of.new')}</Link>
+        </div>
       </div>
 
       <NewNotice />
@@ -326,6 +330,9 @@ function MasterView({ me }: { me: Me }) {
         <div>
           <h1 className="h1">{t('dash.hello')}, <b>{me.full_name.split(' ')[0]}!</b></h1>
           <p className="sub">{t('dash.myOrders')}</p>
+        </div>
+        <div className="split">
+          <Link className="btn btn--primary" to="/orders/new">＋ {t('of.new')}</Link>
         </div>
       </div>
 

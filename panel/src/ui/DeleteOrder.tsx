@@ -37,6 +37,9 @@ export default function DeleteOrder({ order, onClose, onDone }: {
     // всё равно удалён, а имена файлов лежат в снимке корзины.
     const files: string[] = data?.receipts ?? []
     if (files.length) await sb.storage.from('receipts').remove(files).catch(() => {})
+    // Фото «до/после» — тем же путём
+    const pics: string[] = data?.photos ?? []
+    if (pics.length) await sb.storage.from('order-photos').remove(pics).catch(() => {})
 
     setBusy(false)
     onDone(order.order_no)
