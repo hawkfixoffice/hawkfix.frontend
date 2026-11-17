@@ -301,3 +301,27 @@
 .s-prices b small, .irow__unit { font-weight: 500; }
 .chip--pick[data-on='true'] .num { color: var(--on-dark-2); }
 .calcbar__sum { font-weight: var(--price-fw); }
+
+/* ---------- Быстрый старт с первого экрана (2026-11-17) ---------- */
+.s-quick { margin-top: var(--sp-5); display: grid; gap: var(--sp-3); }
+.s-quick__t { margin: 0; font-size: 0.9375rem; color: var(--ink-3); }
+.s-quick__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.s-quick__item {
+  display: inline-flex; align-items: center; gap: 10px; min-height: var(--tap);
+  padding: 8px 12px 8px 16px; border-radius: var(--r-pill);
+  border: 1px solid var(--line); background: var(--card); color: var(--ink); text-decoration: none;
+  font-size: 0.9375rem; transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.s-quick__item:hover { border-color: var(--ink); }
+.s-quick__item b { font-size: 0.875rem; white-space: nowrap; }
+.s-quick__item svg { color: var(--ink-3); }
+@media (max-width: 640px) {
+  .s-quick { margin-top: var(--sp-4); }
+  .s-quick__list { display: grid; grid-template-columns: 1fr; gap: 6px; }
+  .s-quick__item { justify-content: space-between; width: 100%; }
+  .s-quick__item span { flex: 1 1 auto; min-width: 0; }
+}
+
+/* Cookie: «Tylko niezbędne» была тёмной обводкой на тёмной плашке и не читалась */
+.cookie .btn--ghost { color: var(--on-dark); border-color: rgb(255 255 255 / 55%); background: transparent; }
+.cookie .btn--ghost:hover { background: var(--on-dark); color: var(--ink); }

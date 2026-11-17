@@ -89,6 +89,6 @@ export function formatMoney(n: number, settings: Settings, locale: Locale): stri
 export function formatHours(h: number, locale: Locale): string {
   if (h <= 0) return '—'
   const rounded = Math.round(h * 10) / 10
-  const unit = locale === 'pl' ? 'godz.' : locale === 'en' ? 'h' : 'ч'
+  const unit = locale === 'pl' ? 'godz.' : locale === 'en' ? 'h' : locale === 'uk' ? 'год.' : 'ч'
   return `${String(rounded).replace('.', locale === 'en' ? '.' : ',')} ${unit}`
 }

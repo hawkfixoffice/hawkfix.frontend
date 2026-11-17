@@ -564,6 +564,22 @@ Deno.serve(async (req) => {
   const key = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
   if (!url || !key) return json({ error: 'not_configured' }, 500, origin)
 
+  // Повтор той же заявки (ответ на первую попытку потерялся в сети):
+  // отдаём уже записанную, второй заявки и второго письма не будет
+  const reqRaw = str(body.requestId, 40)
+  const requestId = reqRaw && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(reqRaw) ? reqRaw : null
+  const findRepeat = async () => {
+    if (!requestId) return null
+    const r = await fetch(`${url}/rest/v1/leads?request_id=eq.${requestId}&select=id,order_no`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    })
+    if (!r.ok) return null
+    const [hit] = await r.json()
+    return hit ?? null
+  }
+  const repeat = await findRepeat()
+  if (repeat) return json({ ok: true, id: repeat.id, orderNo: repeat.order_no ?? '', repeat: true }, 200, origin)
+
   const res = await fetch(`${url}/rest/v1/leads`, {
     method: 'POST',
     headers: {
@@ -572,9 +588,13 @@ Deno.serve(async (req) => {
       'Content-Type': 'application/json',
       Prefer: 'return=representation',
     },
-    body: JSON.stringify(row),
+    body: JSON.stringify(requestId ? { ...row, request_id: requestId } : row),
   })
 
+  if (res.status === 409) {
+    const again = await findRepeat()
+    if (again) return json({ ok: true, id: again.id, orderNo: again.order_no ?? '', repeat: true }, 200, origin)
+  }
   if (!res.ok) {
     console.error('insert failed', res.status, await res.text())
     return json({ error: 'store_failed' }, 500, origin)

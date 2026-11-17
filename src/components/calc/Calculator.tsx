@@ -38,7 +38,11 @@ export default function Calculator() {
   // На телефоне смета и форма живут в нижнем листе, а не в колонке справа
   const [sheet, setSheet] = useState(false)
   const [near, setNear] = useState(false)
+  // «Опишу своими словами»: форма открывается с полем описания впереди
+  const [describe, setDescribe] = useState(0)
   const root = useRef<HTMLDivElement>(null)
+  const sumRef = useRef<HTMLElement>(null)
+  const barBtn = useRef<HTMLButtonElement>(null)
   // Имя из прошлой заявки. Читаем в эффекте, а не при рендере: страницы
   // статические, и localStorage на сервере нет — иначе разъедется гидрация.
   const [hello, setHello] = useState('')
@@ -85,14 +89,49 @@ export default function Calculator() {
     return () => io.disconnect()
   }, [])
 
-  // Лист закрывается по Esc и держит прокрутку страницы под собой
+  // Лист закрывается по Esc и держит прокрутку страницы под собой.
+  // Фокус уходит внутрь листа и возвращается на кнопку панели после закрытия:
+  // иначе клавиатура и скринридер оставались «за» листом.
   useEffect(() => {
     if (!sheet) return
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setSheet(false) }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
-    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
+    // Лист въезжает с `visibility: hidden` → `visible` (300 мс): фокус,
+    // поставленный раньше, браузер молча сбрасывает
+    const id = window.setTimeout(() => {
+      const box = sumRef.current
+      const first = box?.querySelector<HTMLElement>('textarea:not([disabled]), input:not([type=hidden]):not([disabled])')
+      ;(first ?? box)?.focus({ preventScroll: true })
+    }, 320)
+    return () => {
+      window.clearTimeout(id)
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+      barBtn.current?.focus({ preventScroll: true })
+    }
   }, [sheet])
+
+  // Быстрый выбор из героя главной: работа сразу ложится в смету
+  useEffect(() => {
+    const onPick = (e: Event) => {
+      const key = (e as CustomEvent<string>).detail
+      const it = items.find((i) => i.key === key)
+      if (it && p.qtyOf(key) === 0) p.add(key, it.min)
+    }
+    window.addEventListener('hawkfix:pick', onPick)
+    return () => window.removeEventListener('hawkfix:pick', onPick)
+  }, [items, p.qtyOf, p.add])
+
+  /** Работы нет в списке — открываем форму с полем «что нужно сделать». */
+  function openDescribe() {
+    setDescribe((n) => n + 1)
+    if (window.matchMedia('(max-width: 900px)').matches) setSheet(true)
+    else {
+      sumRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      requestAnimationFrame(() => document.getElementById('lf-comment')?.focus({ preventScroll: true }))
+    }
+  }
 
   const q = query.trim().toLocaleLowerCase(locale)
   let found: typeof items | null = null
@@ -109,9 +148,11 @@ export default function Calculator() {
   const byKey = useMemo(() => new Map(items.map((i) => [i.key, i])), [items])
   const popular = POPULAR.map((k) => byKey.get(k)).filter(Boolean) as typeof items
   const rowLabels = { add: t.a11y.add, minus: t.a11y.minus, plus: t.a11y.plus, remove: t.a11y.remove }
+  const C = CALC_TEXT[locale] ?? CALC_TEXT.pl
+  const byNameCount = found ? found.filter((i) => nameOf(i, locale).toLocaleLowerCase(locale).includes(q)).length : 0
 
   return (
-    <div className="calc" id="wycena" ref={root}>
+    <div className="calc" ref={root}>
       {/* ------------------------- выбор работ ------------------------- */}
       <div className="calc__pick">
         {hello && (
@@ -144,6 +185,15 @@ export default function Calculator() {
 
         {found ? (
           found.length ? (
+            <>
+            {byNameCount === 0 && (
+              <div className="calc__miss">
+                <p>{C.related.replace('{q}', query.trim())}</p>
+                <button type="button" className="btn btn--ghost calc__describe" onClick={openDescribe}>
+                  <Icon name="sparkles" size={16} /> {C.describe}
+                </button>
+              </div>
+            )}
             <ul className="ilist ilist--card">
               {found.map((i) => (
                 <ItemRow
@@ -153,8 +203,14 @@ export default function Calculator() {
                 />
               ))}
             </ul>
+            </>
           ) : (
-            <p className="calc__empty">{settings.strings[locale].searchEmpty}</p>
+            <div className="calc__miss calc__miss--none">
+              <p>{C.none.replace('{q}', query.trim())}</p>
+              <button type="button" className="btn btn--primary calc__describe" onClick={openDescribe}>
+                {C.describe} <Icon name="arrow" size={16} />
+              </button>
+            </div>
           )
         ) : (
           <>
@@ -171,7 +227,7 @@ export default function Calculator() {
                     >
                       <Icon name={on ? 'check' : 'plus'} size={14} />
                       {nameOf(i, locale)}
-                      <span className="num">{i.ptype === 'scope' ? priceText(i, locale, settings).main : i.price}</span>
+                      <span className="num">{i.ptype === 'scope' ? priceText(i, locale, settings).main : `${i.price} ${settings.currency}`}</span>
                     </button>
                   )
                 })}
@@ -203,7 +259,7 @@ export default function Calculator() {
                       <span className="grp__text">
                         <span className="grp__name">{g.name[locale] ?? g.key}</span>
                         <span className="grp__meta num">
-                          <span className="price">{t.prices.from} {from} {settings.currency}</span> · {list.length} {t.prices.positions}
+                          <span className="price">{t.prices.from} {from} {settings.currency}</span> · {nPositions(list.length, locale)}
                         </span>
                       </span>
                       {chosen > 0 && <span className="grp__badge num">{chosen}</span>}
@@ -262,7 +318,7 @@ export default function Calculator() {
         />
       )}
       <aside
-        className="calc__sum" aria-label={t.home.calcLabel}
+        className="calc__sum" aria-label={t.home.calcLabel} ref={sumRef} tabIndex={-1}
         data-open={sheet || undefined}
         role={sheet ? 'dialog' : undefined}
         aria-modal={sheet ? true : undefined}
@@ -281,7 +337,7 @@ export default function Calculator() {
           </div>
 
           {sent ? null : quote.lines.length === 0 ? (
-            <p className="sum__empty">{settings.strings[locale].submitEmpty}</p>
+            <p className="sum__empty">{C.emptySum}</p>
           ) : (
             <ul className="sum__lines">
               {quote.lines.map((l) => (
@@ -304,7 +360,7 @@ export default function Calculator() {
             </ul>
           )}
 
-          {!sent && (
+          {!sent && quote.lines.length > 0 && (
             <div className="rush" data-on={rush || undefined}>
               {rush ? (
                 <>
@@ -343,7 +399,7 @@ export default function Calculator() {
             </p>
           )}
 
-          {!sent && (
+          {!sent && quote.lines.length > 0 && (
             <div className="sum__total">
               <div>
                 <p className="sum__totalLabel">{totalLabel(locale)}</p>
@@ -352,32 +408,45 @@ export default function Calculator() {
                   {formatMoney(shownTotal, settings, locale)}
                 </p>
               </div>
-              <div className="sum__time">
+              <div className="sum__time" title={C.workTime}>
                 <Icon name="clock" size={15} />
-                <span className="num">{formatHours(quote.hours, locale)}</span>
+                <span className="num">{C.approx} {formatHours(quote.hours, locale)} {C.ofWork}</span>
               </div>
             </div>
           )}
 
           <LeadForm
-            quote={quote} urgent={p.urgent} onWhen={setWhen}
+            quote={quote} urgent={p.urgent} onWhen={setWhen} describe={describe}
             onSent={() => { card.capture(); p.clear(); setSent(true) }}
           />
         </div>
       </aside>
 
       {/* Панель с ценой на телефоне: цена копится внизу, форма — по кнопке */}
-      <div className="calcbar" data-show={near && !sheet && !sent ? 'true' : undefined}>
-        <div className="calcbar__info">
-          <span className="calcbar__label">
-            {totalLabel(locale)}
-            {quote.count > 0 && <> · {quote.count} {t.prices.positions}</>}
-          </span>
-          <span className="calcbar__sum num">{quote.hasScope ? `${fromWord(locale)} ` : ''}{formatMoney(shownTotal, settings, locale)}</span>
-        </div>
-        <button type="button" className="btn btn--primary calcbar__go" onClick={() => setSheet(true)}>
-          {settings.strings[locale].next} <Icon name="arrow" size={17} />
-        </button>
+      <div className="calcbar" data-show={near && !sheet && !sent ? 'true' : undefined} data-empty={quote.count === 0 || undefined}>
+        {quote.count > 0 ? (
+          <>
+            <div className="calcbar__info">
+              <span className="calcbar__label">
+                {totalLabel(locale)} · {nPositions(quote.count, locale)}
+                {quote.minimumApplied && <> · {C.minShort}</>}
+              </span>
+              <span className="calcbar__sum num">{quote.hasScope ? `${fromWord(locale)} ` : ''}{formatMoney(shownTotal, settings, locale)}</span>
+            </div>
+            <button ref={barBtn} type="button" className="btn btn--primary calcbar__go" onClick={() => setSheet(true)}>
+              {C.order} <Icon name="arrow" size={17} />
+            </button>
+          </>
+        ) : (
+          <>
+            <div className="calcbar__info">
+              <span className="calcbar__hint">{C.barHint}</span>
+            </div>
+            <button ref={barBtn} type="button" className="btn btn--ghost calcbar__go calcbar__alt" onClick={openDescribe}>
+              {C.describeShort}
+            </button>
+          </>
+        )}
       </div>
     </div>
   )
@@ -415,23 +484,23 @@ function isRush(iso: string): boolean {
 const RUSH: Record<string, { title: string; note: string; hint: string }> = {
   pl: {
     title: 'Pilny przyjazd — dziś lub jutro',
-    note: 'Doliczamy +{pct}% do robocizny, nie więcej niż {max}.',
-    hint: 'Termin wybierasz w formularzu. Za dziś lub jutro doliczamy +{pct}%.',
+    note: 'Doliczamy +{pct}% do wartości zlecenia, nie więcej niż {max}.',
+    hint: 'Termin wybierasz w formularzu. Przyjazd dziś lub jutro: +{pct}%, od pojutrza bez dopłaty.',
   },
   uk: {
     title: 'Терміновий виїзд — сьогодні або завтра',
-    note: 'Додаємо +{pct}% до роботи, але не більше ніж {max}.',
-    hint: 'Дату обираєте у формі. За сьогодні або завтра додаємо +{pct}%.',
+    note: 'Додаємо +{pct}% до вартості замовлення, але не більше ніж {max}.',
+    hint: 'Дату обираєте у формі. Сьогодні або завтра: +{pct}%, з післязавтра без доплати.',
   },
   ru: {
     title: 'Срочный выезд — сегодня или завтра',
-    note: 'Добавляем +{pct}% к работам, но не больше {max}.',
-    hint: 'Дату выбираете в форме. За сегодня или завтра добавляем +{pct}%.',
+    note: 'Добавляем +{pct}% к стоимости заказа, но не больше {max}.',
+    hint: 'Дату выбираете в форме. Сегодня или завтра: +{pct}%, с послезавтра без доплаты.',
   },
   en: {
     title: 'Rush visit — today or tomorrow',
-    note: 'We add +{pct}% to the labour, capped at {max}.',
-    hint: 'You pick the date in the form. Today or tomorrow adds +{pct}%.',
+    note: 'We add +{pct}% to the order value, capped at {max}.',
+    hint: 'You pick the date in the form. Today or tomorrow: +{pct}%, from the day after — no surcharge.',
   },
 }
 
@@ -452,3 +521,52 @@ const greeting = (l: string, name: string) =>
   : l === 'uk' ? `Привіт, ${name}! Раді бачити знову.`
   : l === 'ru' ? `Привет, ${name}! Рады видеть снова.`
   : `Hi, ${name}! Good to see you again.`
+
+/** «1 pozycja / 3 pozycje / 12 pozycji» — подпись не берём из редактора:
+ *  там она правится под счётчик на главной и с числами не согласуется. */
+export function nPositions(n: number, l: string): string {
+  const forms: Record<string, Record<string, string>> = {
+    pl: { one: 'pozycja', few: 'pozycje', many: 'pozycji', other: 'pozycji' },
+    uk: { one: 'позиція', few: 'позиції', many: 'позицій', other: 'позиції' },
+    ru: { one: 'позиция', few: 'позиции', many: 'позиций', other: 'позиции' },
+    en: { one: 'item', other: 'items' },
+  }
+  const f = forms[l] ?? forms.pl
+  const cat = new Intl.PluralRules(l === 'uk' ? 'uk' : l).select(n)
+  return `${n} ${f[cat] ?? f.other}`
+}
+
+const CALC_TEXT: Record<string, Record<string, string>> = {
+  pl: {
+    order: 'Zamów', barHint: 'Zaznacz pracę z listy albo opisz problem',
+    describe: 'Opiszę problem własnymi słowami', describeShort: 'Opisz problem',
+    related: 'Nie mamy „{q}” wprost na liście. Zobacz podobne prace albo opisz problem — wycenimy osobno.',
+    none: 'Nie mamy „{q}” na liście. Opisz problem własnymi słowami — wycenimy osobno i oddzwonimy.',
+    emptySum: 'Zaznacz pracę z listy — cena pojawi się tutaj. Nie ma jej w cenniku? Opisz problem poniżej, wycenimy osobno.',
+    minShort: 'minimum wyjazdu', approx: 'ok.', ofWork: 'pracy', workTime: 'Szacowany czas pracy na miejscu',
+  },
+  uk: {
+    order: 'Замовити', barHint: 'Позначте роботу зі списку або опишіть проблему',
+    describe: 'Опишу проблему своїми словами', describeShort: 'Описати проблему',
+    related: 'Немає «{q}» прямо в списку. Перегляньте схожі роботи або опишіть проблему — оцінимо окремо.',
+    none: 'Немає «{q}» у списку. Опишіть проблему своїми словами — оцінимо окремо й передзвонимо.',
+    emptySum: 'Позначте роботу зі списку — ціна з’явиться тут. Немає в прайсі? Опишіть проблему нижче, оцінимо окремо.',
+    minShort: 'мінімум виїзду', approx: '≈', ofWork: 'роботи', workTime: 'Орієнтовний час роботи на місці',
+  },
+  ru: {
+    order: 'Заказать', barHint: 'Отметьте работу из списка или опишите проблему',
+    describe: 'Опишу проблему своими словами', describeShort: 'Описать проблему',
+    related: 'Нет «{q}» прямо в списке. Посмотрите похожие работы или опишите проблему — оценим отдельно.',
+    none: 'Нет «{q}» в списке. Опишите проблему своими словами — оценим отдельно и перезвоним.',
+    emptySum: 'Отметьте работу из списка — цена появится здесь. Нет в прайсе? Опишите проблему ниже, оценим отдельно.',
+    minShort: 'минимум выезда', approx: '≈', ofWork: 'работы', workTime: 'Примерное время работы на месте',
+  },
+  en: {
+    order: 'Order', barHint: 'Pick a job from the list or describe the problem',
+    describe: 'I’ll describe it in my own words', describeShort: 'Describe it',
+    related: '“{q}” is not on the list as such. See similar jobs or describe the problem — we will price it separately.',
+    none: '“{q}” is not on the list. Describe the problem in your own words — we will price it and call back.',
+    emptySum: 'Pick a job from the list — the price shows up here. Not in the price list? Describe the problem below and we will price it.',
+    minShort: 'minimum charge', approx: '≈', ofWork: 'of work', workTime: 'Estimated time of work on site',
+  },
+}

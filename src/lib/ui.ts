@@ -10,6 +10,8 @@ interface UiBase {
   home: {
     benefitLabel: string; benefitHead: string; benefitHeadTail: string; benefitLead: string
     minVisitTitle: string; minVisitNote: string
+    /** Подписи под счётчиками героя — отдельно от меню и прайса */
+    statPositions: string; statServices: string
     included: string; excluded: string
     calcLabel: string; calcHead: string; calcLead: string
     stepsLabel: string; stepsHead: string
@@ -53,6 +55,7 @@ const BASE: Record<Locale, UiBase> = {
     home: {
       benefitLabel: 'Co robimy', benefitHead: 'Jedna ekipa na', benefitHeadTail: 'całe mieszkanie.',
       benefitLead: 'Hydraulika, elektryka, meble, ściany, sprzątanie, przeprowadzki i ogród. Nie szukasz pięciu fachowców — dzwonisz raz.',
+      statPositions: 'Usług naprawczych', statServices: 'Kategorii',
       minVisitTitle: 'Minimalna wizyta', minVisitNote: 'Dojazd uzupełnia koszt prac do minimum. Płatne kilometry poza miastem liczymy osobno.',
       included: 'W cenie', excluded: 'Poza ceną',
       calcLabel: 'Wycena', calcHead: 'Kosztorys składasz sam.', calcLead: 'Zaznacz prace z listy — od razu widzisz cenę i czas. Kosztorys wysyłasz jednym przyciskiem.',
@@ -111,6 +114,7 @@ const BASE: Record<Locale, UiBase> = {
     home: {
       benefitLabel: 'Що ми робимо', benefitHead: 'Одна бригада на', benefitHeadTail: 'усю квартиру.',
       benefitLead: 'Сантехніка, електрика, меблі, стіни, прибирання, переїзди та сад. Не шукаєте п’ятьох майстрів — телефонуєте один раз.',
+      statPositions: 'Ремонтних послуг', statServices: 'Категорій',
       minVisitTitle: 'Мінімальний виїзд', minVisitNote: 'Дорога добирає вартість робіт до мінімуму. Платні кілометри за містом рахуємо окремо.',
       included: 'У ціні', excluded: 'Поза ціною',
       calcLabel: 'Кошторис', calcHead: 'Кошторис складаєте самі.', calcLead: 'Позначте роботи зі списку — одразу бачите ціну й час. Надсилаєте однією кнопкою.',
@@ -169,6 +173,7 @@ const BASE: Record<Locale, UiBase> = {
     home: {
       benefitLabel: 'Что мы делаем', benefitHead: 'Одна бригада на', benefitHeadTail: 'всю квартиру.',
       benefitLead: 'Сантехника, электрика, мебель, стены, уборка, переезды и сад. Не ищете пятерых мастеров — звоните один раз.',
+      statPositions: 'Ремонтных услуг', statServices: 'Категорий',
       minVisitTitle: 'Минимальный выезд', minVisitNote: 'Дорога добирает стоимость работ до минимума. Платные километры за городом считаем отдельно.',
       included: 'В цене', excluded: 'Вне цены',
       calcLabel: 'Смета', calcHead: 'Смету вы составляете сами.', calcLead: 'Отметьте работы из списка — сразу видите цену и время. Отправляете одной кнопкой.',
@@ -227,6 +232,7 @@ const BASE: Record<Locale, UiBase> = {
     home: {
       benefitLabel: 'What we do', benefitHead: 'One crew for', benefitHeadTail: 'the whole flat.',
       benefitLead: 'Plumbing, electrics, furniture, walls, cleaning, moving and the garden. You don’t hunt for five trades — you call once.',
+      statPositions: 'Repair services', statServices: 'Categories',
       minVisitTitle: 'Minimum visit', minVisitNote: 'Travel tops the labour up to the minimum. Paid kilometres outside the city are counted separately.',
       included: 'Included', excluded: 'Not included',
       calcLabel: 'Quote', calcHead: 'You build the quote yourself.', calcLead: 'Tick the jobs — the price and time appear straight away. Send it with one button.',

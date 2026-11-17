@@ -329,3 +329,78 @@
   font-size: 0.75rem; font-weight: 600; transition: background var(--dur-fast) var(--ease);
 }
 .shots__add:hover { background: var(--accent-soft); border-color: var(--accent-text); }
+
+/* ============================================================
+   UX-доработки пути «смета → заявка» (2026-11-17)
+   ============================================================ */
+
+/* Якорь «#wycena» теперь на секции целиком: заголовок и подсказка
+   «Zaznacz prace z listy…» видны сразу после перехода */
+#wycena { scroll-margin-top: 84px; }
+
+/* Поиск без точного совпадения: объясняем и даём выход — описать своими словами */
+.calc__miss {
+  display: grid; gap: var(--sp-3); justify-items: start;
+  padding: var(--sp-4) var(--sp-5); margin-bottom: var(--sp-3);
+  background: var(--paper-2); border-radius: var(--r-xs);
+}
+.calc__miss p { margin: 0; color: var(--ink-2); line-height: 1.45; }
+.calc__miss--none p { color: var(--ink); font-size: 1.05rem; }
+.calc__describe { min-height: var(--tap); }
+
+/* Нижняя панель без выбранных работ — подсказка вместо «0 zł» */
+.calcbar__hint { font-size: 0.875rem; line-height: 1.25; color: var(--on-dark); white-space: normal; }
+.calcbar .calcbar__alt { color: var(--on-dark); border-color: rgb(255 255 255 / 55%); background: transparent; }
+.calcbar .calcbar__alt:hover { background: var(--on-dark); color: var(--ink); }
+
+/* Дни приезда кнопками: пальцем проще, чем системный календарь,
+   и сразу видно, где +50 % и что выходных нет */
+.days { gap: 8px; }
+.days__row {
+  display: flex; gap: 6px; overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity; padding-bottom: 4px; margin-inline: -2px; padding-inline: 2px;
+  scrollbar-width: thin;
+}
+.day {
+  flex: none; scroll-snap-align: start; min-width: 74px; min-height: 62px;
+  display: grid; justify-items: center; align-content: center; gap: 2px; position: relative;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  border-radius: var(--r-sm); padding: 8px 10px; cursor: pointer;
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.day:hover { border-color: var(--ink); }
+.day[data-on] { background: var(--accent); border-color: var(--accent); }
+.day__w { font-size: 0.8125rem; font-weight: 600; text-transform: capitalize; }
+.day__d { font-size: 0.8125rem; color: var(--ink-2); }
+.day__rush {
+  font-size: 0.6875rem; font-weight: 600; line-height: 1; padding: 3px 6px;
+  border-radius: var(--r-pill); background: var(--ink); color: var(--on-dark);
+}
+.field__hint { margin: 0; font-size: 0.8125rem; color: var(--ink-3); line-height: 1.4; }
+
+/* «Нет фото под рукой» */
+.lead__later {
+  display: flex; gap: 10px; align-items: flex-start; cursor: pointer;
+  font-size: 0.875rem; line-height: 1.35; color: var(--ink-2); min-height: var(--tap); padding-top: 4px;
+}
+.lead__later input { width: 20px; height: 20px; flex: none; accent-color: var(--forest); margin: 0; }
+
+/* Итог в сводке — последнее, что человек сверяет перед отправкой */
+.lead__recapTotal { border-top: 1px solid var(--line-card); padding-top: 6px; margin-top: 2px; }
+.lead__recapTotal b { color: var(--price, var(--forest)); font-weight: 700; }
+
+/* Ошибка отправки — заметным блоком над кнопками, с выходом в WhatsApp */
+.lead__fail {
+  display: grid; gap: 8px; padding: 14px 16px; border-radius: var(--r-sm);
+  background: #fdecea; border: 1px solid #f3b8b1; color: #7a1d12;
+  scroll-margin-block: 120px;
+}
+.lead__failTitle { margin: 0; font-weight: 700; }
+.lead__failText { margin: 0; font-size: 0.875rem; line-height: 1.4; }
+.lead__wa { justify-self: start; min-height: var(--tap); gap: 8px; }
+.lead__fail .lead__wa { background: #fff; }
+
+/* Экран успеха: что дальше и куда писать */
+.lead--ok .lead__wa { justify-self: center; margin-top: 4px; }
+.lead__okHelp { margin: 0; font-size: 0.8125rem; color: var(--ink-3); }
+.lead__okHelp a { color: var(--accent-text); font-weight: 600; }

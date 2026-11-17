@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import type { Quote } from '../../lib/quote'
@@ -15,6 +15,7 @@ import Receipt, { type ReceiptData } from './Receipt'
 import { rid, toWebp } from '../../lib/webp'
 import { fromWord, nameOf } from '../../lib/price'
 import { SUPA_KEY, SUPA_URL, anonHeaders } from '../../lib/supa'
+import { CONTACT } from '../../lib/ui'
 
 /** Адрес edge-функции. Значение публичное по назначению, поэтому дефолт зашит:
  *  без него сборка, собранная без переменной окружения, отправляла заявку
@@ -48,8 +49,10 @@ interface Shot { path: string; url: string; size: number }
 /** Заявка заполняется по шагам: контакты → адрес → время → детали.
  *  Раньше все восемь полей стояли одним экраном, и на телефоне форма
  *  занимала два с половиной экрана прокрутки. */
-export default function LeadForm({ quote, urgent, onWhen, onSent }: {
+export default function LeadForm({ quote, urgent, onWhen, onSent, describe = 0 }: {
   quote: Quote; urgent: boolean; onWhen: (iso: string) => void; onSent: () => void
+  /** Счётчик нажатий «Опишу проблему»: каждое нажатие ставит фокус в описание */
+  describe?: number
 }) {
   const { locale, t } = usePage()
   const T = STEP_TEXT[locale] ?? STEP_TEXT.pl
@@ -66,9 +69,15 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
   const [shots, setShots] = useState<Shot[]>([])
   const [shooting, setShooting] = useState(0)
   const [shotErr, setShotErr] = useState('')
+  // «Нет фото под рукой» — заявка уходит без снимков, фото придут в WhatsApp
+  const [photoLater, setPhotoLater] = useState(false)
+  const errBox = useRef<HTMLDivElement>(null)
   const [sid] = useState(() => (typeof crypto !== 'undefined' && 'randomUUID' in crypto
     ? crypto.randomUUID() : `${rid()}${rid()}-0000-4000-8000-${rid()}${rid()}`.slice(0, 36)))
   const STEPS: readonly Step[] = quote.hasScope ? PHOTO_STEPS : BASE_STEPS
+  // Смета пуста — описание работы становится первым и обязательным полем:
+  // раньше человек проходил четыре шага, а «Отправить» молча не срабатывала
+  const noItems = quote.lines.length === 0
 
   // Имя, телефон и адрес помним на устройстве — второй заказ короче первого
   useEffect(() => {
@@ -88,19 +97,35 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
   const blur = (k: string) => () => setTouched((v) => ({ ...v, [k]: true }))
 
   const nameBad = !f.name.trim()
-  const phoneBad = f.phone.replace(/\D/g, '').length < 9
+  const phoneDigits = f.phone.replace(/\D/g, '').length
+  const phoneBad = phoneDigits < 9
+  const commentBad = noItems && !f.comment.trim()
   const emailBad = f.email.trim() !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.trim())
   const errName = touched.name && nameBad
   const errPhone = touched.phone && phoneBad
   const errEmail = touched.email && emailBad
-  const empty = quote.lines.length === 0 && !f.comment.trim()
+  const errComment = touched.comment && commentBad
+  const empty = commentBad
 
   const today = new Date()
-  const minDate = today.toISOString().slice(0, 10)
+  // Дата по местному календарю устройства, а не по UTC: с полуночи до
+  // 01:00–02:00 по Варшаве `toISOString()` давал вчерашний день
+  const todayIso = isoLocal(today)
   // Сегодняшние слоты, которые уже прошли, выбирать не из чего
-  const slots = f.when === minDate
+  const slots = f.when === todayIso
     ? SLOTS.filter((s) => Number(s.slice(0, 2)) > today.getHours())
     : SLOTS
+  // Дни приезда — кнопками: только будни (пн–пт, как в «Kiedy» на сайте),
+  // сегодня — если ещё остались окна
+  const days = workDays(today, 10)
+
+  // «Опишу своими словами» снаружи формы: на первый шаг и курсор в описание
+  useEffect(() => {
+    if (!describe) return
+    if (step !== 'who') { setDir('back'); setStep('who') }
+    const id = window.setTimeout(() => document.getElementById('lf-comment')?.focus({ preventScroll: false }), 120)
+    return () => window.clearTimeout(id)
+  }, [describe])
 
   const idx = Math.max(0, STEPS.indexOf(step))
   // Позицию «за объём» убрали из сметы, пока человек был на шаге фото
@@ -122,17 +147,26 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
     })
   }
 
+  /** Курсор — в первое поле с ошибкой: на телефоне его иначе ищут глазами */
+  function focusBad(ids: Array<[boolean, string]>) {
+    const bad = ids.find(([b]) => b)
+    if (bad) window.requestAnimationFrame(() => document.getElementById(bad[1])?.focus())
+  }
+
   function next() {
     if (step === 'who') {
-      setTouched((v) => ({ ...v, name: true, phone: true }))
-      if (nameBad || phoneBad) return
+      setTouched((v) => ({ ...v, name: true, phone: true, comment: true }))
+      if (commentBad || nameBad || phoneBad) {
+        focusBad([[commentBad, 'lf-comment'], [nameBad, 'lf-name'], [phoneBad, 'lf-phone']])
+        return
+      }
       saveProfile({ name: f.name, phone: f.phone, email: f.email, address: f.address })
       // Следующий по списку: «Фото», если в смете работы «за объём», иначе «Адрес»
       return go(STEPS[idx + 1])
     }
     if (step === 'photo') {
       if (shooting) return
-      if (!shots.length) { setShotErr(T.photoNeed); return }
+      if (!shots.length && !photoLater) { setShotErr(T.photoNeed); return }
       return go('where')
     }
     if (step === 'where') return go('when')
@@ -142,11 +176,10 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
   async function submit(e?: React.FormEvent) {
     e?.preventDefault()
     if (step !== 'send') { next(); return }
-    setTouched((v) => ({ ...v, name: true, phone: true }))
-    if (nameBad || phoneBad) { go('who'); return }
-    if (emailBad) { setTouched((v) => ({ ...v, email: true })); return }
-    if (empty) return
-    if (quote.hasScope && !shots.length) { setShotErr(T.photoNeed); go('photo'); return }
+    setTouched((v) => ({ ...v, name: true, phone: true, comment: true }))
+    if (nameBad || phoneBad || empty) { go('who'); return }
+    if (emailBad) { setTouched((v) => ({ ...v, email: true })); focusBad([[true, 'lf-email']]); return }
+    if (quote.hasScope && !shots.length && !photoLater) { setShotErr(T.photoNeed); go('photo'); return }
 
     saveProfile({ name: f.name, phone: f.phone, email: f.email, address: f.address })
     setState('sending')
@@ -161,7 +194,10 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
       place: { district: hit?.district ?? '', address: f.address, lat: hit?.lat ?? null, lon: hit?.lon ?? null },
       when: f.when,
       whenTime: f.time,
-      comment: f.comment,
+      comment: [f.comment.trim(), photoLater && !shots.length ? T.photoLaterNote : ''].filter(Boolean).join('\n\n'),
+      // Один и тот же ключ на все попытки отправки этой заявки: если первый
+      // запрос дошёл, а ответ потерялся, сервер вернёт ту же заявку, а не дубль
+      requestId: sid,
       items: quote.lines.map((l) => ({
         key: l.item.key, name: nameOf(l.item, locale), qty: l.qty, sum: l.sum,
         ...(l.item.ptype && l.item.ptype !== 'fixed' ? { ptype: l.item.ptype } : {}),
@@ -231,6 +267,8 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
       // виноват блокировщик, расширение приватности или VPN
       setBlocked(e instanceof TypeError)
       setState('error')
+      // Ошибка обязана быть на виду: раньше она вставала под липкие кнопки
+      window.requestAnimationFrame(() => errBox.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }))
     }
   }
 
@@ -271,6 +309,20 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
     onSent()
   }
 
+  /** То же содержание заявки — для WhatsApp, если сайт не смог отправить */
+  function waText() {
+    const lines = quote.lines.map((l) => `• ${nameOf(l.item, locale)} ×${l.qty}`)
+    return [
+      T.waHello,
+      ...lines,
+      f.comment.trim() && `${T.whatToDo}: ${f.comment.trim()}`,
+      quote.total > 0 && `${T.toPay}: ${quote.hasScope ? `${fromWord(locale)} ` : ''}${formatMoney(quote.total, settings, locale)}`,
+      f.address && `${t.form.address}: ${f.address}`,
+      f.when && `${t.form.when}: ${[showDate(f.when, locale), f.time].filter(Boolean).join(' ')}`,
+      `${t.form.name}: ${f.name}`,
+    ].filter(Boolean).join('\n')
+  }
+
   const overlay = showReceipt && typeof document !== 'undefined'
     ? createPortal(<Receipt data={receipt} onDone={receiptDone} />, document.body)
     : null
@@ -289,6 +341,15 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
             </p>
           )}
           <p className="lead__okNote">{t.form.okNote}</p>
+          {photoLater && !shots.length && (
+            <a className="btn btn--primary lead__wa" href={waLink(T.waPhotos.replace('{no}', orderNo || ''))} target="_blank" rel="noopener">
+              <Icon name="whatsapp" size={17} /> {T.sendPhotos}
+            </a>
+          )}
+          <p className="lead__okHelp">
+            {T.questions}{' '}
+            <a href={CONTACT.whatsappHref} target="_blank" rel="noopener">WhatsApp {CONTACT.whatsappLabel}</a>
+          </p>
         </div>
       </div>
     )
@@ -316,11 +377,22 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
       <div className="lead__step" key={step} data-dir={dir}>
       {step === 'who' && (
         <div className="lead__grid">
+          {noItems && (
+            <div className="field field--wide">
+              <label htmlFor="lf-comment">{T.whatToDo} *</label>
+              <textarea
+                id="lf-comment" name="comment" rows={3} value={f.comment} onChange={set('comment')}
+                onBlur={blur('comment')} placeholder={T.whatToDoPh}
+                aria-invalid={errComment || undefined} aria-describedby="lf-comment-err"
+              />
+              <p className="field__err" id="lf-comment-err" data-empty={!errComment || undefined}>{T.whatToDoErr}</p>
+            </div>
+          )}
           <div className="field">
             <label htmlFor="lf-name">{t.form.name} *</label>
             <input
               id="lf-name" name="name" value={f.name} onChange={set('name')} onBlur={blur('name')}
-              autoComplete="given-name" aria-invalid={errName || undefined}
+              autoComplete="given-name" enterKeyHint="next" aria-invalid={errName || undefined}
               aria-describedby={errName ? 'lf-name-err' : undefined}
             />
             <p className="field__err" id="lf-name-err" data-empty={!errName || undefined}>{t.form.required}</p>
@@ -334,7 +406,9 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
               placeholder="+48 …" aria-invalid={errPhone || undefined}
               aria-describedby={errPhone ? 'lf-phone-err' : undefined}
             />
-            <p className="field__err" id="lf-phone-err" data-empty={!errPhone || undefined}>{t.form.required}</p>
+            <p className="field__err" id="lf-phone-err" data-empty={!errPhone || undefined}>
+              {phoneDigits === 0 ? t.form.required : T.phoneShort}
+            </p>
           </div>
         </div>
       )}
@@ -372,6 +446,15 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
               )}
             </div>
             <p className="field__err" data-empty={!shotErr || undefined} role={shotErr ? 'alert' : undefined}>{shotErr}</p>
+            {!shots.length && (
+              <label className="check lead__later">
+                <input
+                  type="checkbox" checked={photoLater}
+                  onChange={(e) => { setPhotoLater(e.target.checked); setShotErr('') }}
+                />
+                <span>{T.photoLater}</span>
+              </label>
+            )}
           </div>
         </div>
       )}
@@ -388,18 +471,31 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
 
       {step === 'when' && (
         <div className="lead__grid">
-          <div className="field field--wide">
-            <label htmlFor="lf-when">{t.form.when}</label>
-            <input
-              id="lf-when" name="when" type="date" min={minDate} value={f.when}
-              onChange={(e) => {
-                setF((v) => ({ ...v, when: e.target.value, time: '' }))
-                onWhen(e.target.value)
-              }}
-            />
+          <div className="field field--wide days">
+            <span className="field__label" id="lf-when-l">{T.dayLabel}</span>
+            <div className="days__row" role="radiogroup" aria-labelledby="lf-when-l">
+              {days.map((d) => {
+                const on = f.when === d.iso
+                return (
+                  <button
+                    key={d.iso} type="button" className="day" role="radio" aria-checked={on} data-on={on || undefined}
+                    onClick={() => {
+                      const v = on ? '' : d.iso
+                      setF((x) => ({ ...x, when: v, time: '' }))
+                      onWhen(v)
+                    }}
+                  >
+                    <span className="day__w">{dayName(d.date, today, locale, T)}</span>
+                    <span className="day__d num">{d.date.toLocaleDateString(locale === 'en' ? 'en-GB' : locale, { day: '2-digit', month: '2-digit' })}</span>
+                    {d.rush && <span className="day__rush">+{settings.urgentPct}%</span>}
+                  </button>
+                )
+              })}
+            </div>
+            <p className="field__hint">{f.when ? T.dayChosen : T.dayHint}</p>
           </div>
 
-          {/* Слоты появляются только после выбора дня: без даты они бессмысленны */}
+          {/* Окна появляются только после выбора дня: без даты они бессмысленны */}
           {f.when && (
             <div className="field field--wide slots">
               <span className="field__label">{T.timeLabel}</span>
@@ -438,10 +534,12 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
             <p className="field__err" id="lf-email-err" data-empty={!errEmail || undefined}>{t.form.emailBad}</p>
           </div>
 
-          <div className="field field--wide">
-            <label htmlFor="lf-comment">{t.form.comment}</label>
-            <textarea id="lf-comment" name="comment" rows={3} value={f.comment} onChange={set('comment')} />
-          </div>
+          {!noItems && (
+            <div className="field field--wide">
+              <label htmlFor="lf-comment">{t.form.comment} <span className="field__opt">{T.optional}</span></label>
+              <textarea id="lf-comment" name="comment" rows={2} value={f.comment} onChange={set('comment')} />
+            </div>
+          )}
 
           {/* Сводка того, что уже введено: последний шаг не должен требовать
               возврата назад ради проверки */}
@@ -449,18 +547,24 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
             <li><span>{t.form.name}</span><b>{f.name || '—'}</b></li>
             <li><span>{t.form.phone}</span><b className="num">{f.phone || '—'}</b></li>
             {f.address && <li><span>{t.form.address}</span><b>{f.address}</b></li>}
+            {noItems && f.comment.trim() && <li><span>{T.whatToDo}</span><b>{f.comment.trim().slice(0, 80)}</b></li>}
             {shots.length > 0 && <li><span>{T.photo}</span><b className="num">{shots.length}</b></li>}
-            {f.when && <li><span>{t.form.when}</span><b className="num">{[showDate(f.when, locale), f.time.replace('-', ' – ')].filter(Boolean).join(' · ')}</b></li>}
+            {photoLater && !shots.length && <li><span>{T.photo}</span><b>{T.photoLaterShort}</b></li>}
+            <li><span>{t.form.when}</span><b className="num">{f.when ? [showDate(f.when, locale), f.time.replace('-', ' – ')].filter(Boolean).join(' · ') : T.dayNone}</b></li>
+            <li className="lead__recapTotal"><span>{T.toPay}</span><b className="num">{quote.total > 0 ? `${quote.hasScope ? `${fromWord(locale)} ` : ''}${formatMoney(quote.total, settings, locale)}` : T.priceLater}</b></li>
           </ul>
         </div>
       )}
       </div>
 
       {state === 'error' && (
-        <p className="field__err" role="alert">
-          {t.form.error}
-          {blocked && <> {blockedHint(locale)}</>}
-        </p>
+        <div className="lead__fail" role="alert" ref={errBox}>
+          <p className="lead__failTitle">{T.failTitle}</p>
+          <p className="lead__failText">{blocked && <>{blockedHint(locale)} </>}{T.failText}</p>
+          <a className="btn btn--ghost lead__wa" href={waLink(waText())} target="_blank" rel="noopener">
+            <Icon name="whatsapp" size={17} /> {T.failWa}
+          </a>
+        </div>
       )}
 
       <div className="lead__nav">
@@ -488,6 +592,8 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
                 <Lottie name="dots" size={26} loop className="lead__dots" />
                 {t.form.sending}
               </>
+            ) : state === 'error' ? (
+              T.retry
             ) : (
               quote.total > 0
                 ? `${t.form.submit} · ${quote.hasScope ? `${fromWord(locale)} ` : ''}${formatMoney(quote.total, settings, locale)}`
@@ -510,6 +616,18 @@ export default function LeadForm({ quote, urgent, onWhen, onSent }: {
 
 const STEP_TEXT: Record<string, Record<string, string>> = {
   pl: {
+    whatToDo: 'Co trzeba zrobić?', whatToDoPh: 'Np. cieknie syfon pod zlewem, trzeba powiesić 3 półki…',
+    whatToDoErr: 'Napisz kilka słów, co trzeba zrobić — albo zaznacz pracę z listy.',
+    phoneShort: 'Wpisz cały numer — 9 cyfr.', optional: '(opcjonalnie)',
+    photoLater: 'Nie mam teraz zdjęcia — wyślę je na WhatsApp po zgłoszeniu',
+    photoLaterShort: 'wyślę na WhatsApp', photoLaterNote: '[Zdjęcia: klient wyśle na WhatsApp]',
+    sendPhotos: 'Wyślij zdjęcia na WhatsApp', waPhotos: 'Dzień dobry, przesyłam zdjęcia do zgłoszenia {no}.',
+    questions: 'Pytania? Napisz:',
+    dayLabel: 'Kiedy przyjechać?', dayHint: 'Pracujemy od poniedziałku do piątku. Możesz pominąć — termin ustalimy przez telefon.',
+    dayChosen: 'Kliknij dzień ponownie, żeby odznaczyć.', dayNone: 'ustalimy przez telefon',
+    today: 'Dziś', tomorrow: 'Jutro', toPay: 'Do zapłaty', priceLater: 'wycenimy po rozmowie',
+    failTitle: 'Nie udało się wysłać zgłoszenia.', failText: 'Twoje dane są zapisane. Spróbuj ponownie albo wyślij to samo na WhatsApp — jednym kliknięciem.',
+    failWa: 'Wyślij na WhatsApp', retry: 'Spróbuj ponownie', waHello: 'Dzień dobry, chcę zamówić:',
     who: 'Kontakt', where: 'Adres', when: 'Termin', send: 'Wysyłka',
     next: 'Dalej', back: 'Wstecz', stepsLabel: 'Kroki zgłoszenia',
     timeLabel: 'Okno przyjazdu', noSlots: 'Na dziś nie ma już wolnych okien — wybierz kolejny dzień.',
@@ -519,6 +637,18 @@ const STEP_TEXT: Record<string, Record<string, string>> = {
     photoFail: 'Zdjęcie się nie wysłało. Spróbuj jeszcze raz.', photoFormat: 'Tego formatu przeglądarka nie otworzy. Zrób zrzut ekranu albo wybierz JPG/PNG.',
   },
   uk: {
+    whatToDo: 'Що треба зробити?', whatToDoPh: 'Напр. тече сифон під мийкою, треба повісити 3 полиці…',
+    whatToDoErr: 'Напишіть кілька слів, що треба зробити, — або позначте роботу зі списку.',
+    phoneShort: 'Введіть повний номер — 9 цифр.', optional: '(необов’язково)',
+    photoLater: 'Зараз немає фото — надішлю у WhatsApp після заявки',
+    photoLaterShort: 'надішлю у WhatsApp', photoLaterNote: '[Фото: клієнт надішле у WhatsApp]',
+    sendPhotos: 'Надіслати фото у WhatsApp', waPhotos: 'Добрий день, надсилаю фото до заявки {no}.',
+    questions: 'Питання? Пишіть:',
+    dayLabel: 'Коли приїхати?', dayHint: 'Працюємо з понеділка по п’ятницю. Можна пропустити — домовимося телефоном.',
+    dayChosen: 'Натисніть день ще раз, щоб зняти вибір.', dayNone: 'домовимося телефоном',
+    today: 'Сьогодні', tomorrow: 'Завтра', toPay: 'До оплати', priceLater: 'оцінимо після розмови',
+    failTitle: 'Не вдалося надіслати заявку.', failText: 'Ваші дані збережені. Спробуйте ще раз або надішліть те саме у WhatsApp — одним натисканням.',
+    failWa: 'Надіслати у WhatsApp', retry: 'Спробувати ще раз', waHello: 'Добрий день, хочу замовити:',
     who: 'Контакти', where: 'Адреса', when: 'Час', send: 'Відправка',
     next: 'Далі', back: 'Назад', stepsLabel: 'Кроки заявки',
     timeLabel: 'Вікно приїзду', noSlots: 'На сьогодні вільних вікон немає — оберіть інший день.',
@@ -528,6 +658,18 @@ const STEP_TEXT: Record<string, Record<string, string>> = {
     photoFail: 'Фото не надіслалося. Спробуйте ще раз.', photoFormat: 'Цей формат браузер не відкриє. Зробіть скріншот або оберіть JPG/PNG.',
   },
   ru: {
+    whatToDo: 'Что нужно сделать?', whatToDoPh: 'Напр. течёт сифон под мойкой, нужно повесить 3 полки…',
+    whatToDoErr: 'Напишите пару слов, что нужно сделать, — или отметьте работу из списка.',
+    phoneShort: 'Введите номер полностью — 9 цифр.', optional: '(необязательно)',
+    photoLater: 'Сейчас нет фото — пришлю в WhatsApp после заявки',
+    photoLaterShort: 'пришлю в WhatsApp', photoLaterNote: '[Фото: клиент пришлёт в WhatsApp]',
+    sendPhotos: 'Отправить фото в WhatsApp', waPhotos: 'Здравствуйте, отправляю фото к заявке {no}.',
+    questions: 'Вопросы? Пишите:',
+    dayLabel: 'Когда приехать?', dayHint: 'Работаем с понедельника по пятницу. Можно пропустить — договоримся по телефону.',
+    dayChosen: 'Нажмите день ещё раз, чтобы снять выбор.', dayNone: 'договоримся по телефону',
+    today: 'Сегодня', tomorrow: 'Завтра', toPay: 'К оплате', priceLater: 'оценим после разговора',
+    failTitle: 'Не удалось отправить заявку.', failText: 'Ваши данные сохранены. Попробуйте ещё раз или отправьте то же самое в WhatsApp — одним нажатием.',
+    failWa: 'Отправить в WhatsApp', retry: 'Попробовать ещё раз', waHello: 'Здравствуйте, хочу заказать:',
     who: 'Контакты', where: 'Адрес', when: 'Время', send: 'Отправка',
     next: 'Далее', back: 'Назад', stepsLabel: 'Шаги заявки',
     timeLabel: 'Окно приезда', noSlots: 'На сегодня свободных окон нет — выберите другой день.',
@@ -537,6 +679,18 @@ const STEP_TEXT: Record<string, Record<string, string>> = {
     photoFail: 'Фото не отправилось. Попробуйте ещё раз.', photoFormat: 'Этот формат браузер не откроет. Сделайте скриншот или выберите JPG/PNG.',
   },
   en: {
+    whatToDo: 'What needs doing?', whatToDoPh: 'E.g. the sink trap is leaking, 3 shelves to hang…',
+    whatToDoErr: 'Write a few words about the job — or pick one from the list.',
+    phoneShort: 'Enter the full number — 9 digits.', optional: '(optional)',
+    photoLater: 'No photo right now — I will send it on WhatsApp after the request',
+    photoLaterShort: 'will send on WhatsApp', photoLaterNote: '[Photos: client will send on WhatsApp]',
+    sendPhotos: 'Send photos on WhatsApp', waPhotos: 'Hello, sending photos for request {no}.',
+    questions: 'Questions? Message us:',
+    dayLabel: 'When should we come?', dayHint: 'We work Monday to Friday. You can skip this — we will agree on a time by phone.',
+    dayChosen: 'Tap the day again to unselect.', dayNone: 'we will agree by phone',
+    today: 'Today', tomorrow: 'Tomorrow', toPay: 'To pay', priceLater: 'priced after a chat',
+    failTitle: 'The request did not go through.', failText: 'Your details are saved. Try again or send the same on WhatsApp — in one tap.',
+    failWa: 'Send on WhatsApp', retry: 'Try again', waHello: 'Hello, I would like to order:',
     who: 'Contact', where: 'Address', when: 'Time', send: 'Send',
     next: 'Next', back: 'Back', stepsLabel: 'Request steps',
     timeLabel: 'Arrival window', noSlots: 'No windows left today — pick another day.',
@@ -566,3 +720,31 @@ const blockedHint = (l: string) =>
 const privacyWord = (l: string) =>
   l === 'pl' ? 'politykę prywatności' : l === 'uk' ? 'політику конфіденційності'
   : l === 'ru' ? 'политику конфиденциальности' : 'privacy policy'
+
+/** YYYY-MM-DD по местному календарю */
+const isoLocal = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
+/** Ближайшие рабочие дни (пн–пт). Сегодня — только если ещё есть окна:
+ *  последнее начинается в 18:00. «Срочно» = сегодня или завтра по календарю. */
+function workDays(now: Date, count: number) {
+  const out: { iso: string; date: Date; rush: boolean }[] = []
+  const start = new Date(now); start.setHours(0, 0, 0, 0)
+  for (let i = 0; out.length < count && i < 30; i++) {
+    const d = new Date(start); d.setDate(start.getDate() + i)
+    const wd = d.getDay()
+    if (wd === 0 || wd === 6) continue
+    if (i === 0 && now.getHours() >= 18) continue
+    out.push({ iso: isoLocal(d), date: d, rush: i <= 1 })
+  }
+  return out
+}
+
+function dayName(d: Date, now: Date, locale: string, T: Record<string, string>) {
+  const diff = Math.round((d.getTime() - new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()) / 86400000)
+  if (diff === 0) return T.today
+  if (diff === 1) return T.tomorrow
+  return d.toLocaleDateString(locale === 'en' ? 'en-GB' : locale, { weekday: 'short' })
+}
+
+const waLink = (text: string) => `${CONTACT.whatsappHref}?text=${encodeURIComponent(text)}`

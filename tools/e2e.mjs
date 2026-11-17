@@ -50,7 +50,8 @@ await new Promise((r) => setTimeout(r, 400))
 async function settledTotal() {
   let prev = null
   for (let i = 0; i < 25; i++) {
-    const now = await page.$eval('.sum__big', (e) => e.textContent.trim())
+    // Пока смета пуста, итога нет вовсе (вместо «0 zł» — подсказка)
+    const now = await page.$eval('.sum__big', (e) => e.textContent.trim()).catch(() => '')
     if (now === prev) return now
     prev = now
     await new Promise((r) => setTimeout(r, 120))
@@ -103,20 +104,21 @@ if (suggested) {
 }
 await page.click('.lead__nav .lead__submit')
 
-// Шаг 3 — дата, следом окна приезда
-await page.waitForSelector('#lf-when', { timeout: 8000 })
-const day = new Date(Date.now() + 3 * 864e5).toISOString().slice(0, 10)
-await page.evaluate((d) => {
-  const el = document.querySelector('#lf-when')
-  const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set
-  setter.call(el, d)
-  el.dispatchEvent(new Event('input', { bubbles: true }))
-}, day)
+// Шаг 3 — день кнопкой (только будни), следом окна приезда
+await page.waitForSelector('.day', { timeout: 8000 })
+const dayNames = await page.$$eval('.day', (d) => d.map((x) => x.textContent))
+check(dayNames.length >= 5, `предложены дни приезда: ${dayNames.length}`)
+// третий день — гарантированно без надбавки за срочность
+await page.evaluate(() => document.querySelectorAll('.day')[2].click())
+// окна приезда въезжают с морфом высоты карточки — даём ему закончиться
+await new Promise((r) => setTimeout(r, 450))
 const slot = await page.waitForSelector('.slot', { timeout: 8000 }).catch(() => null)
 check(Boolean(slot), 'после выбора даты появились окна приезда')
 if (slot) await slot.click()
 check(await page.$eval('.slot[data-on]', (e) => e.textContent.trim()).catch(() => null),
       'окно приезда выбрано')
+// карточка морфит высоту после появления окон — ждём, пока кнопка встанет
+await new Promise((r) => setTimeout(r, 450))
 await page.click('.lead__nav .lead__submit')
 
 // Шаг 4 — детали и отправка

@@ -10,6 +10,7 @@ import Facts from '../components/Facts'
 import { CtaBand, MainActions, ServiceRows } from '../components/Simple'
 import E, { U } from '../cms/E'
 import { CONTACT } from '../lib/ui'
+import { nameOf } from '../lib/price'
 
 /** Главная в простой вёрстке (2026-09-29): крупный текст, много воздуха,
  *  ни одного декоративного элемента. Калькулятор — без изменений. */
@@ -28,6 +29,25 @@ export default function Home() {
             <U as="h1" className="s-hero__h1" k="hero.tagline" />
             <U as="p" className="s-lead" k="hero.sub" multiline />
             <div className="s-actions"><MainActions /></div>
+            {/* Первый шаг к заказу — прямо с первого экрана: работа сразу
+                ложится в смету, и человек оказывается у калькулятора с ценой */}
+            <div className="s-quick">
+              <p className="s-quick__t">{QUICK_TITLE[locale]}</p>
+              <ul className="s-quick__list">
+                {QUICK.map((k) => items.find((i) => i.key === k)).filter(Boolean).map((i) => (
+                  <li key={i!.key}>
+                    <Link
+                      className="s-quick__item" to={`${pathOf(KEY_PAGES.home, locale)}#wycena`}
+                      onClick={() => window.dispatchEvent(new CustomEvent('hawkfix:pick', { detail: i!.key }))}
+                    >
+                      <span>{nameOf(i!, locale)}</span>
+                      <b className="num price">{i!.price} {cur}</b>
+                      <Icon name="plus" size={16} />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
           <div className="s-hero__photo">
             <Picture
@@ -39,8 +59,8 @@ export default function Home() {
         <div className="wrap">
           <ul className="s-stats">
             <li><b className="num price">{settings.minVisit} {cur}</b><U as="span" k="home.minVisitTitle" /></li>
-            <li><b className="num">{items.length}</b><U as="span" k="prices.positions" /></li>
-            <li><b className="num">{services.length}</b><U as="span" k="nav.services" /></li>
+            <li><b className="num">{items.length}</b><U as="span" k="home.statPositions" /></li>
+            <li><b className="num">{services.length}</b><U as="span" k="home.statServices" /></li>
             <li><b>{CONTACT.radiusKm} km</b><span>{CONTACT.city}</span></li>
           </ul>
         </div>
@@ -63,7 +83,7 @@ export default function Home() {
       </section>
 
       {/* ============================ КАЛЬКУЛЯТОР ============================ */}
-      <section className="s-band calcband">
+      <section className="s-band calcband" id="wycena">
         <div className="wrap">
           <U as="h2" className="s-h2" k="home.calcHead" />
           <U as="p" className="s-lead" k="home.calcLead" multiline />
@@ -98,4 +118,13 @@ export default function Home() {
       <CtaBand />
     </>
   )
+}
+
+/** Частые работы для быстрого старта с первого экрана (ключи прайса) */
+const QUICK = ['tap', 'socket', 'assembly-small', 'tv-mount']
+const QUICK_TITLE: Record<string, string> = {
+  pl: 'Najczęściej zamawiane — dotknij, a policzymy cenę:',
+  uk: 'Найчастіше замовляють — торкніться, і ми порахуємо ціну:',
+  ru: 'Чаще всего заказывают — нажмите, и мы посчитаем цену:',
+  en: 'Most ordered — tap one and we will price it:',
 }
