@@ -14,6 +14,9 @@ import SparkDot from '../SparkDot'
 import { firstName, readProfile } from '../../lib/profile'
 import { useMorphHeight } from './useMorphHeight'
 import Collapse from '../Collapse'
+import WaDraft from './WaDraft'
+import { track } from '../../lib/track'
+import { setQuoteContext } from '../../lib/wa'
 
 /** Часто выбираемые работы — чтобы не листать 105 позиций ради лампочки. */
 const POPULAR = [
@@ -72,6 +75,7 @@ export default function Calculator() {
     const added = [...now].find((k) => !prevKeys.current.has(k))
     prevKeys.current = now
     if (!added) return
+    track('item_add', locale)
     setFlash(added)
     const id = setTimeout(() => setFlash(null), 900)
     return () => clearTimeout(id)
@@ -82,7 +86,10 @@ export default function Calculator() {
   useEffect(() => {
     const el = root.current
     if (!el || typeof IntersectionObserver === 'undefined') return
-    const io = new IntersectionObserver(([e]) => setNear(e.isIntersecting), {
+    const io = new IntersectionObserver(([e]) => {
+      setNear(e.isIntersecting)
+      if (e.isIntersecting) track('calc_seen', locale)
+    }, {
       rootMargin: '-12% 0px -12% 0px',
     })
     io.observe(el)
@@ -111,6 +118,14 @@ export default function Calculator() {
       barBtn.current?.focus({ preventScroll: true })
     }
   }, [sheet])
+
+  // Любая кнопка WhatsApp на странице (шапка, подвал) отправит и эту смету
+  const ctxLines = quote.lines.map((l) => `• ${nameOf(l.item, locale)} ×${l.qty}`).join('\n')
+  const ctxTotal = quote.lines.length ? `${quote.hasScope ? `${fromWord(locale)} ` : ''}${formatMoney(quote.total, settings, locale)}` : ''
+  useEffect(() => {
+    setQuoteContext(ctxLines ? { lines: ctxLines.split('\n'), total: ctxTotal } : null)
+    return () => setQuoteContext(null)
+  }, [ctxLines, ctxTotal])
 
   // Быстрый выбор из героя главной: работа сразу ложится в смету
   useEffect(() => {
@@ -433,6 +448,9 @@ export default function Calculator() {
               </span>
               <span className="calcbar__sum num">{quote.hasScope ? `${fromWord(locale)} ` : ''}{formatMoney(shownTotal, settings, locale)}</span>
             </div>
+            <WaDraft quote={quote} urgent={p.urgent} className="calcbar__wa" label={C.waSend}>
+              <Icon name="whatsapp" size={22} />
+            </WaDraft>
             <button ref={barBtn} type="button" className="btn btn--primary calcbar__go" onClick={() => setSheet(true)}>
               {C.order} <Icon name="arrow" size={17} />
             </button>
@@ -442,6 +460,9 @@ export default function Calculator() {
             <div className="calcbar__info">
               <span className="calcbar__hint">{C.barHint}</span>
             </div>
+            <WaDraft quote={quote} urgent={p.urgent} className="calcbar__wa" label={C.waWrite}>
+              <Icon name="whatsapp" size={22} />
+            </WaDraft>
             <button ref={barBtn} type="button" className="btn btn--ghost calcbar__go calcbar__alt" onClick={openDescribe}>
               {C.describeShort}
             </button>
@@ -539,7 +560,7 @@ export function nPositions(n: number, l: string): string {
 const CALC_TEXT: Record<string, Record<string, string>> = {
   pl: {
     order: 'Zamów', barHint: 'Zaznacz pracę z listy albo opisz problem',
-    describe: 'Opiszę problem własnymi słowami', describeShort: 'Opisz problem',
+    describe: 'Opiszę problem własnymi słowami', describeShort: 'Opisz problem', waSend: 'Wyślij kosztorys na WhatsApp', waWrite: 'Napisz na WhatsApp',
     related: 'Nie mamy „{q}” wprost na liście. Zobacz podobne prace albo opisz problem — wycenimy osobno.',
     none: 'Nie mamy „{q}” na liście. Opisz problem własnymi słowami — wycenimy osobno i oddzwonimy.',
     emptySum: 'Zaznacz pracę z listy — cena pojawi się tutaj. Nie ma jej w cenniku? Opisz problem poniżej, wycenimy osobno.',
@@ -547,7 +568,7 @@ const CALC_TEXT: Record<string, Record<string, string>> = {
   },
   uk: {
     order: 'Замовити', barHint: 'Позначте роботу зі списку або опишіть проблему',
-    describe: 'Опишу проблему своїми словами', describeShort: 'Описати проблему',
+    describe: 'Опишу проблему своїми словами', describeShort: 'Описати проблему', waSend: 'Надіслати кошторис у WhatsApp', waWrite: 'Написати у WhatsApp',
     related: 'Немає «{q}» прямо в списку. Перегляньте схожі роботи або опишіть проблему — оцінимо окремо.',
     none: 'Немає «{q}» у списку. Опишіть проблему своїми словами — оцінимо окремо й передзвонимо.',
     emptySum: 'Позначте роботу зі списку — ціна з’явиться тут. Немає в прайсі? Опишіть проблему нижче, оцінимо окремо.',
@@ -555,7 +576,7 @@ const CALC_TEXT: Record<string, Record<string, string>> = {
   },
   ru: {
     order: 'Заказать', barHint: 'Отметьте работу из списка или опишите проблему',
-    describe: 'Опишу проблему своими словами', describeShort: 'Описать проблему',
+    describe: 'Опишу проблему своими словами', describeShort: 'Описать проблему', waSend: 'Отправить смету в WhatsApp', waWrite: 'Написать в WhatsApp',
     related: 'Нет «{q}» прямо в списке. Посмотрите похожие работы или опишите проблему — оценим отдельно.',
     none: 'Нет «{q}» в списке. Опишите проблему своими словами — оценим отдельно и перезвоним.',
     emptySum: 'Отметьте работу из списка — цена появится здесь. Нет в прайсе? Опишите проблему ниже, оценим отдельно.',
@@ -563,7 +584,7 @@ const CALC_TEXT: Record<string, Record<string, string>> = {
   },
   en: {
     order: 'Order', barHint: 'Pick a job from the list or describe the problem',
-    describe: 'I’ll describe it in my own words', describeShort: 'Describe it',
+    describe: 'I’ll describe it in my own words', describeShort: 'Describe it', waSend: 'Send the estimate on WhatsApp', waWrite: 'Message us on WhatsApp',
     related: '“{q}” is not on the list as such. See similar jobs or describe the problem — we will price it separately.',
     none: '“{q}” is not on the list. Describe the problem in your own words — we will price it and call back.',
     emptySum: 'Pick a job from the list — the price shows up here. Not in the price list? Describe the problem below and we will price it.',

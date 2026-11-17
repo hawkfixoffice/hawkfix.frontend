@@ -717,3 +717,12 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
   .chip--lg { min-height: 44px; }
   .osum .btn { min-height: 50px; }
 }
+
+/* Воронка сайта (дашборд) */
+.funnel { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.funnel__row { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) auto; align-items: center; gap: 10px; font-size: 0.875rem; }
+.funnel--orders { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+.funnel--orders .funnel__row { grid-template-columns: minmax(0, 1fr) auto; }
+.funnel__label { color: var(--ink-2); }
+.funnel__bar { height: 8px; border-radius: 99px; background: var(--paper-2, #eee); overflow: hidden; }
+.funnel__bar i { display: block; height: 100%; border-radius: inherit; background: var(--accent, #6eefa0); }

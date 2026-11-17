@@ -75,7 +75,9 @@ check(found.length > 0, `поиск «kran» нашёл ${found.length} пози
 await page.click('.calc__search button')
 
 // --- отправка заявки: форма идёт по шагам ---
-// Шаг 1 — контакты
+// Шаг 1 — контакты; первым предложен WhatsApp со сметой и кодом
+const waHref = await page.$eval('.lead__waBtn', (a) => decodeURIComponent(a.href)).catch(() => '')
+check(/HF-[2-9A-HJ-NP-Z]{5}/.test(waHref) && /246/.test(waHref), 'кнопка WhatsApp несёт код и смету')
 await page.type('#lf-name', 'TEST E2E')
 await page.type('#lf-phone', '+48 500 111 333')
 await page.click('.lead__nav .lead__submit')
@@ -102,9 +104,8 @@ if (suggested) {
   check(after.value.length > 6, `адрес подтверждён выбором: «${after.value}»`)
   check(after.step === 'where', 'клик по подсказке не перелистнул шаг')
 }
-await page.click('.lead__nav .lead__submit')
-
-// Шаг 3 — день кнопкой (только будни), следом окна приезда
+// Тот же шаг — день кнопкой (только будни), следом окна приезда:
+// адрес и время стоят на одном экране
 await page.waitForSelector('.day', { timeout: 8000 })
 const dayNames = await page.$$eval('.day', (d) => d.map((x) => x.textContent))
 check(dayNames.length >= 5, `предложены дни приезда: ${dayNames.length}`)
@@ -121,7 +122,7 @@ check(await page.$eval('.slot[data-on]', (e) => e.textContent.trim()).catch(() =
 await new Promise((r) => setTimeout(r, 450))
 await page.click('.lead__nav .lead__submit')
 
-// Шаг 4 — детали и отправка
+// Шаг 3 — детали и отправка
 await page.waitForSelector('#lf-comment', { timeout: 8000 })
 await page.type('#lf-comment', 'автотест, удалить')
 check((await page.$$('.lead__recap li')).length >= 3, 'на последнем шаге показана сводка заявки')

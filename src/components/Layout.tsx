@@ -8,11 +8,15 @@ import CookieBanner from './CookieBanner'
 import ClientOnly from './ClientOnly'
 import CmsBoot from '../cms/CmsBoot'
 import { detectLocale, isBot, onceThisSession, readPref } from '../lib/locale-pref'
+import { installWaLinks } from '../lib/wa'
 
 function Shell({ children }: { children: React.ReactNode }) {
   const { t, page, locale } = usePage()
   const { pathname, hash, key } = useLocation()
   const navigate = useNavigate()
+
+  // Кнопки WhatsApp по всему сайту: приветствие с темой страницы и сметой
+  useEffect(() => installWaLinks(), [])
 
   // При загрузке подставляем язык устройства (или явный выбор пользователя),
   // если у этой страницы есть такая версия. Один раз за сессию, не для ботов.

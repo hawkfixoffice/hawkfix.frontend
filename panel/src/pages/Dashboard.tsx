@@ -6,6 +6,8 @@ import { money, dateShort, fromNow, monthName, nOrders } from '../lib/fmt'
 import Stat from '../ui/Stat'
 import NewNotice from '../ui/NewNotice'
 import Attention from '../ui/Attention'
+import WaDrafts from '../ui/WaDrafts'
+import Funnel from '../ui/Funnel'
 import Avatar from '../ui/Avatar'
 import { AreaChart, BarChart, type Point } from '../ui/Chart'
 import Status from '../ui/Status'
@@ -82,6 +84,8 @@ function AdminView({ me }: { me: Me }) {
 
       <NewNotice />
 
+      <WaDrafts />
+
       <Attention />
 
       <div className="grid grid--4">
@@ -108,6 +112,8 @@ function AdminView({ me }: { me: Me }) {
           <MiniStat label={t('dash.overdue')} value={ops.overdue} to="/orders" tone={ops.overdue ? 'bad' : undefined} />
         </div>
       )}
+
+      <Funnel />
 
       <div className="grid grid--wide-left">
         <div className="card">
@@ -192,6 +198,8 @@ function ManagerView({ me }: { me: Me }) {
       </div>
 
       <NewNotice />
+
+      <WaDrafts />
 
       <Attention />
 

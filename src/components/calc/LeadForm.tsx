@@ -16,6 +16,8 @@ import { rid, toWebp } from '../../lib/webp'
 import { fromWord, nameOf } from '../../lib/price'
 import { SUPA_KEY, SUPA_URL, anonHeaders } from '../../lib/supa'
 import { CONTACT } from '../../lib/ui'
+import { track } from '../../lib/track'
+import WaDraft from './WaDraft'
 
 /** Адрес edge-функции. Значение публичное по назначению, поэтому дефолт зашит:
  *  без него сборка, собранная без переменной окружения, отправляла заявку
@@ -39,9 +41,11 @@ const SLOTS = ['08:00-10:00', '10:00-12:00', '12:00-14:00', '14:00-16:00', '16:0
 type State = 'idle' | 'sending' | 'ok' | 'error'
 /** Шаг «Фото» появляется, только если в смете есть работы «за объём»:
  *  их без фото не оценить, и мастер называет цену, глядя на снимки. */
-const BASE_STEPS = ['who', 'where', 'when', 'send'] as const
-const PHOTO_STEPS = ['who', 'photo', 'where', 'when', 'send'] as const
-type Step = 'who' | 'photo' | 'where' | 'when' | 'send'
+// Адрес и день — один шаг: оба необязательны, и отдельный экран ради
+// «можно пропустить» был лишним нажатием на пути к отправке
+const BASE_STEPS = ['who', 'where', 'send'] as const
+const PHOTO_STEPS = ['who', 'photo', 'where', 'send'] as const
+type Step = 'who' | 'photo' | 'where' | 'send'
 const MAX_PHOTOS = 6
 
 interface Shot { path: string; url: string; size: number }
@@ -140,6 +144,7 @@ export default function LeadForm({ quote, urgent, onWhen, onSent, describe = 0 }
     setDir(STEPS.indexOf(to) < idx ? 'back' : 'fwd')
     stage.capture()
     setStep(to)
+    if (to === 'where' || to === 'send') track(to === 'where' ? 'step_where' : 'step_send', locale)
     // На невысоких экранах карточка прокручивается сама: показываем
     // начало нового шага, а не то место, где человек остановился
     requestAnimationFrame(() => {
@@ -169,8 +174,7 @@ export default function LeadForm({ quote, urgent, onWhen, onSent, describe = 0 }
       if (!shots.length && !photoLater) { setShotErr(T.photoNeed); return }
       return go('where')
     }
-    if (step === 'where') return go('when')
-    if (step === 'when') return go('send')
+    if (step === 'where') return go('send')
   }
 
   async function submit(e?: React.FormEvent) {
@@ -246,6 +250,7 @@ export default function LeadForm({ quote, urgent, onWhen, onSent, describe = 0 }
       if (data?.error) throw new Error(String(data.error))
       const no = data?.orderNo ?? ''
       setOrderNo(no)
+      track('lead_ok', locale)
       // Чек печатается только после ответа: до него печатать нечего
       setReceipt({
         orderNo: no,
@@ -263,6 +268,7 @@ export default function LeadForm({ quote, urgent, onWhen, onSent, describe = 0 }
       })
     } catch (e) {
       setShowReceipt(false)
+      track('lead_fail', locale)
       // «Failed to fetch» значит, что запрос не ушёл вовсе: обычно
       // виноват блокировщик, расширение приватности или VPN
       setBlocked(e instanceof TypeError)
@@ -357,7 +363,8 @@ export default function LeadForm({ quote, urgent, onWhen, onSent, describe = 0 }
 
   return (
     <div className="lead__stage" ref={stage.ref}>
-    <form className="lead lead--steps" onSubmit={submit} noValidate data-step={step}>
+    <form className="lead lead--steps" onSubmit={submit} noValidate data-step={step}
+          onFocus={() => track('form_start', locale)}>
       {/* Шаги: где мы сейчас и куда можно вернуться */}
       <ol className="steps" aria-label={T.stepsLabel}>
         {STEPS.map((s, i) => (
@@ -375,6 +382,17 @@ export default function LeadForm({ quote, urgent, onWhen, onSent, describe = 0 }
       </ol>
 
       <div className="lead__step" key={step} data-dir={dir}>
+      {step === 'who' && (
+        <div className="lead__waPick">
+          {/* Многим проще написать, чем заполнять форму: смета с кодом уходит
+              в чат, офис находит черновик в панели по коду */}
+          <WaDraft quote={quote} urgent={urgent} comment={f.comment} className="btn lead__waBtn">
+            <Icon name="whatsapp" size={19} /> {noItems ? T.waDescribe : T.waSend}
+          </WaDraft>
+          <p className="lead__waNote">{T.waNote}</p>
+          <p className="lead__or"><span>{T.orForm}</span></p>
+        </div>
+      )}
       {step === 'who' && (
         <div className="lead__grid">
           {noItems && (
@@ -469,8 +487,8 @@ export default function LeadForm({ quote, urgent, onWhen, onSent, describe = 0 }
         </div>
       )}
 
-      {step === 'when' && (
-        <div className="lead__grid">
+      {step === 'where' && (
+        <div className="lead__grid lead__grid--when">
           <div className="field field--wide days">
             <span className="field__label" id="lf-when-l">{T.dayLabel}</span>
             <div className="days__row" role="radiogroup" aria-labelledby="lf-when-l">
@@ -628,7 +646,10 @@ const STEP_TEXT: Record<string, Record<string, string>> = {
     today: 'Dziś', tomorrow: 'Jutro', toPay: 'Do zapłaty', priceLater: 'wycenimy po rozmowie',
     failTitle: 'Nie udało się wysłać zgłoszenia.', failText: 'Twoje dane są zapisane. Spróbuj ponownie albo wyślij to samo na WhatsApp — jednym kliknięciem.',
     failWa: 'Wyślij na WhatsApp', retry: 'Spróbuj ponownie', waHello: 'Dzień dobry, chcę zamówić:',
-    who: 'Kontakt', where: 'Adres', when: 'Termin', send: 'Wysyłka',
+    who: 'Kontakt', where: 'Adres i termin', send: 'Wysyłka',
+    waSend: 'Wyślij kosztorys na WhatsApp', waDescribe: 'Opisz problem na WhatsApp',
+    waNote: 'Bez formularza: kosztorys z numerem trafi do czatu, adres i termin ustalimy w rozmowie.',
+    orForm: 'albo zostaw numer — odezwiemy się',
     next: 'Dalej', back: 'Wstecz', stepsLabel: 'Kroki zgłoszenia',
     timeLabel: 'Okno przyjazdu', noSlots: 'Na dziś nie ma już wolnych okien — wybierz kolejny dzień.',
     photo: 'Zdjęcia', photoTitle: 'Zdjęcia tego, co jest do zrobienia',
@@ -649,7 +670,10 @@ const STEP_TEXT: Record<string, Record<string, string>> = {
     today: 'Сьогодні', tomorrow: 'Завтра', toPay: 'До оплати', priceLater: 'оцінимо після розмови',
     failTitle: 'Не вдалося надіслати заявку.', failText: 'Ваші дані збережені. Спробуйте ще раз або надішліть те саме у WhatsApp — одним натисканням.',
     failWa: 'Надіслати у WhatsApp', retry: 'Спробувати ще раз', waHello: 'Добрий день, хочу замовити:',
-    who: 'Контакти', where: 'Адреса', when: 'Час', send: 'Відправка',
+    who: 'Контакти', where: 'Адреса і час', send: 'Відправка',
+    waSend: 'Надіслати кошторис у WhatsApp', waDescribe: 'Описати проблему у WhatsApp',
+    waNote: 'Без форми: кошторис із номером потрапить у чат, адресу й час узгодимо в розмові.',
+    orForm: 'або залиште номер — ми зв’яжемося',
     next: 'Далі', back: 'Назад', stepsLabel: 'Кроки заявки',
     timeLabel: 'Вікно приїзду', noSlots: 'На сьогодні вільних вікон немає — оберіть інший день.',
     photo: 'Фото', photoTitle: 'Фото того, що треба зробити',
@@ -670,7 +694,10 @@ const STEP_TEXT: Record<string, Record<string, string>> = {
     today: 'Сегодня', tomorrow: 'Завтра', toPay: 'К оплате', priceLater: 'оценим после разговора',
     failTitle: 'Не удалось отправить заявку.', failText: 'Ваши данные сохранены. Попробуйте ещё раз или отправьте то же самое в WhatsApp — одним нажатием.',
     failWa: 'Отправить в WhatsApp', retry: 'Попробовать ещё раз', waHello: 'Здравствуйте, хочу заказать:',
-    who: 'Контакты', where: 'Адрес', when: 'Время', send: 'Отправка',
+    who: 'Контакты', where: 'Адрес и время', send: 'Отправка',
+    waSend: 'Отправить смету в WhatsApp', waDescribe: 'Описать проблему в WhatsApp',
+    waNote: 'Без формы: смета с номером придёт в чат, адрес и время согласуем в переписке.',
+    orForm: 'или оставьте номер — мы свяжемся',
     next: 'Далее', back: 'Назад', stepsLabel: 'Шаги заявки',
     timeLabel: 'Окно приезда', noSlots: 'На сегодня свободных окон нет — выберите другой день.',
     photo: 'Фото', photoTitle: 'Фото того, что нужно сделать',
@@ -691,7 +718,10 @@ const STEP_TEXT: Record<string, Record<string, string>> = {
     today: 'Today', tomorrow: 'Tomorrow', toPay: 'To pay', priceLater: 'priced after a chat',
     failTitle: 'The request did not go through.', failText: 'Your details are saved. Try again or send the same on WhatsApp — in one tap.',
     failWa: 'Send on WhatsApp', retry: 'Try again', waHello: 'Hello, I would like to order:',
-    who: 'Contact', where: 'Address', when: 'Time', send: 'Send',
+    who: 'Contact', where: 'Address & time', send: 'Send',
+    waSend: 'Send the estimate on WhatsApp', waDescribe: 'Describe it on WhatsApp',
+    waNote: 'No form: the estimate and its number land in the chat, and we agree the address and time there.',
+    orForm: 'or leave your number and we’ll get back to you',
     next: 'Next', back: 'Back', stepsLabel: 'Request steps',
     timeLabel: 'Arrival window', noSlots: 'No windows left today — pick another day.',
     photo: 'Photos', photoTitle: 'Photos of what needs doing',

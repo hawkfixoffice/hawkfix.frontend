@@ -490,6 +490,72 @@ async function mailForLead(id: string, origin: string | null): Promise<Response>
   return json({ ok: !mailError, orderNo }, 200, origin)
 }
 
+/** Код черновика WhatsApp: «HF-» и пять знаков без похожих (0/O, 1/I). */
+const WA_CODE_RE = /^HF-[2-9A-HJ-NP-Z]{5}$/
+
+/** Черновик для WhatsApp: смета с кодом, а дальше клиент пишет в чат.
+ *
+ *  Код придумывает браузер, ссылка на WhatsApp с ним готова ещё до нажатия
+ *  (из-под асинхронного ответа Safari на iPhone приложение не открывает).
+ *  Сюда запрос уходит фоном в момент нажатия. Тот же код — та же смета:
+ *  повтор возвращает уже записанный черновик.
+ *
+ *  Телефона и имени нет — их офис увидит в самом WhatsApp и впишет в панели
+ *  (`wa_draft_accept`). До этого черновик заказом не становится (триггер
+ *  пропускает статус `wa`), мастерам не предлагается и письмо не уходит:
+ *  сообщение в WhatsApp и есть уведомление. */
+async function waDraft(body: Record<string, unknown>, req: Request, origin: string | null): Promise<Response> {
+  const url = Deno.env.get('SUPABASE_URL')
+  const key = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+  if (!url || !key) return json({ error: 'not_configured' }, 500, origin)
+
+  const code = str(body.code, 12)
+  if (!code || !WA_CODE_RE.test(code)) return json({ error: 'bad_code' }, 422, origin)
+  const items = Array.isArray(body.items) ? body.items.slice(0, 120) : []
+  const comment = str(body.comment, 4000)
+  if (items.length === 0 && !comment) return json({ error: 'empty_request' }, 422, origin)
+
+  const head = { apikey: key, Authorization: `Bearer ${key}` }
+  const find = async () => {
+    const r = await fetch(`${url}/rest/v1/leads?wa_code=eq.${code}&select=id,order_no`, { headers: head })
+    if (!r.ok) return null
+    const [hit] = await r.json()
+    return hit ?? null
+  }
+  const had = await find()
+  if (had) return json({ ok: true, id: had.id, code, repeat: true }, 200, origin)
+
+  const row = {
+    locale: LOCALES.includes(String(body.locale)) ? String(body.locale) : 'pl',
+    name: 'WhatsApp',
+    phone: null,
+    status: 'wa',
+    source: 'wa',
+    wa_code: code,
+    comment,
+    urgent: Boolean(body.urgent),
+    items,
+    totals: (body.totals ?? {}) as Record<string, unknown>,
+    page: str(body.page, 300),
+    user_agent: (req.headers.get('user-agent') ?? '').slice(0, 400),
+  }
+  const res = await fetch(`${url}/rest/v1/leads`, {
+    method: 'POST',
+    headers: { ...head, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+    body: JSON.stringify(row),
+  })
+  if (res.status === 409) {
+    const again = await find()
+    if (again) return json({ ok: true, id: again.id, code, repeat: true }, 200, origin)
+  }
+  if (!res.ok) {
+    console.error('wa draft failed', res.status, await res.text())
+    return json({ error: 'store_failed' }, 500, origin)
+  }
+  const [saved] = await res.json()
+  return json({ ok: true, id: saved?.id, code }, 200, origin)
+}
+
 Deno.serve(async (req) => {
   const origin = req.headers.get('origin')
 
@@ -513,6 +579,9 @@ Deno.serve(async (req) => {
 
   // Ловушка для ботов: поле скрыто в вёрстке, человек его не заполнит
   if (str(body.company, 200)) return json({ ok: true }, 200, origin)
+
+  // «Wyślij na WhatsApp»: черновик с номером, без контактов
+  if (body.channel === 'wa') return await waDraft(body, req, origin)
 
   const contact = (body.contact ?? {}) as Record<string, unknown>
   const place = (body.place ?? {}) as Record<string, unknown>

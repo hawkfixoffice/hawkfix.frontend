@@ -404,3 +404,38 @@
 .lead--ok .lead__wa { justify-self: center; margin-top: 4px; }
 .lead__okHelp { margin: 0; font-size: 0.8125rem; color: var(--ink-3); }
 .lead__okHelp a { color: var(--accent-text); font-weight: 600; }
+
+/* ── WhatsApp как равноправный путь (2026-11-17) ─────────────────────────
+   Многим проще написать, чем заполнять форму. Кнопка стоит первой на шаге
+   «Kontakt» и в нижней панели телефона; смета с кодом уходит в чат. */
+.calcbar__wa {
+  flex: none; display: grid; place-items: center;
+  width: 46px; height: 46px; border-radius: 50%;
+  margin-inline-start: auto;
+  color: var(--on-dark); border: 1.5px solid rgb(255 255 255 / 55%);
+}
+.calcbar__wa:hover, .calcbar__wa:focus-visible { background: var(--on-dark); color: var(--ink); }
+.calcbar__wa + .calcbar__go { margin-inline-start: 0; }
+
+.lead__waPick { display: grid; gap: 8px; margin-bottom: 4px; }
+.lead__waBtn {
+  width: 100%; justify-content: center; gap: 8px; min-height: var(--tap);
+  background: var(--forest); color: var(--on-dark); border-color: var(--forest);
+}
+.lead__waBtn:hover { background: #143a24; border-color: #143a24; color: var(--on-dark); }
+.lead__waNote { margin: 0; font-size: 0.8125rem; line-height: 1.45; color: var(--ink-3); text-align: center; }
+.lead__or {
+  display: flex; align-items: center; gap: 12px; margin: 6px 0 2px;
+  font-size: 0.8125rem; color: var(--ink-3);
+}
+.lead__or::before, .lead__or::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.lead__or span { flex: none; max-width: 75%; text-align: center; }
+.lead__grid--when { margin-top: 14px; }
+.calcbar__sum { white-space: nowrap; }
+/* 320–360: три элемента в панели — цена не должна переноситься */
+@media (max-width: 360px) {
+  .calcbar { gap: 8px; padding-inline-start: 16px; }
+  .calcbar__wa { width: 42px; height: 42px; }
+  .calcbar__go { padding-inline: 14px; gap: 6px; }
+  .calcbar__go svg { display: none; }
+}

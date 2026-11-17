@@ -9,6 +9,18 @@ export const LANGS: Lang[] = ['pl', 'ru', 'en']
 type Dict = Record<string, string>
 
 const pl: Dict = {
+  'wa.title': 'WhatsApp ze strony', 'wa.note': 'Klient wysłał kosztorys na WhatsApp z kodem. Znajdź kod z czatu i przyjmij — powstanie zlecenie.',
+  'wa.find': 'Szukaj kodu', 'wa.noItems': 'Bez pozycji — tylko opis', 'wa.notFound': 'Nie ma szkicu z takim kodem (szkice są widoczne 7 dni).',
+  'wa.accept': 'Przyjmij', 'wa.drop': 'Usuń szkic', 'wa.dropAsk': 'Usunąć szkic {code}? Klient nie napisał albo to śmieci.',
+  'wa.acceptNote': 'Wpisz numer z czatu WhatsApp. Kosztorys przejdzie do zlecenia, a system zaproponuje mastera.',
+  'wa.phone': 'Telefon klienta', 'wa.name': 'Imię', 'wa.address': 'Adres', 'wa.toOrder': 'Utwórz zlecenie',
+  'wa.phoneBad': 'Wpisz cały numer — min. 9 cyfr.', 'wa.gone': 'Ten szkic jest już przyjęty albo usunięty.',
+  'fun.title': 'Strona → zamówienie', 'fun.note': 'Ostatnie 30 dni, od {since}. Każdy krok liczony raz na wejście na stronę, bez danych osobowych.',
+  'fun.share': 'zleceń ze strony', 'fun.shareHint': 'Formularz + WhatsApp z kodem kosztorysu, wśród wszystkich zleceń',
+  'fun.calc_seen': 'Zobaczył kalkulator', 'fun.item_add': 'Dodał pracę', 'fun.form_start': 'Zaczął formularz',
+  'fun.step_where': 'Doszedł do adresu', 'fun.step_send': 'Doszedł do wysyłki', 'fun.lead_ok': 'Wysłał zgłoszenie', 'fun.lead_fail': 'Błąd wysyłki',
+  'fun.wa_draft': 'WhatsApp z kosztorysem', 'fun.wa_head': 'WhatsApp w nagłówku', 'fun.wa_page': 'WhatsApp na stronach', 'fun.wa_form': 'WhatsApp w formularzu',
+  'fun.ordersForm': 'Zlecenia z formularza', 'fun.ordersWaSite': 'Zlecenia z WhatsApp z kodem', 'fun.ordersWa': 'Zlecenia z WhatsApp bez kodu', 'fun.ordersOther': 'Pozostałe zlecenia',
   // вход
   'login.title': 'Panel HAWK.FIX',
   'login.user': 'Login', 'login.pass': 'Hasło', 'login.go': 'Zaloguj się',
@@ -229,6 +241,18 @@ const pl: Dict = {
 
 
 const ru: Dict = {
+  'wa.title': 'WhatsApp с сайта', 'wa.note': 'Клиент отправил смету в WhatsApp с кодом. Найдите код из чата и примите — появится заказ.',
+  'wa.find': 'Найти код', 'wa.noItems': 'Без позиций — только описание', 'wa.notFound': 'Черновика с таким кодом нет (черновики видны 7 дней).',
+  'wa.accept': 'Принять', 'wa.drop': 'Удалить черновик', 'wa.dropAsk': 'Удалить черновик {code}? Клиент не написал или это мусор.',
+  'wa.acceptNote': 'Впишите номер из чата WhatsApp. Смета перейдёт в заказ, система предложит мастера.',
+  'wa.phone': 'Телефон клиента', 'wa.name': 'Имя', 'wa.address': 'Адрес', 'wa.toOrder': 'Создать заказ',
+  'wa.phoneBad': 'Впишите номер целиком — минимум 9 цифр.', 'wa.gone': 'Этот черновик уже принят или удалён.',
+  'fun.title': 'Сайт → заказ', 'fun.note': 'Последние 30 дней, с {since}. Каждый шаг считается раз за заход на страницу, без персональных данных.',
+  'fun.share': 'заказов с сайта', 'fun.shareHint': 'Форма + WhatsApp с кодом сметы среди всех заказов',
+  'fun.calc_seen': 'Увидел калькулятор', 'fun.item_add': 'Добавил работу', 'fun.form_start': 'Начал форму',
+  'fun.step_where': 'Дошёл до адреса', 'fun.step_send': 'Дошёл до отправки', 'fun.lead_ok': 'Отправил заявку', 'fun.lead_fail': 'Ошибка отправки',
+  'fun.wa_draft': 'WhatsApp со сметой', 'fun.wa_head': 'WhatsApp в шапке', 'fun.wa_page': 'WhatsApp на страницах', 'fun.wa_form': 'WhatsApp в форме',
+  'fun.ordersForm': 'Заказы из формы', 'fun.ordersWaSite': 'Заказы из WhatsApp с кодом', 'fun.ordersWa': 'Заказы из WhatsApp без кода', 'fun.ordersOther': 'Прочие заказы',
   'login.title': 'Панель HAWK.FIX',
   'login.user': 'Логин', 'login.pass': 'Пароль', 'login.go': 'Войти',
   'login.bad': 'Неверный логин или пароль.',
@@ -439,6 +463,18 @@ const ru: Dict = {
 
 
 const en: Dict = {
+  'wa.title': 'WhatsApp from the site', 'wa.note': 'A client sent the estimate on WhatsApp with a code. Find the code from the chat and accept — an order is created.',
+  'wa.find': 'Find code', 'wa.noItems': 'No items — description only', 'wa.notFound': 'No draft with this code (drafts stay 7 days).',
+  'wa.accept': 'Accept', 'wa.drop': 'Delete draft', 'wa.dropAsk': 'Delete draft {code}? The client never wrote or it is junk.',
+  'wa.acceptNote': 'Enter the number from the WhatsApp chat. The estimate becomes an order and a master is offered.',
+  'wa.phone': 'Client phone', 'wa.name': 'Name', 'wa.address': 'Address', 'wa.toOrder': 'Create order',
+  'wa.phoneBad': 'Enter the full number — at least 9 digits.', 'wa.gone': 'This draft was already accepted or deleted.',
+  'fun.title': 'Site → order', 'fun.note': 'Last 30 days, since {since}. Each step counted once per page visit, no personal data.',
+  'fun.share': 'orders from the site', 'fun.shareHint': 'Form + WhatsApp with an estimate code, out of all orders',
+  'fun.calc_seen': 'Saw the calculator', 'fun.item_add': 'Added a job', 'fun.form_start': 'Started the form',
+  'fun.step_where': 'Reached address', 'fun.step_send': 'Reached send', 'fun.lead_ok': 'Sent a request', 'fun.lead_fail': 'Send error',
+  'fun.wa_draft': 'WhatsApp with estimate', 'fun.wa_head': 'WhatsApp in header', 'fun.wa_page': 'WhatsApp on pages', 'fun.wa_form': 'WhatsApp in form',
+  'fun.ordersForm': 'Orders from the form', 'fun.ordersWaSite': 'WhatsApp orders with code', 'fun.ordersWa': 'WhatsApp orders without code', 'fun.ordersOther': 'Other orders',
   'login.title': 'HAWK.FIX panel',
   'login.user': 'Login', 'login.pass': 'Password', 'login.go': 'Sign in',
   'login.bad': 'Wrong login or password.',
