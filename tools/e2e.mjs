@@ -1,4 +1,4 @@
-/** Сквозная проверка калькулятора и формы заявки на собранном сайте. */
+/** Сквозная проверка калькулятора, формы WhatsApp в герое и попапа на собранном сайте. */
 import puppeteer from 'puppeteer'
 
 const BASE = process.argv[2] ?? 'http://localhost:4173'
@@ -74,91 +74,44 @@ const found = await page.$$eval('.ilist .irow__name', (n) => n.map((x) => x.text
 check(found.length > 0, `поиск «kran» нашёл ${found.length} позиц.`)
 await page.click('.calc__search button')
 
-// --- отправка заявки: форма идёт по шагам ---
-// Шаг 1 — контакты; первым предложен WhatsApp со сметой и кодом
-const waHref = await page.$eval('.lead__waBtn', (a) => decodeURIComponent(a.href)).catch(() => '')
-check(/HF-[2-9A-HJ-NP-Z]{5}/.test(waHref) && /246/.test(waHref), 'кнопка WhatsApp несёт код и смету')
-await page.type('#lf-name', 'TEST E2E')
-await page.type('#lf-phone', '+48 500 111 333')
-await page.click('.lead__nav .lead__submit')
-await page.waitForSelector('.addr__box input', { timeout: 8000 })
-check(true, 'шаг 1 → 2: контакты приняты, показан адрес')
-
-// Имя запомнилось на устройстве — приветствие над поиском
-const remembered = await page.evaluate(() => localStorage.getItem('hawkfix.client'))
-check(remembered && JSON.parse(remembered).name === 'TEST E2E', 'имя записано в localStorage')
-
-// Шаг 2 — адрес с подсказками из OSM
-await page.type('.addr__box input', 'Marszalkowska 10')
-const suggested = await page.waitForSelector('.addr__list button', { timeout: 12000 }).catch(() => null)
-check(Boolean(suggested), 'геокодер отдал подсказки адреса')
-if (suggested) {
-  await suggested.click()
-  await new Promise((r) => setTimeout(r, 350))
-  // Список висит в портале поверх липкой кнопки: клик по подсказке должен
-  // подставить адрес и оставить нас на этом же шаге, а не нажать «Далее»
-  const after = await page.evaluate(() => ({
-    value: document.querySelector('.addr__box input')?.value ?? '',
-    step: document.querySelector('.lead')?.dataset.step,
-  }))
-  check(after.value.length > 6, `адрес подтверждён выбором: «${after.value}»`)
-  check(after.step === 'where', 'клик по подсказке не перелистнул шаг')
-}
-// Тот же шаг — день кнопкой (только будни), следом окна приезда:
-// адрес и время стоят на одном экране
-await page.waitForSelector('.day', { timeout: 8000 })
-const dayNames = await page.$$eval('.day', (d) => d.map((x) => x.textContent))
-check(dayNames.length >= 5, `предложены дни приезда: ${dayNames.length}`)
-// третий день — гарантированно без надбавки за срочность
-await page.evaluate(() => document.querySelectorAll('.day')[2].click())
-// окна приезда въезжают с морфом высоты карточки — даём ему закончиться
-await new Promise((r) => setTimeout(r, 450))
-const slot = await page.waitForSelector('.slot', { timeout: 8000 }).catch(() => null)
-check(Boolean(slot), 'после выбора даты появились окна приезда')
-if (slot) await slot.click()
-check(await page.$eval('.slot[data-on]', (e) => e.textContent.trim()).catch(() => null),
-      'окно приезда выбрано')
-// карточка морфит высоту после появления окон — ждём, пока кнопка встанет
-await new Promise((r) => setTimeout(r, 450))
-await page.click('.lead__nav .lead__submit')
-
-// Шаг 3 — детали и отправка
-await page.waitForSelector('#lf-comment', { timeout: 8000 })
+// --- отправка: только WhatsApp (2026-11-24) ---
+// Ссылку wa.me не открываем: гасим переход после обработчиков сайта
+await page.evaluate(() => window.addEventListener('click', (e) => {
+  if (e.target.closest?.('a[href^="https://wa.me/"]') && !e.defaultPrevented) e.preventDefault()
+}))
+check(!(await page.$('.lead')), 'классической формы заявки нет')
 await page.type('#lf-comment', 'автотест, удалить')
-check((await page.$$('.lead__recap li')).length >= 3, 'на последнем шаге показана сводка заявки')
-await page.screenshot({ path: `${SHOTS}/e2e-form.png`, clip: await page.$eval('.calc__sum', (e) => {
-  const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: Math.min(r.height, 900) }
-}) })
-await page.click('.lead__nav .lead__submit')
+const waHref = await page.$eval('.calcsend__btn', (a) => decodeURIComponent(a.href)).catch(() => '')
+check(/HF-[2-9A-HJ-NP-Z]{5}/.test(waHref) && /246/.test(waHref) && waHref.includes('автотест'),
+      'кнопка калькулятора несёт код, смету и описание')
+await page.click('.calcsend__btn')
+await new Promise((r) => setTimeout(r, 300))
+check(submitted?.channel === 'wa' && submitted.items?.length >= 1 && waHref.includes(submitted.code),
+      `черновик ушёл в lead с тем же кодом (${submitted?.code})`)
+check(await page.$eval('.calcsend__note', (e) => /HF-/.test(e.textContent)), 'после нажатия показан номер заявки')
 
-// Чек печатается поверх страницы, потом улетает
-const receipt = await page.waitForSelector('.rcp', { timeout: 8000 }).catch(() => null)
-check(Boolean(receipt), 'показана печать чека на весь экран')
-await page.waitForSelector('.rcp__amount', { timeout: 8000 })
-await new Promise((r) => setTimeout(r, 900))
-await page.screenshot({ path: `${SHOTS}/e2e-receipt.png` })
-check(await page.$eval('.rcp__rows .num', (e) => e.textContent.trim()) === 'HF-E2E-0001',
-      'на чеке напечатан номер заявки из ответа')
+// --- герой: «Co się stało?» с подсказками из прайса ---
+submitted = null
+await page.evaluate(() => scrollTo(0, 0))
+await page.type('.s-hero .wabox textarea', 'cieknie kran w łazience')
+await page.waitForSelector('.s-hero .wabox__hits button', { timeout: 3000 }).catch(() => null)
+const hint = await page.$$eval('.s-hero .wabox__hits button', (b) => b.map((x) => x.textContent.trim()))
+check(hint.some((x) => /bateri/i.test(x)), `«cieknie kran…» подсказал: ${hint.join(' | ')}`)
+check(!(await page.$$eval('.s-hero .wabox__hits', (l) => l.some((x) => /zł/.test(x.textContent)))), 'в подсказках героя нет цен')
+await page.$$eval('.s-hero .wabox__hits button', (b) => b[0].dispatchEvent(new MouseEvent('mousedown', { bubbles: true })))
+await new Promise((r) => setTimeout(r, 250))
+check((await page.$$('.s-hero .wabox__lines li')).length === 1, 'выбранная работа легла строкой с ценой')
+await page.screenshot({ path: `${SHOTS}/e2e-hero.png` })
+await page.click('.s-hero .wabox__send')
+await new Promise((r) => setTimeout(r, 300))
+check(submitted?.channel === 'wa' && submitted.comment === 'cieknie kran w łazience' && submitted.items?.length === 1,
+      'из героя ушёл черновик с работой и описанием')
 
-await page.waitForSelector('.lead--ok', { timeout: 20000 })
-check(true, 'заявка отправлена, показан экран успеха')
-check(submitted?.contact?.name === 'TEST E2E' && Array.isArray(submitted?.items),
-      `в запросе ушли контакт и ${submitted?.items?.length ?? 0} позиц.`)
-check(Boolean(submitted?.place?.address) && submitted?.whenTime,
-      `адрес и окно приезда ушли в заявку (${submitted?.whenTime})`)
-check(await page.$eval('.lead__order b', (e) => e.textContent.trim()) === 'HF-E2E-0001',
-      'номер заказа из ответа показан клиенту')
-
-// --- Lottie реально отрисовался ---
-await new Promise((r) => setTimeout(r, 1200))
-const svg = await page.$eval('.lead--ok', (e) => {
-  const s = e.querySelector('svg')
-  return s ? { paths: s.querySelectorAll('path').length, w: s.clientWidth } : null
-})
-check(svg && svg.paths > 0, `Lottie отрисовал SVG (${svg ? svg.paths : 0} path)`)
-await page.screenshot({ path: `${SHOTS}/e2e-success.png`, clip: await page.$eval('.calc__sum', (e) => {
-  const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: Math.min(r.height, 600) }
-}) })
+// --- кнопка WhatsApp в шапке открывает попап ---
+await page.evaluate(() => document.querySelector('header a[href^="https://wa.me/"]')?.click())
+await new Promise((r) => setTimeout(r, 300))
+check(Boolean(await page.$('.wamodal .wabox')), 'WhatsApp в шапке открыл попап с формой')
+await page.keyboard.press('Escape')
 
 console.log('\nПРОЙДЕНО:')
 ok.forEach((m) => console.log('  ✓ ' + m))

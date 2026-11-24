@@ -9,10 +9,8 @@ import Picture from '../Picture'
 import ItemRow from './ItemRow'
 import { usePicker } from './usePicker'
 import { useCountUp } from './useCountUp'
-import LeadForm from './LeadForm'
 import SparkDot from '../SparkDot'
 import { firstName, readProfile } from '../../lib/profile'
-import { useMorphHeight } from './useMorphHeight'
 import Collapse from '../Collapse'
 import WaDraft from './WaDraft'
 import { track } from '../../lib/track'
@@ -36,37 +34,33 @@ export default function Calculator() {
   const p = usePicker()
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState<string | null>(null)
-  const [sent, setSent] = useState(false)
   const [flash, setFlash] = useState<string | null>(null)
   // На телефоне смета и форма живут в нижнем листе, а не в колонке справа
   const [sheet, setSheet] = useState(false)
   const [near, setNear] = useState(false)
-  // «Опишу своими словами»: форма открывается с полем описания впереди
-  const [describe, setDescribe] = useState(0)
   const root = useRef<HTMLDivElement>(null)
   const sumRef = useRef<HTMLElement>(null)
   const barBtn = useRef<HTMLButtonElement>(null)
   // Имя из прошлой заявки. Читаем в эффекте, а не при рендере: страницы
   // статические, и localStorage на сервере нет — иначе разъедется гидрация.
   const [hello, setHello] = useState('')
-  // После отправки из карточки уходят строки сметы, срочность и итог —
-  // без морфа высоты карточка схлопывалась рывком под улетевшим чеком
-  const card = useMorphHeight<HTMLDivElement>(sentKey(sent))
-  // Дату выбирают в форме, а надбавка за срочность — её следствие:
-  // отдельная галочка «сегодня или завтра» спрашивала то же самое второй раз
-  const [when, setWhen] = useState('')
+  // Отправка — только в WhatsApp (2026-11-24): описание к смете и код заявки
+  const [note, setNote] = useState('')
+  const [noteErr, setNoteErr] = useState(false)
+  const [sentCode, setSentCode] = useState('')
 
-  const quote = useMemo(() => calcQuote(p.selection, items, settings, p.urgent), [p.selection, p.urgent, items])
+  // Дату больше не выбирают на сайте — день и срочность согласуются в чате,
+  // поэтому надбавку в смету не включаем (старый черновик мог хранить urgent)
+  const quote = useMemo(() => calcQuote(p.selection, items, settings, false), [p.selection, items])
   const suggestions = useMemo(() => suggestedChains(p.selection, chains), [p.selection])
   const shownTotal = useCountUp(quote.total)
 
   useEffect(() => {
     const p = readProfile()
     if (p) setHello(firstName(p.name))
-  }, [sent])
-
-  const rush = isRush(when)
-  useEffect(() => { p.setUrgent(rush) }, [rush])
+  }, [])
+  useEffect(() => { if (note.trim() || p.selection.length) setNoteErr(false) }, [note, p.selection.length])
+  useEffect(() => { setSentCode('') }, [note, p.selection])
 
   // Подсветка только что добавленной строки в смете
   const prevKeys = useRef<Set<string>>(new Set())
@@ -123,9 +117,9 @@ export default function Calculator() {
   const ctxLines = quote.lines.map((l) => `• ${nameOf(l.item, locale)} ×${l.qty}`).join('\n')
   const ctxTotal = quote.lines.length ? `${quote.hasScope ? `${fromWord(locale)} ` : ''}${formatMoney(quote.total, settings, locale)}` : ''
   useEffect(() => {
-    setQuoteContext(ctxLines ? { lines: ctxLines.split('\n'), total: ctxTotal } : null)
+    setQuoteContext(ctxLines ? { lines: ctxLines.split('\n'), total: ctxTotal, selection: p.selection } : null)
     return () => setQuoteContext(null)
-  }, [ctxLines, ctxTotal])
+  }, [ctxLines, ctxTotal, p.selection])
 
   // Быстрый выбор из героя главной: работа сразу ложится в смету
   useEffect(() => {
@@ -138,9 +132,9 @@ export default function Calculator() {
     return () => window.removeEventListener('hawkfix:pick', onPick)
   }, [items, p.qtyOf, p.add])
 
-  /** Работы нет в списке — открываем форму с полем «что нужно сделать». */
+  /** Работы нет в списке — к полю «что нужно сделать» под сметой. */
   function openDescribe() {
-    setDescribe((n) => n + 1)
+    if (q) setNote((v) => v || query.trim())
     if (window.matchMedia('(max-width: 900px)').matches) setSheet(true)
     else {
       sumRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -338,10 +332,10 @@ export default function Calculator() {
         role={sheet ? 'dialog' : undefined}
         aria-modal={sheet ? true : undefined}
       >
-        <div className="sum" ref={card.ref} data-done={sent || undefined}>
+        <div className="sum">
           <div className="sum__head">
             <p className="calc__subhead">{t.home.calcLabel}</p>
-            {quote.count > 0 && !sent && (
+            {quote.count > 0 && (
               <button type="button" className="sum__clear" onClick={p.clear}>{clearLabel(locale)}</button>
             )}
             <button
@@ -351,7 +345,7 @@ export default function Calculator() {
             </button>
           </div>
 
-          {sent ? null : quote.lines.length === 0 ? (
+          {quote.lines.length === 0 ? (
             <p className="sum__empty">{C.emptySum}</p>
           ) : (
             <ul className="sum__lines">
@@ -375,46 +369,29 @@ export default function Calculator() {
             </ul>
           )}
 
-          {!sent && quote.lines.length > 0 && (
-            <div className="rush" data-on={rush || undefined}>
-              {rush ? (
-                <>
-                  <span className="rush__ico"><Icon name="clock" size={16} /></span>
-                  <span className="rush__text">
-                    <b>{RUSH[locale].title}</b>
-                    <small>
-                      {RUSH[locale].note
-                        .replace('{pct}', String(settings.urgentPct))
-                        .replace('{max}', formatMoney(settings.urgentMax, settings, locale))}
-                    </small>
-                  </span>
-                  {quote.urgentFee > 0 && (
-                    <span className="rush__fee num">+{formatMoney(quote.urgentFee, settings, locale)}</span>
-                  )}
-                </>
-              ) : (
-                <span className="rush__text rush__text--off">
-                  <small>{RUSH[locale].hint.replace('{pct}', String(settings.urgentPct))}</small>
-                </span>
-              )}
+          {quote.lines.length > 0 && (
+            <div className="rush">
+              <span className="rush__text rush__text--off">
+                <small>{RUSH[locale].replace('{pct}', String(settings.urgentPct)).replace('{max}', formatMoney(settings.urgentMax, settings, locale))}</small>
+              </span>
             </div>
           )}
 
-          {!sent && quote.hasScope && (
+          {quote.hasScope && (
             <p className="sum__note sum__note--scope">
               <Icon name="sparkles" size={15} />
               {SCOPE_NOTE[locale]}
             </p>
           )}
 
-          {!sent && quote.minimumApplied && (
+          {quote.minimumApplied && (
             <p className="sum__note">
               <Icon name="shield" size={15} />
               {settings.strings[locale].minNote?.replace('{minValue}', formatMoney(quote.minimum, settings, locale))}
             </p>
           )}
 
-          {!sent && quote.lines.length > 0 && (
+          {quote.lines.length > 0 && (
             <div className="sum__total">
               <div>
                 <p className="sum__totalLabel">{totalLabel(locale)}</p>
@@ -430,15 +407,34 @@ export default function Calculator() {
             </div>
           )}
 
-          <LeadForm
-            quote={quote} urgent={p.urgent} onWhen={setWhen} describe={describe}
-            onSent={() => { card.capture(); p.clear(); setSent(true) }}
-          />
+          {/* Отправка: смета (или описание) с кодом уходит в чат WhatsApp,
+              черновик — в панель. Адрес и день согласуются в переписке. */}
+          <div className="calcsend">
+            <label className="calcsend__label" htmlFor="lf-comment">
+              {quote.lines.length ? C.addNote : C.whatToDo}
+            </label>
+            <textarea
+              id="lf-comment" rows={quote.lines.length ? 2 : 3} value={note} maxLength={600}
+              onChange={(e) => setNote(e.target.value)} placeholder={C.notePh}
+              aria-invalid={noteErr || undefined} onFocus={() => track('form_start', locale)}
+            />
+            {noteErr && <p className="calcsend__err" role="alert">{C.noteErr}</p>}
+            <WaDraft
+              quote={quote} urgent={false} comment={note} className="btn btn--primary btn--lg calcsend__btn"
+              onEmpty={() => { setNoteErr(true); document.getElementById('lf-comment')?.focus() }}
+              onSent={setSentCode}
+            >
+              <Icon name="whatsapp" size={19} /> {quote.lines.length ? C.waSend : C.waDescribe}
+            </WaDraft>
+            <p className="calcsend__note" aria-live="polite">
+              {sentCode ? C.sent.replace('{code}', sentCode) : C.waNote}
+            </p>
+          </div>
         </div>
       </aside>
 
       {/* Панель с ценой на телефоне: цена копится внизу, форма — по кнопке */}
-      <div className="calcbar" data-show={near && !sheet && !sent ? 'true' : undefined} data-empty={quote.count === 0 || undefined}>
+      <div className="calcbar" data-show={near && !sheet ? 'true' : undefined} data-empty={quote.count === 0 || undefined}>
         {quote.count > 0 ? (
           <>
             <div className="calcbar__info">
@@ -448,7 +444,7 @@ export default function Calculator() {
               </span>
               <span className="calcbar__sum num">{quote.hasScope ? `${fromWord(locale)} ` : ''}{formatMoney(shownTotal, settings, locale)}</span>
             </div>
-            <WaDraft quote={quote} urgent={p.urgent} className="calcbar__wa" label={C.waSend}>
+            <WaDraft quote={quote} urgent={false} comment={note} className="calcbar__wa" label={C.waSend}>
               <Icon name="whatsapp" size={22} />
             </WaDraft>
             <button ref={barBtn} type="button" className="btn btn--primary calcbar__go" onClick={() => setSheet(true)}>
@@ -460,7 +456,7 @@ export default function Calculator() {
             <div className="calcbar__info">
               <span className="calcbar__hint">{C.barHint}</span>
             </div>
-            <WaDraft quote={quote} urgent={p.urgent} className="calcbar__wa" label={C.waWrite}>
+            <WaDraft quote={quote} urgent={false} comment={note} className="calcbar__wa" label={C.waWrite}>
               <Icon name="whatsapp" size={22} />
             </WaDraft>
             <button ref={barBtn} type="button" className="btn btn--ghost calcbar__go calcbar__alt" onClick={openDescribe}>
@@ -488,53 +484,21 @@ const clearLabel = (l: string) =>
 const totalLabel = (l: string) =>
   l === 'pl' ? 'Razem' : l === 'uk' ? 'Разом' : l === 'ru' ? 'Итого' : 'Total'
 
-/** Срочно — это «сегодня или завтра» по календарю устройства.
- *  Считаем по датам, а не по разнице в часах: заявка в 23:50 на завтра
- *  иначе оказалась бы «не срочной». */
-function isRush(iso: string): boolean {
-  if (!iso) return false
-  const day = new Date(`${iso}T00:00:00`)
-  if (Number.isNaN(day.getTime())) return false
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const diff = Math.round((day.getTime() - today.getTime()) / 86400000)
-  return diff === 0 || diff === 1
-}
-
-/** Плашка надбавки за срочность: объясняет, откуда взялись деньги. */
-const RUSH: Record<string, { title: string; note: string; hint: string }> = {
-  pl: {
-    title: 'Pilny przyjazd — dziś lub jutro',
-    note: 'Doliczamy +{pct}% do wartości zlecenia, nie więcej niż {max}.',
-    hint: 'Termin wybierasz w formularzu. Przyjazd dziś lub jutro: +{pct}%, od pojutrza bez dopłaty.',
-  },
-  uk: {
-    title: 'Терміновий виїзд — сьогодні або завтра',
-    note: 'Додаємо +{pct}% до вартості замовлення, але не більше ніж {max}.',
-    hint: 'Дату обираєте у формі. Сьогодні або завтра: +{pct}%, з післязавтра без доплати.',
-  },
-  ru: {
-    title: 'Срочный выезд — сегодня или завтра',
-    note: 'Добавляем +{pct}% к стоимости заказа, но не больше {max}.',
-    hint: 'Дату выбираете в форме. Сегодня или завтра: +{pct}%, с послезавтра без доплаты.',
-  },
-  en: {
-    title: 'Rush visit — today or tomorrow',
-    note: 'We add +{pct}% to the order value, capped at {max}.',
-    hint: 'You pick the date in the form. Today or tomorrow: +{pct}%, from the day after — no surcharge.',
-  },
+/** Срочность больше не выбирается на сайте — только объясняем правило */
+const RUSH: Record<string, string> = {
+  pl: 'Przyjazd dziś lub jutro: +{pct}% do wartości zlecenia (najwyżej {max}). Termin ustalimy na czacie.',
+  uk: 'Приїзд сьогодні або завтра: +{pct}% до вартості (не більше {max}). Час узгодимо в чаті.',
+  ru: 'Приезд сегодня или завтра: +{pct}% к стоимости (не больше {max}). Время согласуем в чате.',
+  en: 'Visit today or tomorrow: +{pct}% on the order value (max {max}). We agree the time in the chat.',
 }
 
 /** Работы «за объём»: итог — ориентир, фото обязательно, цену назовёт мастер. */
 const SCOPE_NOTE: Record<string, string> = {
-  pl: 'Część prac wyceniamy po zdjęciu: w formularzu dodasz zdjęcia, a fachowiec poda dokładną cenę przed rozpoczęciem pracy.',
-  uk: 'Частину робіт оцінюємо за фото: у формі додасте фото, а майстер назве точну ціну до початку роботи.',
-  ru: 'Часть работ оцениваем по фото: в форме добавите фото, а мастер назовёт точную цену до начала работы.',
-  en: 'Some jobs are priced from a photo: add photos in the form and the specialist gives the exact price before starting.',
+  pl: 'Część prac wyceniamy po zdjęciu: wyślesz je na czacie WhatsApp, a fachowiec poda dokładną cenę przed rozpoczęciem pracy.',
+  uk: 'Частину робіт оцінюємо за фото: надішлете їх у чаті WhatsApp, а майстер назве точну ціну до початку роботи.',
+  ru: 'Часть работ оцениваем по фото: пришлёте их в чате WhatsApp, а мастер назовёт точную цену до начала работы.',
+  en: 'Some jobs are priced from a photo: send them in the WhatsApp chat and the specialist gives the exact price before starting.',
 }
-
-/** Ключ морфа: играем переход ровно один раз — когда заявка ушла. */
-const sentKey = (sent: boolean) => (sent ? 'sent' : 'form')
 
 /** Приветствие по имени из прошлой заявки — на языке страницы. */
 const greeting = (l: string, name: string) =>
@@ -559,6 +523,10 @@ export function nPositions(n: number, l: string): string {
 
 const CALC_TEXT: Record<string, Record<string, string>> = {
   pl: {
+    addNote: 'Coś dodać? (opcjonalnie)', whatToDo: 'Co trzeba zrobić?', notePh: 'Np. cieknie syfon pod zlewem, 3. piętro bez windy…',
+    noteErr: 'Napisz kilka słów, co trzeba zrobić — albo zaznacz pracę z listy.', waDescribe: 'Opisz problem na WhatsApp',
+    waNote: 'Otworzy się WhatsApp z kosztorysem i numerem zgłoszenia. Adres i termin ustalimy na czacie.',
+    sent: 'Numer zgłoszenia: {code}. WhatsApp się nie otworzył? Dotknij przycisku jeszcze raz.',
     order: 'Zamów', barHint: 'Zaznacz pracę z listy albo opisz problem',
     describe: 'Opiszę problem własnymi słowami', describeShort: 'Opisz problem', waSend: 'Wyślij kosztorys na WhatsApp', waWrite: 'Napisz na WhatsApp',
     related: 'Nie mamy „{q}” wprost na liście. Zobacz podobne prace albo opisz problem — wycenimy osobno.',
@@ -567,6 +535,10 @@ const CALC_TEXT: Record<string, Record<string, string>> = {
     minShort: 'minimum wyjazdu', approx: 'ok.', ofWork: 'pracy', workTime: 'Szacowany czas pracy na miejscu',
   },
   uk: {
+    addNote: 'Щось додати? (необов’язково)', whatToDo: 'Що треба зробити?', notePh: 'Напр. тече сифон під мийкою, 3-й поверх без ліфта…',
+    noteErr: 'Напишіть кілька слів, що треба зробити, — або позначте роботу зі списку.', waDescribe: 'Описати проблему у WhatsApp',
+    waNote: 'Відкриється WhatsApp із кошторисом і номером заявки. Адресу й час узгодимо в чаті.',
+    sent: 'Номер заявки: {code}. WhatsApp не відкрився? Торкніться кнопки ще раз.',
     order: 'Замовити', barHint: 'Позначте роботу зі списку або опишіть проблему',
     describe: 'Опишу проблему своїми словами', describeShort: 'Описати проблему', waSend: 'Надіслати кошторис у WhatsApp', waWrite: 'Написати у WhatsApp',
     related: 'Немає «{q}» прямо в списку. Перегляньте схожі роботи або опишіть проблему — оцінимо окремо.',
@@ -575,6 +547,10 @@ const CALC_TEXT: Record<string, Record<string, string>> = {
     minShort: 'мінімум виїзду', approx: '≈', ofWork: 'роботи', workTime: 'Орієнтовний час роботи на місці',
   },
   ru: {
+    addNote: 'Что-то добавить? (необязательно)', whatToDo: 'Что нужно сделать?', notePh: 'Напр. течёт сифон под мойкой, 3-й этаж без лифта…',
+    noteErr: 'Напишите пару слов, что нужно сделать, — или отметьте работу из списка.', waDescribe: 'Описать проблему в WhatsApp',
+    waNote: 'Откроется WhatsApp со сметой и номером заявки. Адрес и время согласуем в чате.',
+    sent: 'Номер заявки: {code}. WhatsApp не открылся? Нажмите кнопку ещё раз.',
     order: 'Заказать', barHint: 'Отметьте работу из списка или опишите проблему',
     describe: 'Опишу проблему своими словами', describeShort: 'Описать проблему', waSend: 'Отправить смету в WhatsApp', waWrite: 'Написать в WhatsApp',
     related: 'Нет «{q}» прямо в списке. Посмотрите похожие работы или опишите проблему — оценим отдельно.',
@@ -583,6 +559,10 @@ const CALC_TEXT: Record<string, Record<string, string>> = {
     minShort: 'минимум выезда', approx: '≈', ofWork: 'работы', workTime: 'Примерное время работы на месте',
   },
   en: {
+    addNote: 'Anything to add? (optional)', whatToDo: 'What needs doing?', notePh: 'E.g. the sink trap is leaking, 3rd floor, no lift…',
+    noteErr: 'Write a few words about the job — or pick one from the list.', waDescribe: 'Describe it on WhatsApp',
+    waNote: 'WhatsApp opens with your estimate and request number. We agree the address and time in the chat.',
+    sent: 'Request number: {code}. WhatsApp did not open? Tap the button again.',
     order: 'Order', barHint: 'Pick a job from the list or describe the problem',
     describe: 'I’ll describe it in my own words', describeShort: 'Describe it', waSend: 'Send the estimate on WhatsApp', waWrite: 'Message us on WhatsApp',
     related: '“{q}” is not on the list as such. See similar jobs or describe the problem — we will price it separately.',

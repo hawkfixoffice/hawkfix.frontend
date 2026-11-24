@@ -1,5 +1,6 @@
 import { CONTACT } from './ui'
 import { track } from './track'
+import type { Selection } from './quote'
 
 /** WhatsApp — главный канал, которым клиенты пользуются и без нас.
  *  Сайт с ним не воюет, а делает так, чтобы чат начинался не с «Dzień dobry»,
@@ -12,21 +13,23 @@ const LEAD_ENDPOINT = import.meta.env.VITE_LEAD_ENDPOINT
 export const waHref = (text: string) => `${CONTACT.whatsappHref}?text=${encodeURIComponent(text)}`
 
 const T = {
-  pl: { hi: 'Dzień dobry! Piszę ze strony hawkfix.pl', about: 'w sprawie', quote: 'Mój kosztorys', order: 'Zamówienie', total: 'Razem', what: 'Opis', next: 'Adres i termin ustalmy tutaj.' },
-  uk: { hi: 'Добрий день! Пишу з сайту hawkfix.pl', about: 'щодо', quote: 'Мій кошторис', order: 'Замовлення', total: 'Разом', what: 'Опис', next: 'Адресу й час узгодьмо тут.' },
-  ru: { hi: 'Здравствуйте! Пишу с сайта hawkfix.pl', about: 'по поводу', quote: 'Моя смета', order: 'Заказ', total: 'Итого', what: 'Описание', next: 'Адрес и время давайте согласуем здесь.' },
-  en: { hi: "Hello! I'm writing from hawkfix.pl", about: 'about', quote: 'My estimate', order: 'Order', total: 'Total', what: 'Details', next: "Let's agree on the address and time here." },
+  pl: { hi: 'Dzień dobry! Piszę ze strony hawkfix.pl', about: 'w sprawie', quote: 'Mój kosztorys', order: 'Zamówienie', total: 'Razem', what: 'Opis', photos: 'Zdjęcia wyślę tutaj.', next: 'Adres i termin ustalmy tutaj.' },
+  uk: { hi: 'Добрий день! Пишу з сайту hawkfix.pl', about: 'щодо', quote: 'Мій кошторис', order: 'Замовлення', total: 'Разом', what: 'Опис', photos: 'Фото надішлю тут.', next: 'Адресу й час узгодьмо тут.' },
+  ru: { hi: 'Здравствуйте! Пишу с сайта hawkfix.pl', about: 'по поводу', quote: 'Моя смета', order: 'Заказ', total: 'Итого', what: 'Описание', photos: 'Фото пришлю сюда.', next: 'Адрес и время давайте согласуем здесь.' },
+  en: { hi: "Hello! I'm writing from hawkfix.pl", about: 'about', quote: 'My estimate', order: 'Order', total: 'Total', what: 'Details', photos: "I'll send photos here.", next: "Let's agree on the address and time here." },
 } as const
 type L = keyof typeof T
 const tx = (l: string) => T[(l in T ? l : 'pl') as L]
 
 /** Текущая смета на странице: калькулятор кладёт сюда строки, чтобы любая
  *  кнопка WhatsApp на странице отправила их вместе с приветствием. */
-let quote: { lines: string[]; total: string } | null = null
+let quote: { lines: string[]; total: string; selection?: Selection[] } | null = null
 export function setQuoteContext(q: typeof quote) { quote = q }
+/** Выбранные в калькуляторе работы — попап WhatsApp начинает с них */
+export const quoteSelection = (): Selection[] => quote?.selection ?? []
 
-/** Текст для «простых» кнопок WhatsApp: шапка, подвал, контакты. */
-function contextText(locale: string) {
+/** Текст для ссылки «без формы»: приветствие с темой страницы и сметой. */
+export function contextText(locale: string) {
   const t = tx(locale)
   const h1 = document.querySelector('main h1')?.textContent?.trim().replace(/\s+/g, ' ') ?? ''
   // Главная: её заголовок — слоган, а не тема обращения
@@ -36,17 +39,36 @@ function contextText(locale: string) {
   return parts.join('\n')
 }
 
-/** Ставится один раз на весь сайт: каждое нажатие на ссылку WhatsApp без
- *  готового текста получает приветствие с темой страницы и сметой, и каждое
- *  нажатие считается в воронке по месту, где была кнопка. */
+/** Событие, по которому открывается попап «Napisz na WhatsApp» (`WaModal`) */
+export const WA_OPEN = 'hawkfix:wa'
+export const openWaPopup = () => window.dispatchEvent(new CustomEvent(WA_OPEN))
+
+/** Ставится один раз на весь сайт. Любая ссылка WhatsApp без готового текста
+ *  (шапка, подвал, контакты, кнопка «Napisz») открывает не голый чат, а попап
+ *  с формой: человек пишет, что случилось, выбирает работы — и в чат уходит
+ *  сообщение с кодом, а в панель черновик. Ссылки с готовым текстом (ошибка
+ *  отправки, фото к заявке) и «без формы» (`data-wa="direct"`) идут как есть.
+ *  Каждое нажатие считается в воронке по месту, где была кнопка. */
 export function installWaLinks() {
   const onClick = (e: MouseEvent) => {
     const a = (e.target as Element | null)?.closest?.('a[href^="https://wa.me/"]') as HTMLAnchorElement | null
     if (!a) return
     const locale = document.documentElement.lang?.slice(0, 2) || 'pl'
-    if (a.dataset.wa === 'draft') return // черновик считает сам калькулятор
-    track(a.closest('header') ? 'wa_head' : a.closest('.calc, .lead') ? 'wa_form' : 'wa_page', locale)
-    if (!a.href.includes('?text=')) a.href = waHref(contextText(locale))
+    if (a.dataset.wa === 'draft') return // черновик считает сам WaDraft
+    if (a.dataset.wa === 'direct') {
+      track('wa_page', locale)
+      if (!a.href.includes('?text=')) a.href = waHref(contextText(locale))
+      return
+    }
+    if (a.href.includes('?text=')) return
+    // Клик с модификатором (новая вкладка) — человек явно хочет чат
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) {
+      a.href = waHref(contextText(locale))
+      return
+    }
+    e.preventDefault()
+    track(a.closest('header') ? 'wa_head' : a.closest('.calc') ? 'wa_form' : 'wa_page', locale)
+    openWaPopup()
   }
   document.addEventListener('click', onClick, true)
   return () => document.removeEventListener('click', onClick, true)
@@ -70,7 +92,7 @@ export function draftCode(sig: string): string {
   return code
 }
 
-export function draftText(locale: string, code: string, lines: string[], total: string, comment = '') {
+export function draftText(locale: string, code: string, lines: string[], total: string, comment = '', photos = false) {
   const t = tx(locale)
   return [
     `${t.hi}.`,
@@ -79,6 +101,7 @@ export function draftText(locale: string, code: string, lines: string[], total: 
     ...lines,
     total ? `${t.total}: ${total}` : null,
     comment.trim() ? `\n${t.what}: ${comment.trim().slice(0, 600)}` : null,
+    photos ? t.photos : null,
     '',
     t.next,
   ].filter((x): x is string => x !== null).join('\n').replace(/\n{3,}/g, '\n\n')

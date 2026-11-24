@@ -1,0 +1,145 @@
+/* HAWK.FIX — «Что случилось?» → WhatsApp (2026-11-24).
+   Форма в герое главной и в попапе на всех кнопках WhatsApp (WaComposer),
+   отправка из калькулятора (.calcsend) и короткие три шага (.s-flow).
+   Грузится после simple.css. */
+
+/* ============================ ФОРМА ============================ */
+.wabox { display: grid; gap: 10px; margin-top: var(--sp-6); max-width: 620px; }
+.wabox[data-variant='modal'] { margin-top: 0; max-width: none; }
+.wabox__label { font-size: 1.05rem; font-weight: 600; color: var(--ink); }
+
+.wabox__field { position: relative; }
+.wabox__field textarea {
+  display: block; width: 100%; min-height: 84px; resize: vertical;
+  padding: 14px 18px; border: 1.5px solid var(--ink); border-radius: var(--r-xs);
+  background: var(--card); color: var(--ink);
+  font: inherit; font-size: 1.0625rem; line-height: 1.45;
+}
+.wabox__field textarea::placeholder { color: var(--ink-3); }
+.wabox__field textarea:focus { outline: none; box-shadow: 0 0 0 4px var(--accent-soft); }
+.wabox__field[data-err] textarea { border-color: #b3261e; }
+
+/* Подсказки из прайса — под полем, без цен */
+.wabox__hits {
+  position: absolute; z-index: calc(var(--z-modal) + 2); inset-inline: 0; top: calc(100% + 6px);
+  list-style: none; margin: 0; padding: 6px; max-height: 320px; overflow-y: auto; overscroll-behavior: contain;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--r-xs); box-shadow: var(--shadow-lift);
+}
+.wabox__hitsHead { padding: 6px 12px 4px; font-size: 0.8125rem; color: var(--ink-3); }
+.wabox__hits button {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-height: var(--tap);
+  padding: 8px 12px; border: 0; border-radius: 12px; background: none; color: var(--ink);
+  font: inherit; font-size: 1rem; text-align: start; cursor: pointer;
+}
+.wabox__hits button svg { flex: none; color: var(--accent-text); }
+.wabox__hits button:hover, .wabox__hits button[data-on] { background: var(--accent-soft); }
+
+.wabox__hint { margin: 0; font-size: 0.9375rem; line-height: 1.45; color: var(--ink-3); min-height: 1.45em; }
+.wabox__hint[data-err] { color: #b3261e; }
+
+/* Выбранные работы: только здесь цены */
+.wabox__quote {
+  border: 1px solid var(--line); border-radius: var(--r-xs); padding: 6px 16px 12px; background: var(--card);
+  animation: waIn 220ms var(--ease) both;
+}
+.wabox__lines { list-style: none; margin: 0; padding: 0; }
+.wabox__lines li {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--line-card);
+}
+.wabox__ln { font-size: 1rem; line-height: 1.35; }
+.wabox__step { display: inline-flex; align-items: center; gap: 2px; }
+.wabox__step button {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer;
+}
+.wabox__step button:hover { border-color: var(--ink); }
+.wabox__step .num { min-width: 2.4ch; text-align: center; font-size: 0.95rem; white-space: nowrap; }
+.wabox__lp { white-space: nowrap; font-size: 1rem; text-align: end; min-width: 72px; }
+.wabox__total { display: flex; justify-content: space-between; align-items: baseline; margin: 10px 0 0; font-size: 1.05rem; }
+.wabox__total b { font-size: 1.35rem; }
+.wabox__note { margin: 6px 0 0; font-size: 0.875rem; line-height: 1.45; color: var(--ink-3); }
+
+.wabox__send, .calcsend__btn {
+  width: 100%; gap: 10px;
+  background: var(--forest); color: var(--on-dark); border-color: var(--forest);
+}
+.wabox__send:hover, .calcsend__btn:hover { background: #143a24; border-color: #143a24; color: var(--on-dark); }
+.wabox__after { margin: 0; font-size: 0.875rem; line-height: 1.45; color: var(--ink-3); text-align: center; }
+.wabox__alt {
+  justify-self: center; display: inline-flex; align-items: center; gap: 6px; margin-top: 2px;
+  font-size: 0.9375rem; font-weight: 600; color: var(--ink); text-decoration: none;
+  border-bottom: 2px solid var(--accent); padding-bottom: 1px;
+}
+.wabox__alt:hover { border-color: var(--ink); }
+
+@keyframes waIn { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { .wabox__quote, .wamodal__card { animation: none; } }
+
+/* ============================ ПОПАП ============================ */
+.wamodal {
+  position: fixed; inset: 0; z-index: calc(var(--z-modal) + 1);
+  display: grid; place-items: center; padding: 16px;
+}
+.wamodal__back {
+  position: absolute; inset: 0; border: 0; padding: 0; cursor: default;
+  background: rgb(17 19 18 / 55%); backdrop-filter: blur(6px);
+}
+.wamodal__card {
+  position: relative; width: min(560px, 100%); max-height: calc(100dvh - 32px); overflow-y: auto;
+  background: var(--paper); border-radius: var(--r-xs); padding: 20px 22px 22px;
+  box-shadow: var(--shadow-lift); animation: waIn 220ms var(--ease) both;
+}
+.wamodal__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.wamodal__h { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 1.25rem; font-weight: 600; }
+.wamodal__h svg { color: var(--accent-text); }
+.wamodal__x {
+  display: grid; place-items: center; width: var(--tap); height: var(--tap); flex: none;
+  border: 1px solid var(--line); border-radius: 50%; background: var(--card); color: var(--ink); cursor: pointer;
+}
+.wamodal__x:hover { border-color: var(--ink); }
+
+@media (max-width: 640px) {
+  /* На телефоне — лист снизу: до него достаёт большой палец */
+  .wamodal { place-items: end stretch; padding: 0; }
+  .wamodal__card {
+    width: 100%; max-height: 92dvh; overflow-y: auto;
+    border-radius: var(--r-xs) var(--r-xs) 0 0; padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+  }
+  .wabox__lines li { grid-template-columns: minmax(0, 1fr) auto; row-gap: 6px; }
+  .wabox__lp { grid-column: 2; grid-row: 1; }
+  .wabox__step { grid-column: 1; }
+}
+
+/* ===================== ОТПРАВКА ИЗ КАЛЬКУЛЯТОРА ===================== */
+.calcsend { display: grid; gap: 10px; margin-top: 16px; }
+.calcsend__label { font-size: 0.9375rem; font-weight: 600; }
+.calcsend textarea {
+  width: 100%; min-height: 64px; resize: vertical; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 14px; background: var(--card);
+  font: inherit; font-size: 1rem; line-height: 1.45; color: var(--ink);
+}
+.calcsend textarea:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 4px var(--accent-soft); }
+.calcsend textarea[aria-invalid] { border-color: #b3261e; }
+.calcsend__err { margin: 0; font-size: 0.875rem; color: #b3261e; }
+.calcsend__note { margin: 0; font-size: 0.8125rem; line-height: 1.45; color: var(--ink-3); text-align: center; }
+
+/* ============================ ТРИ ШАГА ============================ */
+.s-band--tight { padding-block: clamp(40px, 5vw, 80px); }
+.s-band--tight + .s-band { padding-top: clamp(40px, 5vw, 80px); }
+.s-flow__h { font-size: clamp(1.6rem, 2.6vw, 2.4rem); margin-bottom: var(--sp-5); }
+.s-flow {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5);
+}
+.s-flow li { display: flex; align-items: flex-start; gap: 14px; }
+.s-flow__n {
+  flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+  background: var(--accent); font-size: 1rem; font-weight: 600;
+}
+.s-flow__body { display: grid; gap: 2px; padding-top: 4px; }
+.s-flow__t { font-size: 1.15rem; font-weight: 600; line-height: 1.25; }
+.s-flow__d { font-size: 1rem; line-height: 1.4; color: var(--ink-3); }
+@media (max-width: 760px) {
+  .s-flow { grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); }
+}

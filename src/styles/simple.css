@@ -75,32 +75,13 @@
 .s-hero { padding-block: clamp(32px, 5vw, 80px) 0; }
 .s-hero__grid {
   display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: var(--s-gap); align-items: center;
+  /* start, а не center: форма в герое растёт по мере выбора работ,
+     и фото не должно ездить вслед за ней */
+  gap: var(--s-gap); align-items: start;
 }
 .s-hero__h1 { max-width: 15ch; }
 
-.s-stats {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--sp-5); margin-top: clamp(48px, 6vw, 96px);
-  padding-top: var(--sp-6); border-top: 1px solid var(--line);
-}
-.s-stats li { display: grid; gap: 4px; }
-.s-stats b { font-size: clamp(1.9rem, 3.2vw, 3rem); font-weight: var(--s-fw); letter-spacing: -0.03em; line-height: 1; }
-.s-stats span { font-size: var(--s-text); color: var(--ink-3); }
-
 /* ================================ ШАГИ ================================ */
-.s-steps {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--s-gap); margin-top: var(--sp-6); counter-reset: none;
-}
-.s-steps li { display: grid; gap: var(--sp-3); align-content: start; }
-.s-steps__n {
-  width: 60px; height: 60px; border-radius: 50%; background: var(--accent);
-  display: grid; place-items: center; font-size: 1.6rem; font-weight: 600;
-  margin-bottom: var(--sp-3);
-}
-.s-steps .s-h3 { margin: 0; }
-
 /* ============================ КАЛЬКУЛЯТОР ============================ */
 .s-calc { margin-top: clamp(32px, 4vw, 56px); }
 
@@ -266,8 +247,6 @@
 @media (max-width: 900px) {
   .s-hero__grid, .s-split, .s-cols, .s-head__grid { grid-template-columns: minmax(0, 1fr); }
   .s-hero__photo img, .s-hero__photo picture { aspect-ratio: 16 / 10; }
-  .s-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-6) var(--sp-5); }
-  .s-steps { grid-template-columns: minmax(0, 1fr); gap: var(--sp-7); }
   .s-price { text-align: left; }
   .s-keyfacts { min-width: 0; }
   .facts__row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
@@ -301,26 +280,6 @@
 .s-prices b small, .irow__unit { font-weight: 500; }
 .chip--pick[data-on='true'] .num { color: var(--on-dark-2); }
 .calcbar__sum { font-weight: var(--price-fw); }
-
-/* ---------- Быстрый старт с первого экрана (2026-11-17) ---------- */
-.s-quick { margin-top: var(--sp-5); display: grid; gap: var(--sp-3); }
-.s-quick__t { margin: 0; font-size: 0.9375rem; color: var(--ink-3); }
-.s-quick__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.s-quick__item {
-  display: inline-flex; align-items: center; gap: 10px; min-height: var(--tap);
-  padding: 8px 12px 8px 16px; border-radius: var(--r-pill);
-  border: 1px solid var(--line); background: var(--card); color: var(--ink); text-decoration: none;
-  font-size: 0.9375rem; transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
-}
-.s-quick__item:hover { border-color: var(--ink); }
-.s-quick__item b { font-size: 0.875rem; white-space: nowrap; }
-.s-quick__item svg { color: var(--ink-3); }
-@media (max-width: 640px) {
-  .s-quick { margin-top: var(--sp-4); }
-  .s-quick__list { display: grid; grid-template-columns: 1fr; gap: 6px; }
-  .s-quick__item { justify-content: space-between; width: 100%; }
-  .s-quick__item span { flex: 1 1 auto; min-width: 0; }
-}
 
 /* Cookie: «Tylko niezbędne» была тёмной обводкой на тёмной плашке и не читалась */
 .cookie .btn--ghost { color: var(--on-dark); border-color: rgb(255 255 255 / 55%); background: transparent; }

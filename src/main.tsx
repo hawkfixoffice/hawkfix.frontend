@@ -22,6 +22,7 @@ import './styles/sections.css'
 import './styles/lead.css'
 import './styles/content.css'
 import './styles/simple.css'
+import './styles/wa.css'
 import './styles/cms.css'
 
 function view(type: string) {

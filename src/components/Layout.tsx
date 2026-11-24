@@ -9,13 +9,14 @@ import ClientOnly from './ClientOnly'
 import CmsBoot from '../cms/CmsBoot'
 import { detectLocale, isBot, onceThisSession, readPref } from '../lib/locale-pref'
 import { installWaLinks } from '../lib/wa'
+import WaModal from './wa/WaModal'
 
 function Shell({ children }: { children: React.ReactNode }) {
   const { t, page, locale } = usePage()
   const { pathname, hash, key } = useLocation()
   const navigate = useNavigate()
 
-  // Кнопки WhatsApp по всему сайту: приветствие с темой страницы и сметой
+  // Кнопки WhatsApp по всему сайту открывают попап с формой (WaModal)
   useEffect(() => installWaLinks(), [])
 
   // При загрузке подставляем язык устройства (или явный выбор пользователя),
@@ -68,6 +69,7 @@ function Shell({ children }: { children: React.ReactNode }) {
       <Footer />
       <ClientOnly><CookieBanner /></ClientOnly>
       <ClientOnly><CmsBoot /></ClientOnly>
+      <ClientOnly><WaModal /></ClientOnly>
     </>
   )
 }
